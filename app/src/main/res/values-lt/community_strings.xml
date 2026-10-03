@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Nepriklausoma bendruomenės programėlė · nesusijusi su abfahrt.now</string>
+    <string name="community_data_source">Viešojo transporto duomenys per abfahrt.now</string>
+    <string name="community_project_link">Bendruomenės projektas GitHub ↗</string>
+    <string name="community_api_privacy">API privatumas</string>
+    <string name="community_api_terms">API sąlygos</string>
+    <string name="community_disclaimer">Neoficiali programėlė. Viešojo transporto duomenis teikia abfahrt.now.</string>
+</resources>

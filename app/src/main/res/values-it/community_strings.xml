@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">App della community indipendente · non affiliata ad abfahrt.now</string>
+    <string name="community_data_source">Dati del trasporto pubblico via abfahrt.now</string>
+    <string name="community_project_link">Progetto community su GitHub ↗</string>
+    <string name="community_api_privacy">Privacy API</string>
+    <string name="community_api_terms">Termini API</string>
+    <string name="community_disclaimer">App non ufficiale. I dati del trasporto pubblico sono forniti da abfahrt.now.</string>
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Sõltumatu kogukonnarakendus · ei ole seotud abfahrt.now-ga</string>
+    <string name="community_data_source">Ühistranspordi andmed abfahrt.now kaudu</string>
+    <string name="community_project_link">Kogukonnaprojekt GitHubis ↗</string>
+    <string name="community_api_privacy">API privaatsus</string>
+    <string name="community_api_terms">API tingimused</string>
+    <string name="community_disclaimer">Mitteametlik rakendus. Ühistranspordi andmed pakub abfahrt.now.</string>
+</resources>

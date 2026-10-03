@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Aplicație comunitară independentă · neafiliată cu abfahrt.now</string>
+    <string name="community_data_source">Date de transport public prin abfahrt.now</string>
+    <string name="community_project_link">Proiect comunitar pe GitHub ↗</string>
+    <string name="community_api_privacy">Confidențialitate API</string>
+    <string name="community_api_terms">Termeni API</string>
+    <string name="community_disclaimer">Aplicație neoficială. Datele de transport public sunt furnizate de abfahrt.now.</string>
+</resources>

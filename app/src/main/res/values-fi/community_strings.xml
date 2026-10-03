@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Riippumaton yhteisösovellus · ei yhteyttä abfahrt.now-palveluun</string>
+    <string name="community_data_source">Joukkoliikennetiedot abfahrt.now-palvelusta</string>
+    <string name="community_project_link">Yhteisöprojekti GitHubissa ↗</string>
+    <string name="community_api_privacy">API-tietosuoja</string>
+    <string name="community_api_terms">API-ehdot</string>
+    <string name="community_disclaimer">Ei abfahrt.now-palvelun virallinen sovellus. Joukkoliikennetiedot tarjoaa abfahrt.now.</string>
+</resources>
