@@ -6,6 +6,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / "doc"
+EVIDENCE = ROOT / "evidence"
 required = {
     "00-index.md", "01-product.md", "02-architecture.md", "03-api-contracts.md",
     "04-invariants.md", "05-regression-ledger.md", "06-decisions.md",
@@ -39,8 +40,16 @@ for md in [ROOT / "README.md", ROOT / "AGENTS.md", *sorted(DOC.glob("*.md")), RO
         if not target:
             continue
         resolved = (md.parent / target).resolve()
-        if not resolved.exists():
-            errors.append(f"broken local link in {md.relative_to(ROOT)} -> {target}")
+        if resolved.exists():
+            continue
+        # Raw/private evidence is intentionally absent from the public repository.
+        # Normative/public docs may still name the internal evidence path as provenance.
+        try:
+            resolved.relative_to(EVIDENCE.resolve())
+            continue
+        except ValueError:
+            pass
+        errors.append(f"broken local link in {md.relative_to(ROOT)} -> {target}")
 
 if errors:
     print("DOC governance check FAILED")
