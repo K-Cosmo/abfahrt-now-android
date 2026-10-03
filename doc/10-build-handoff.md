@@ -1,6 +1,6 @@
 # Build-Handoff
 
-## Aktuell: v1.1.0 Build 151 (`versionCode 1510`) — Community identity accepted
+## Aktuell akzeptiert: v1.1.0 Build 151 (`versionCode 1510`) — Community identity accepted
 
 Build 150 ist technisch accepted und in `main` integriert. REPO1 bleibt die abgeschlossene Repository-/Governance-Baseline. DOC2 konvergiert am 03.10.2026 ausschließlich die Dokumentation auf diesen Stand; App-Source, Ressourcen und Versionierung bleiben unverändert.
 
@@ -51,26 +51,33 @@ DOC2 ist **kein Runtime-Build**:
 - keine neue Runtime-Abnahme nötig;
 - normale Doku-/Governance-Gates bleiben erforderlich.
 
-## Build 152 UI/UX-Paket — in Arbeit
+## Build 152 UI/UX-Paket — implementation complete / pending real evidence
 
-PR #6 (`feature/build152-ui-ux`) enthält den ersten Teil von Build 152. Android CI #52 ist vollständig grün, einschließlich Governance-/Compatibility-Gates, Unit-Tests, Debug- und Release/R8-Build. Build 152 ist dadurch noch nicht accepted.
+Draft-PR #6 (`feature/build152-ui-ux`) enthält inzwischen den vollständigen Build-152-Scope. Build 152 ist **noch nicht accepted** und wird vor der Realgeräte-/UX-Abnahme nicht gemergt.
 
-Bereits im Branch:
-1. `versionCode = 1520`.
-2. Onboarding-Fließtext linksbündig statt Blocksatz.
-3. Access-Gate wartet über eine nullable Preference-Projektion auf eine echte Repository/DataStore-Emission, bevor ein Startziel gerendert wird.
+Implementiert:
+1. `versionCode = 1520`, `versionName = 1.1.0`.
+2. Onboarding-Fließtext ist linksbündig statt im Blocksatz; Pflicht-Key und optionaler ORS-Hinweis bleiben einfach lesbar.
+3. `AccessGateViewModel` ist alleiniger Owner der Startup-Access-Entscheidung. Der nullable Preference-State bleibt geschlossen, bis eine echte Repository/DataStore-Emission vorliegt; erst danach werden `DepartureViewModel` und `RoutePlannerViewModel` erzeugt. Der bestehende `DepartureViewModel.preferences`-State ist damit Feature-/Settings-State und wählt kein Startziel.
+4. RoutePlanner-Start/Ziel liegen in einer gemeinsamen kompakten Surface mit Trenner und kleiner Tauschaktion rechts. Die vorhandenen `RouteEndpointField`-/`RouteSearchPanel`-Pfade, Photon, Current location, Home/Work, Swap und `/trips` werden weiterverwendet.
+5. Der Settings-Footer ist als ein zusammenhängender Block in den 24-dp-Settings-Rhythmus integriert; die vorherige Kombination aus Root-Spacern + `Arrangement.spacedBy(24.dp)` erzeugt keinen kumulierten Leerraum mehr.
+6. Der ungenutzte historische `AppFooter` inklusive alter Riles-Tech-/Legal-Hilfsfunktionen ist entfernt. `CommunityFooter` ist die einzige Runtime-Footer-Implementierung.
 
-Vor weiterer Runtime-Konvergenz ist **F-152-001** zu klären: Der neue `AccessGateViewModel` projiziert denselben Preference-Flow zusätzlich, während `DepartureViewModel` seinen bisherigen `stateIn(..., AppPreferences())`-/`preferencesLoaded`-Pfad weiterhin enthält. Ziel bleibt eine kleine, nachvollziehbare und eindeutige Readiness-Lösung ohne unbeabsichtigte Schattenlogik.
+### Automatisierte Evidence
 
-Danach offen:
-1. RoutePlanner-Start/Ziel-Kopf in einen gemeinsamen kompakten Container überführen; vorhandene Such-/Swap-/Saved-Places-/`/trips`-Logik erhalten.
-2. ORS→Community-Footer-Abstand reduzieren.
-3. nicht mehr genutzten historischen `AppFooter`-Deadcode entfernen.
-4. reale Kaltstart-Smokes mit eingerichtetem Key: kein Onboarding/API-Key-Flash.
-5. RoutePlanner-Smoke: Start-/Zielsuche, Swap, Home/Work, `Route finden`.
-6. Compact-Width-Smoke für RoutePlanner und beide Onboarding-Schritte.
-7. Footer visuell abnehmen.
-8. erst danach Build 152 abschließend nach `/doc` konvergieren und akzeptieren.
+- Android CI #60: Access-Gate-Konvergenz vollständig grün — Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8.
+- Android CI #62: vollständiger Implementierungsstand einschließlich RoutePlanner-/Footer-Teil vollständig grün — dieselben Gates inklusive Release/R8.
+
+F-152-001 ist damit **fixed in code / pending evidence**, nicht mehr als offener Architekturkonflikt zu behandeln.
+
+### Vor Abnahme noch erforderlich
+
+1. Eingerichtetes Realgerät mehrfach kalt starten: kein sichtbarer Onboarding-/API-Key-Flash.
+2. RoutePlanner: Startsuche, Zielsuche, Current location, Home/Work, Swap und `Route finden` praktisch prüfen.
+3. Compact-Width-Smoke: gemeinsamer RoutePlanner-Kopf sowie beide Onboarding-Schritte; keine abgeschnittenen oder unbedienbaren Elemente.
+4. Settings bis ORS/Community-Footer scrollen und neuen Abstand visuell akzeptieren.
+5. keine neue App-FATAL-/ANR-/Navigation-Signatur im getesteten Lauf.
+6. Danach erst Build 152 abschließend als accepted nach `/doc` konvergieren, PR aus Draft nehmen und mergen.
 
 AB-018 Startup/Main-Thread-Messung folgt separat als **Build 153**. Dort gilt weiterhin: erst instrumentieren/messen, nicht vorab optimieren.
 

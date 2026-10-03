@@ -11,17 +11,23 @@ Acceptance for DOC2 requires:
 
 No additional Android runtime smoke is required for DOC2 itself because runtime code is unchanged.
 
-## Build 152 — in progress / pending runtime evidence
+## Build 152 — implementation complete / pending runtime evidence
 
-PR #6 / `feature/build152-ui-ux` has a successful Android CI #52. The run covers static governance/compatibility gates, committed-wrapper verification, unit tests, debug build and release/R8 build.
+Draft-PR #6 / `feature/build152-ui-ux` contains the complete Build-152 implementation. This is **not** Build-152 acceptance.
 
-This is **not** Build-152 acceptance. Still required before acceptance:
-1. F-152-001 access-gate state-path convergence;
-2. configured real-device repeated cold starts without visible onboarding/API-key flash;
-3. compact RoutePlanner origin/destination UI with origin search, destination search, Home/Work, swap and `Route finden` smoke;
-4. compact-width/onboarding visual smoke;
-5. ORS→Community-footer spacing acceptance and removal of the unused legacy footer;
-6. final `/doc` convergence to the actually verified implementation.
+Automated technical evidence:
+1. Android CI #60 validated the converged startup access-gate path: static governance/compatibility gates, committed-wrapper verification, unit tests, debug build and release/R8 build are green.
+2. Android CI #62 validated the complete implementation including the compact RoutePlanner header and Settings-footer cleanup with the same full gate.
+3. The normal combined Gradle gate remains `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon`.
+4. F-152-001 is therefore `fixed in code / pending evidence`: `AccessGateViewModel` alone owns the startup access decision and protected feature ViewModels are not created until a real preference snapshot exists.
+
+Still required before acceptance:
+1. configured real-device repeated cold starts without visible onboarding/API-key flash;
+2. RoutePlanner runtime smoke covering origin search, destination search, Current location, Home/Work, swap and `Route finden`;
+3. compact-width visual smoke for the shared RoutePlanner endpoint surface and both onboarding steps;
+4. Settings footer spacing visual acceptance after the ORS section;
+5. no new app FATAL/ANR/navigation failure in the tested runtime path;
+6. final `/doc` acceptance convergence, then remove Draft status and merge PR #6.
 
 ## Build 151 Acceptance — accepted 03.10.2026
 

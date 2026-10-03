@@ -5,13 +5,13 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-152-001 UI/UX-Konvergenz
-- **Status:** in progress in PR #6; Teil A ist implementiert und Android CI #52 ist grün, reale Abnahme und Teil B stehen aus.
-- Erststart/Onboarding: Fließtext linksbündig statt Blocksatz; sinnvolle Absatztrennung zwischen verpflichtendem abfahrt.now-Key und optionalem ORS-Key.
-- RoutePlanner: Start/Ziel-Eingabe als gemeinsamer kompakter Container mit zwei Zeilen, Trenner und platzsparender Tauschaktion; bestehende Photon-/Saved-Places-/`/trips`-Logik bleibt erhalten.
-- Startup-Access-Gate: API-Key-Onboarding darf bei bereits eingerichteter App nicht kurz sichtbar werden. Ursache ist die künstliche `AppPreferences()`-Initialemission von `stateIn`; die Access-Entscheidung darf erst nach einer echten Repository/DataStore-Emission geöffnet werden.
-- Vor weiterer Runtime-Konvergenz F-152-001 klären: keine dauerhaft parallelen Preference-State-Projektionen für dieselbe Access-Entscheidung ohne ausdrückliche Architekturentscheidung.
-- Legacy-`AppFooter`-Deadcode im Settings-Sheet wird entfernt, damit keine historische Schatten-UX im Source verbleibt.
-- **Noch offen:** kompakter RoutePlanner-Kopf, ORS→Community-Footer-Abstand, Legacy-Footer-Entfernung, Realgeräte-Kaltstart/RoutePlanner/Compact-Width-Smokes und abschließende `/doc`-Konvergenz.
+- **Status:** implementation complete in Draft-PR #6; Android CI #62 ist grün, reale Abnahme steht aus.
+- Erststart/Onboarding: Fließtext linksbündig statt Blocksatz; verpflichtender abfahrt.now-Key und optionaler ORS-Hinweis bleiben als getrennte, einfache Information sichtbar.
+- RoutePlanner: Start/Ziel-Eingabe als gemeinsamer kompakter Container mit zwei Zeilen, Trenner und platzsparender Tauschaktion; bestehende Photon-/Saved-Places-/`/trips`-Logik wird weiterverwendet.
+- Startup-Access-Gate: `AccessGateViewModel` ist alleiniger Owner der Start-/Onboarding-Entscheidung und wartet auf die erste echte Preference-Emission. Geschützte Feature-ViewModels entstehen erst danach; der `DepartureViewModel.preferences`-State bleibt Feature-/Settings-State.
+- Settings-Footer: gestapelte Root-Spacer vor dem `CommunityFooter` entfernt; Footer als ein zusammenhängender Block in den 24-dp-Settings-Rhythmus integriert.
+- historischer, ungenutzter `AppFooter`-/Legal-Deadcode inklusive Riles-Tech-Link ist entfernt; `CommunityFooter` bleibt die einzige Runtime-Footer-Implementierung.
+- **Noch offen:** wiederholte Kaltstarts mit eingerichtetem Key ohne Onboarding-Flash; RoutePlanner-Smoke für Start-/Zielsuche, Current location, Home/Work, Swap und `Route finden`; Compact-Width-Smoke für RoutePlanner und Onboarding; Footer-Abstand visuell abnehmen; finale Build-152-Abnahme und Merge.
 
 ### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
 - **Status:** planned after Build 152.
