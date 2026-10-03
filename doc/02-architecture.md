@@ -13,6 +13,12 @@
 - Coroutines / Flow
 - `minSdk 34`, `compileSdk 37`, `targetSdk 37`
 
+## Externe Runtime-Dienste und Trust Boundaries
+
+Die App trennt externe Dienste fachlich und credential-seitig. abfahrt.now, Photon, HeiGIT/openrouteservice, OpenStreetMap-Tiles, Google Play Services Location und künftig GitHub-Release-Metadaten sind **keine** gemeinsame Backend-Schicht. Ein Client/Interceptor mit Credential darf nicht für einen fremden Host wiederverwendet werden.
+
+Das normative Service-Inventar einschließlich EU-first-/Ausnahmeregeln steht in [`14-community-and-service-policy.md`](14-community-and-service-policy.md). Insbesondere erhält GitHub für den geplanten Update-Checker einen separaten anonymen HTTP-Client; abfahrt.now-/ORS-Keys, Standortkoordinaten und Suchtexte dürfen nicht in diesen Pfad gelangen.
+
 ## Access-Gate
 
 Ab Build 136 wird der Departure-Hauptflow nur gerendert, wenn `onboardingCompleted == true` **und** der entschlüsselte abfahrt.now-Key nichtleer ist. Diese Entscheidung ist ein eigener, reiner Access-Gate und keine Netzwerk-/UI-Heuristik. HTTP 401 setzt nur den Access-Status zurück; der gespeicherte Key bleibt zur Korrektur erhalten. ORS ist von diesem Gate unabhängig.
@@ -63,7 +69,7 @@ Ein laufendes ORS-Enrichment darf den Core-Refresh fachlich nicht blockieren.
 - `DepartureViewModel.kt` ist mit rund 2.000 Zeilen ein Wartbarkeitshotspot.
 - API-Keys liegen in Preferences DataStore nur als versionierter AES-GCM-Ciphertext. Der AES-256-Schlüssel wird nicht exportierbar im Android Keystore gehalten. Klartext existiert nur zur Laufzeit im App-Prozess, wenn Requests oder Key-Editor ihn benötigen.
 - Linienfarb-Mapping ist regional teilweise hardcodiert; langfristig datengetriebene Quelle erwünscht.
-- Die mitgelieferte Source-ZIP enthält Wrapper-Properties, aber keine ausführbaren Gradle-Wrapper-Skripte/JAR; isolierte CLI-Reproduzierbarkeit ist deshalb noch nicht vollständig.
+- Der öffentliche Repo-Stand enthält die Gradle-Wrapper-Properties und Launcher. Solange `gradle-wrapper.jar` noch nicht eingecheckt ist, bootstrappt CI den offiziellen Gradle-9.6.0-Wrapper mit festem SHA-256; vollständige Offline-/Source-Selbstständigkeit bleibt bis zum eingecheckten JAR als F-DOC1-008 offen.
 
 Große Refactorings sind **kein** Selbstzweck. Aufteilung nur bei konkretem Nutzen und in kleinen, regressionsgesicherten Schritten.
 
