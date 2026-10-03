@@ -6,9 +6,11 @@
 - [x] `/docs` legacy tree removed; `/doc` remains the only normative documentation tree.
 - [x] EU-first/external-service policy added under `/doc`.
 - [x] Agent entry point added without creating new policy.
-- [x] Windows/POSIX Gradle wrapper launchers and verified bootstrap helper added.
+- [x] Windows/POSIX Gradle wrapper launchers added.
 - [x] Gradle distribution checksum pinned.
+- [x] `gradle-wrapper.jar` generated with Gradle 9.6.0, locally verified, committed and pushed to `main`.
+- [x] Windows fresh-wrapper gate: `gradlew.bat --version` → Gradle 9.6.0; `:app:testDebugUnitTest :app:assembleDebug` → `BUILD SUCCESSFUL`.
 - [x] GitHub Actions static + unit/debug-build gate added.
-- [ ] GitHub Actions real run green.
-- [ ] `gradle-wrapper.jar` committed after verified bootstrap; then close F-DOC1-008.
-- [ ] REPO1 accepted and merged to `main`.
+- [x] REPO1 governance/community baseline merged to `main`.
+- [ ] GitHub Actions run using the committed wrapper directly is green.
+- [ ] Close F-DOC1-008 after the direct-wrapper CI gate.
