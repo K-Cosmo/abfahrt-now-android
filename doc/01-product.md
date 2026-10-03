@@ -17,8 +17,16 @@ Die App soll ausdrücklich **kein Google-Maps-Ersatz** sein. Kern ist eine schne
 - Teilresultate dürfen früh erscheinen, solange sie nicht wissentlich fachlich falsch dargestellt werden.
 - Fehlende Zusatzdaten dürfen die Kernfunktion nicht blockieren.
 - Update-Verfügbarkeit ist Zusatzkomfort: ein fehlgeschlagener Update-Check darf die App weder blockieren noch als Kernfehler erscheinen.
+- Die App ist ein unabhängiges Community-Projekt. Externe Daten-/API-Anbieter werden klar als solche benannt und dürfen nicht als App-Betreiber erscheinen.
 
-## Aktueller Funktionsumfang Build 150
+## Aktueller Funktionsumfang Build 151
+
+### Community-Identität Build 151
+- Settings-Footer bezeichnet Abfahrt! sichtbar als unabhängige/unoffizielle Community-App und grenzt sie von abfahrt.now ab.
+- abfahrt.now bleibt als Quelle der Transitdaten/API sichtbar.
+- der Projektlink führt auf das kanonische GitHub-Repository `K-Cosmo/abfahrt-now-android`.
+- externe Privacy-/Terms-Links sind ausdrücklich als API-Provider-Links bezeichnet.
+- die Community-Texte liegen in allen 22 gebündelten UI-Locale-Sets vor.
 
 ### Routing-/Such-UX Build 146–148
 - Uhrzeiten in Route-Legs sind in derselben festen linken Spalte wie Modus-Symbol und Linienbadge zentriert; Namen/Details beginnen auf einer gemeinsamen Inhaltsachse.
@@ -57,6 +65,7 @@ Im Quellstand nachweisbar:
 - ORS-Routenvorschau mit MapLibre und externem Karten-Fallback.
 - mehrsprachige UI mit 22 Sprach-Ressourcensätzen plus Systemsprache.
 - anonymer GitHub-Release-Update-Hinweis ohne Credential-Weitergabe.
+- sichtbare unabhängige Community-Identität im Settings-Footer.
 
 ## Bewusste Nicht-Ziele
 
