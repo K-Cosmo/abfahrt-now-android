@@ -1,10 +1,11 @@
 # Build 152 Plan
 
 1. Bump app `versionCode` from 1510 to 1520; keep `versionName 1.1.0`.
-2. Fix preference readiness at the source of the navigation decision:
-   - keep the existing preference StateFlow/API;
-   - prevent its synthetic default value from marking preferences as loaded;
-   - only the first actual upstream preference emission opens the navigation gate.
+2. Fix startup preference readiness with one explicit app-level access path:
+   - `AccessGateViewModel` alone decides when the startup destination may be chosen;
+   - its nullable initial state stays closed until the first real `UserPreferencesRepository.preferencesFlow` emission;
+   - `DepartureViewModel` and `RoutePlannerViewModel` are instantiated only after that access snapshot exists;
+   - the existing `DepartureViewModel.preferences` remains feature/settings state and does not participate in startup navigation.
 3. Simplify onboarding typography:
    - use start alignment instead of justification;
    - use spacing/layout to separate the required-key explanation from the optional ORS note without adding a technical tutorial.
