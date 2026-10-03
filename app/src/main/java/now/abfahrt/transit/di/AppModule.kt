@@ -6,10 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import now.abfahrt.transit.BuildConfig
 import now.abfahrt.transit.data.api.AbfahrtApiService
-import now.abfahrt.transit.util.AppVersionInfo
 import now.abfahrt.transit.data.api.ApiKeyInterceptor
+import now.abfahrt.transit.data.api.GitHubReleaseApi
 import now.abfahrt.transit.data.api.OpenRouteServiceApi
 import now.abfahrt.transit.data.api.PhotonApiService
+import now.abfahrt.transit.util.AppVersionInfo
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
@@ -26,6 +27,7 @@ object NetworkModule {
     private const val BASE_URL = "https://api.abfahrt.now/"
     private const val PHOTON_BASE_URL = "https://photon.komoot.io/"
     private const val ORS_BASE_URL = "https://api.heigit.org/openrouteservice/"
+    private const val GITHUB_BASE_URL = "https://api.github.com/"
 
     private fun networkLogLevel(): HttpLoggingInterceptor.Level =
         if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
@@ -72,7 +74,7 @@ object NetworkModule {
         OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request: Request = chain.request().newBuilder()
-                                        .header("User-Agent", AppVersionInfo.userAgent)
+                    .header("User-Agent", AppVersionInfo.userAgent)
                     .build()
                 chain.proceed(request)
             }
@@ -83,6 +85,27 @@ object NetworkModule {
             )
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(15, TimeUnit.SECONDS)
+            .build()
+
+    @Provides
+    @Singleton
+    @Named("githubClient")
+    fun provideGitHubOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request: Request = chain.request().newBuilder()
+                    .header("User-Agent", AppVersionInfo.userAgent)
+                    .header("Accept", "application/vnd.github+json")
+                    .build()
+                chain.proceed(request)
+            }
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = networkLogLevel()
+                }
+            )
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .build()
 
     @Provides
@@ -117,6 +140,16 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("githubRetrofit")
+    fun provideGitHubRetrofit(@Named("githubClient") client: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(GITHUB_BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    @Provides
+    @Singleton
     fun provideApiService(@Named("abfahrtRetrofit") retrofit: Retrofit): AbfahrtApiService =
         retrofit.create(AbfahrtApiService::class.java)
 
@@ -129,4 +162,9 @@ object NetworkModule {
     @Singleton
     fun provideOpenRouteServiceApi(@Named("orsRetrofit") retrofit: Retrofit): OpenRouteServiceApi =
         retrofit.create(OpenRouteServiceApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideGitHubReleaseApi(@Named("githubRetrofit") retrofit: Retrofit): GitHubReleaseApi =
+        retrofit.create(GitHubReleaseApi::class.java)
 }
