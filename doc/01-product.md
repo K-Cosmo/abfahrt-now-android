@@ -1,5 +1,11 @@
 # Produkt
 
+## Projektidentität
+
+Abfahrt! in diesem Repository ist eine **unabhängige Community-Android-App**. Sie ist nicht die offizielle Android-App von abfahrt.now, nicht mit dem Betreiber/Entwickler der abfahrt.now-API verbunden und entwickelt oder betreibt diese API nicht. Die App nutzt abfahrt.now als externen fachlichen Dienst.
+
+Bei externen Runtime-Diensten gilt EU-first: EU-basierte Betreiber, offene Standards/Open-Source und Datenminimierung werden bevorzugt, sofern sie den Produktbedarf gleichwertig erfüllen. Bewusste Ausnahmen werden dokumentiert; Details und das aktuelle Service-Inventar stehen in [`14-community-and-service-policy.md`](14-community-and-service-policy.md).
+
 ## Zielbild
 
 Abfahrt! beantwortet eine enge, alltagsnahe Frage: **Welche relevanten öffentlichen Verkehrsmittel fahren in meiner Umgebung als Nächstes ab, und welche Haltestelle ist dafür aus Nutzersicht die sinnvollste?**
