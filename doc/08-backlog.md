@@ -4,23 +4,17 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-150-001 GitHub Release Update Checker
-- **Status:** implemented in Build-150 branch; CI/runtime evidence pending.
-- einmaliger asynchroner Check pro App-Start gegen öffentliche GitHub-Release-Metadaten; kein GitHub-Token.
-- separater anonymer GitHub-HTTP-Client; keinerlei Wiederverwendung des abfahrt.now-Clients/`ApiKeyInterceptor`.
-- Release-Tag-Schema `v<versionName>-b<build>`; Vergleich über monotone Buildnummer (`versionCode = build * 10`).
-- lokalisierter Hinweis in allen 22 gebündelten UI-Sprachressourcen; Aktion öffnet die feste Release-Seite des Community-Repositories.
-- Fehler/404/Offline bleiben still; keine stille Installation und kein automatischer APK-Download.
-- Unit-Tests schützen Tag-/Buildvergleich sowie die Credential-Isolation des GitHub-Clients.
+### B-COMMUNITY-001 In-App-Community-Abgrenzung — Build 151
+- **Status:** implemented; CI/runtime evidence pending.
+- Settings-Footer zeigt die App als unabhängiges Community-Projekt und grenzt sie ausdrücklich von abfahrt.now ab.
+- abfahrt.now bleibt als Daten-/API-Quelle sichtbar, nicht als App-Betreiber.
+- Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`.
+- Privacy/Terms-Links sind ausdrücklich als API-Provider-Links beschriftet.
+- sechs neue Community-Texte sind in allen 22 gebündelten Locale-Sets vorhanden.
+- Release-Blocker F-DOC1-015 wird erst nach Build-/Runtime-Evidence geschlossen.
 
-### B-COMMUNITY-001 In-App-Community-Abgrenzung
-- **Status:** open; Release-Blocker vor dem ersten öffentlichen Community-App-Release.
-- bestehende About-/Legal-UX muss mit der neuen Community-Identität konvergieren.
-- insbesondere darf die App keine offizielle Zugehörigkeit zu abfahrt.now oder einem API-Entwickler suggerieren. Siehe F-DOC1-015.
-- eigene Produktänderung mit Buildnummer/Gate; nicht still in Build 150 vermischen.
-
-### B-151-001 Startup/Main-Thread-Instrumentierung (AB-018)
-- **Status:** planned after Build 150 bzw. nach notwendiger Community-Release-Konvergenz.
+### B-152-001 Startup/Main-Thread-Instrumentierung (AB-018)
+- **Status:** planned after Build 151.
 - zunächst Messinstrumentierung der Kaltstart-/Main-Thread-Schritte; keine Optimierung ohne Ursache/Evidence.
 - erst nach Messung gezielte Verschiebung/Lazy-Initialisierung, falls tatsächlich erforderlich.
 
@@ -29,13 +23,20 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
 - Nicht-HERE-RoutePreview bleibt unverändert.
 
-## Abgeschlossenes Repository-Housekeeping
+## Abgeschlossen
+
+### B-150-001 GitHub Release Update Checker
+- **Status:** closed Build 150; in `main` integriert.
+- anonymer, credential-isolierter `releases/latest`-Check; kein GitHub-Token und keine API-Key-Weitergabe.
+- striktes `v<versionName>-b<build>`-Schema und monotone Buildnummer.
+- lokalisierter Hinweis in 22 UI-Sprachen; feste Release-Seite; kein APK-Autodownload/Installer.
+- CI, realer E2E und Release-/R8-Build erfolgreich.
 
 ### B-REPO1-001 Public-Repo-Housekeeping / Community-Baseline
 - **Status:** closed.
 - `/doc` ist einzige normative Quelle; `/docs` und doppelter Root-`CHANGELOG.md` entfernt.
 - README/Service-Policy grenzen die Community-App klar von abfahrt.now ab und dokumentieren EU-first, 22 gebündelte UI-Locale-Sets und benötigte API-Keys.
-- vollständiger Gradle-9.6.0-Wrapper inklusive JAR eingecheckt; lokaler Windows-Gate und GitHub Actions mit direkter Wrapper-Nutzung grün. F-DOC1-008 geschlossen.
+- vollständiger Gradle-9.6.0-Wrapper inklusive JAR eingecheckt; lokaler Windows-Gate und GitHub Actions mit direkter Wrapper-Nutzung grün.
 
 ## Blockiert / abhängig von externem Contract
 
