@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash screen theme — shown by the system before MainActivity draws -->
+    <style name="Theme.Abfahrt" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_train</item>
+        <item name="postSplashScreenTheme">@style/Theme.Abfahrt.Main</item>
+    </style>
+
+    <!-- Main activity theme — Compose takes over immediately after launch -->
+    <style name="Theme.Abfahrt.Main" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+</resources>

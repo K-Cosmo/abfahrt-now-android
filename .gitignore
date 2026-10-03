@@ -1,0 +1,43 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Build directories
+build/
+app/build/
+*/build/
+
+# Local configuration
+local.properties
+*.local.properties
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# Gradle
+.gradle/
+# The Gradle wrapper JAR should be committed once F-DOC1-008 is closed.
+
+# Keystore — NEVER commit these
+*.jks
+*.keystore
+*.p12
+
+# Logs
+*.log
+
+# Public repository evidence policy:
+# raw runtime evidence can contain precise location/device data.
+evidence/**
+!evidence/README.md
+!evidence/public/
+!evidence/public/**
+
+# OS
+Thumbs.db

@@ -1,0 +1,11 @@
+# Tasks
+- [x] versionCode 1360
+- [x] mandatory access gate + unit tests
+- [x] onboarding no-skip + prefill
+- [x] Settings no-delete for abfahrt.now
+- [x] repository blank-update guard
+- [x] HTTP 401 re-entry
+- [x] locale copy/gates
+- [x] `/doc` convergence
+- [ ] real `testDebugUnitTest + assembleDebug`
+- [ ] first-run/settings/401 runtime acceptance

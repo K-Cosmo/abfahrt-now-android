@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <!--
+        API keys are encrypted at rest with an Android Keystore key, but the
+        Keystore key itself is device-bound. Keep the DataStore file excluded
+        from cloud backup and device-to-device transfer so unusable ciphertext
+        is not restored onto another device.
+    -->
+    <cloud-backup>
+        <exclude domain="file" path="datastore/abfahrt_prefs.preferences_pb" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="file" path="datastore/abfahrt_prefs.preferences_pb" />
+    </device-transfer>
+</data-extraction-rules>

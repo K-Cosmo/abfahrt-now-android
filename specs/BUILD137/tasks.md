@@ -1,0 +1,11 @@
+# Tasks
+- [x] versionCode 1370
+- [x] dedicated protected `alternate_departures` route
+- [x] Home overflow menu: alternate departures + Settings
+- [x] existing Photon station-search semantics retained on alternate page
+- [x] Header/System Back reset to CurrentLocation/Idle
+- [x] 22-locale key parity for new UI strings
+- [x] `/doc` convergence
+- [x] source/static gates
+- [ ] real `testDebugUnitTest + assembleDebug`
+- [ ] runtime menu/search/back acceptance

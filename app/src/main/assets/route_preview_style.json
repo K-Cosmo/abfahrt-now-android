@@ -1,0 +1,30 @@
+{
+  "version": 8,
+  "name": "Abfahrt Route Preview",
+  "sources": {
+    "osm-raster": {
+      "type": "raster",
+      "tiles": [
+        "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+      ],
+      "tileSize": 256,
+      "attribution": "© OpenStreetMap contributors"
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "#eef3f7"
+      }
+    },
+    {
+      "id": "osm-raster-layer",
+      "type": "raster",
+      "source": "osm-raster",
+      "minzoom": 0,
+      "maxzoom": 19
+    }
+  ]
+}
