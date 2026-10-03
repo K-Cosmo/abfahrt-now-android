@@ -478,7 +478,6 @@ Verbindliche Regel:
 
 Die Korrektur erzeugt keinen zweiten Photon-Call, keine neue Dependency und keine neue Ranking-Architektur.
 
-
 ## D-069 — Allgemeine Photon-Zielsuche nutzt Raw Query + Location Bias; keine Client-Heuristik
 
 Build 148 beendet die clientseitige Ortsklassifikation für die allgemeine Routen-/Zielsuche. Der Client darf nicht mehr aus Wortanzahl, PLZ, `S`/`U`/`Bhf`, Kommas oder der aktuellen `DepartureResponse.city` ableiten, welchen Ort der Nutzer gemeint haben könnte.
@@ -505,3 +504,34 @@ Verbindlich:
 - für Abfahrten an einem explizit gewählten Alternativort ist der Query-Origin dieses Orts maßgeblich, nicht der physische Geräte-Standort.
 - Nicht-HERE-Routenvorschau, ORS-Anreicherung und externe Kartenaktion bleiben unverändert.
 - AB-018 Startup/Main-Thread-Performance wird nicht in Build 149 vermischt; erst messen/instrumentieren, dann optimieren.
+
+## D-071 — Update-Metadaten sind ein separater anonymer Komfortpfad
+
+Ab Build 150 ist der GitHub-Release-Check bewusst **nicht** Teil der Transit-/Routing- oder Credential-Architektur. Er verwendet einen separaten anonymen Client ausschließlich gegen `GET /repos/K-Cosmo/abfahrt-now-android/releases/latest`.
+
+Verbindlich:
+- kein GitHub-Token;
+- keine Wiederverwendung des abfahrt.now-Clients oder `ApiKeyInterceptor`;
+- keine Übertragung von abfahrt.now-/ORS-Keys, Standort-, Such- oder Transitdaten;
+- nur Tags im Schema `v<semver>-b<build>` werden ausgewertet; die monotone Buildnummer entscheidet;
+- Fehler/Offline/404/Rate-Limit blockieren Startup und Kernfunktion nicht;
+- nach Nutzeraktion wird ausschließlich die feste Release-Seite des Community-Repositories geöffnet;
+- kein eigener APK-Downloader und kein stiller Installer.
+
+## D-072 — Runtime-Identität trennt Community-App und API-Anbieter sichtbar
+
+Ab Build 151 muss die App in der sichtbaren Runtime klar als unabhängig entwickelte, inoffizielle Community-App erkennbar sein. abfahrt.now ist Daten-/API-Anbieter, nicht App-Betreiber oder Projektinhaber.
+
+Verbindlich:
+- Community-Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`;
+- externe Privacy-/Terms-Links werden als API-Provider-Links bezeichnet;
+- die Abgrenzung muss in allen ausgelieferten UI-Sprachen vorhanden sein;
+- Provider-/Markenhinweise dürfen nicht den Eindruck einer offiziellen Zugehörigkeit erzeugen.
+
+## D-073 — Der normale Android-CI-Gate enthält Release/R8
+
+Ab Build 151 umfasst der Standard-Gate auf Pull Requests dauerhaft:
+
+`./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon`
+
+Damit werden Unit-Tests, Debug-Build und minifizierter Release/R8-Build auf demselben Commit geprüft. Ein grüner CI-Gate bleibt trotzdem **nur ein technischer Gate**: sichtbare UX, reale Netzwerk-/Gerätepfade und andere definierte Runtime-Evidence werden dadurch nicht automatisch akzeptiert.

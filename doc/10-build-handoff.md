@@ -2,7 +2,7 @@
 
 ## Aktuell: v1.1.0 Build 151 (`versionCode 1510`) — Community identity accepted
 
-Build 150 ist technisch accepted und in `main` integriert. REPO1 bleibt die abgeschlossene Repository-/Governance-Baseline.
+Build 150 ist technisch accepted und in `main` integriert. REPO1 bleibt die abgeschlossene Repository-/Governance-Baseline. DOC2 konvergiert am 03.10.2026 ausschließlich die Dokumentation auf diesen Stand; App-Source, Ressourcen und Versionierung bleiben unverändert.
 
 ### Build-151-Scope
 
@@ -41,14 +41,38 @@ Damit sind Locale-/Static-/Governance-Gates, Unit-Tests, Debug-Build und Release
 
 Der Release-/R8-Build gehört künftig direkt zum normalen Android-CI-Gate. Ein separates manuelles `assembleRelease` ist nur noch nötig, wenn gezielte lokale Release-Evidence verlangt wird.
 
-## Als Nächstes: Build 152 UI/UX-Paket
+## DOC2 — Dokumentationskonvergenz
 
-1. Onboarding-Fließtext linksbündig und sinnvoll in Pflicht-Key/optionalen ORS-Abschnitt gliedern.
-2. RoutePlanner-Start/Ziel-Kopf in einen gemeinsamen kompakten Container überführen; vorhandene Such-/Swap-/Saved-Places-/`/trips`-Logik erhalten.
-3. API-Key-Onboarding-Flash beim Start einer bereits eingerichteten App beseitigen. Konkreter Befund: `stateIn(..., AppPreferences())` liefert einen künstlichen leeren Initialzustand; `preferencesLoaded` wird derzeit dadurch zu früh geöffnet. Gate künftig erst nach echter `prefsRepo.preferencesFlow`-Emission.
-4. nicht mehr genutzten historischen `AppFooter`-Deadcode entfernen.
+DOC2 behebt ausschließlich den Dokumentationsdrift nach REPO1/Build 150/Build 151. Insbesondere werden Changelog, Decision Log, Test-/Evidence-Historie, Compatibility, Localization, Backlog, Release-Plan und Handoff auf denselben akzeptierten Stand gebracht.
 
-AB-018 Startup/Main-Thread-Messung folgt separat als **Build 153**.
+DOC2 ist **kein Runtime-Build**:
+- keine App-/Resource-/Gradle-Runtimeänderung;
+- kein Versionssprung;
+- keine neue Runtime-Abnahme nötig;
+- normale Doku-/Governance-Gates bleiben erforderlich.
+
+## Build 152 UI/UX-Paket — in Arbeit
+
+PR #6 (`feature/build152-ui-ux`) enthält den ersten Teil von Build 152. Android CI #52 ist vollständig grün, einschließlich Governance-/Compatibility-Gates, Unit-Tests, Debug- und Release/R8-Build. Build 152 ist dadurch noch nicht accepted.
+
+Bereits im Branch:
+1. `versionCode = 1520`.
+2. Onboarding-Fließtext linksbündig statt Blocksatz.
+3. Access-Gate wartet über eine nullable Preference-Projektion auf eine echte Repository/DataStore-Emission, bevor ein Startziel gerendert wird.
+
+Vor weiterer Runtime-Konvergenz ist **F-152-001** zu klären: Der neue `AccessGateViewModel` projiziert denselben Preference-Flow zusätzlich, während `DepartureViewModel` seinen bisherigen `stateIn(..., AppPreferences())`-/`preferencesLoaded`-Pfad weiterhin enthält. Ziel bleibt eine kleine, nachvollziehbare und eindeutige Readiness-Lösung ohne unbeabsichtigte Schattenlogik.
+
+Danach offen:
+1. RoutePlanner-Start/Ziel-Kopf in einen gemeinsamen kompakten Container überführen; vorhandene Such-/Swap-/Saved-Places-/`/trips`-Logik erhalten.
+2. ORS→Community-Footer-Abstand reduzieren.
+3. nicht mehr genutzten historischen `AppFooter`-Deadcode entfernen.
+4. reale Kaltstart-Smokes mit eingerichtetem Key: kein Onboarding/API-Key-Flash.
+5. RoutePlanner-Smoke: Start-/Zielsuche, Swap, Home/Work, `Route finden`.
+6. Compact-Width-Smoke für RoutePlanner und beide Onboarding-Schritte.
+7. Footer visuell abnehmen.
+8. erst danach Build 152 abschließend nach `/doc` konvergieren und akzeptieren.
+
+AB-018 Startup/Main-Thread-Messung folgt separat als **Build 153**. Dort gilt weiterhin: erst instrumentieren/messen, nicht vorab optimieren.
 
 ## Lokaler Workspace
 

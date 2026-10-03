@@ -1,3 +1,61 @@
+## DOC2 — documentation convergence gate
+
+DOC2 is documentation/governance-only. It does **not** change app source, Android resources, dependencies, build configuration, `versionCode` or `versionName`.
+
+Acceptance for DOC2 requires:
+1. diff is limited to `/doc` and `/specs/DOC2`;
+2. Build 151 remains the latest accepted runtime baseline (`versionCode 1510`, `versionName 1.1.0`);
+3. REPO1, Build 150 and Build 151 status is consistent across changelog, decisions, evidence, compatibility, localization, backlog, release plan and handoff;
+4. Build 152 is described only as in progress/pending runtime evidence;
+5. documentation/governance CI is green.
+
+No additional Android runtime smoke is required for DOC2 itself because runtime code is unchanged.
+
+## Build 152 — in progress / pending runtime evidence
+
+PR #6 / `feature/build152-ui-ux` has a successful Android CI #52. The run covers static governance/compatibility gates, committed-wrapper verification, unit tests, debug build and release/R8 build.
+
+This is **not** Build-152 acceptance. Still required before acceptance:
+1. F-152-001 access-gate state-path convergence;
+2. configured real-device repeated cold starts without visible onboarding/API-key flash;
+3. compact RoutePlanner origin/destination UI with origin search, destination search, Home/Work, swap and `Route finden` smoke;
+4. compact-width/onboarding visual smoke;
+5. ORS→Community-footer spacing acceptance and removal of the unused legacy footer;
+6. final `/doc` convergence to the actually verified implementation.
+
+## Build 151 Acceptance — accepted 03.10.2026
+
+Evidence:
+1. real-device Settings screenshot confirms independent/unofficial Community identity, abfahrt.now as API/data source, GitHub project CTA, API Privacy/Terms labeling and visible Build 151 version;
+2. all six new Community/provider strings exist in all 22 bundled locale sets;
+3. Android CI #42 completed static/locale/governance gates, unit tests, debug build and release/R8 build on the same PR state;
+4. combined Gradle gate: `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon` → `BUILD SUCCESSFUL in 3m 47s`, 106 actionable tasks executed;
+5. no transit, routing, credential, update-check or MapLibre semantic change was part of Build 151.
+
+F-DOC1-015 / B-COMMUNITY-001 are closed. Build 151 is the latest accepted runtime baseline.
+
+## Build 150 Acceptance — accepted 03.10.2026
+
+Evidence:
+1. Branch CI green for the anonymous GitHub release update checker;
+2. focused JVM coverage validates strict `v<semver>-b<build>` parsing/build comparison and verifies that the GitHub client has no `ApiKeyInterceptor`;
+3. real E2E: without a release no dialog appears; an older build detects `v1.1.0-b150` and opens the fixed repository release page; the same build does not show an update prompt;
+4. local `gradlew.bat :app:assembleRelease` with R8/Minify succeeded (`BUILD SUCCESSFUL in 52s`);
+5. no GitHub token, app API-key forwarding, APK auto-download or silent install path exists.
+
+F-150-001 / B-150-001 are closed.
+
+## REPO1 Acceptance — accepted
+
+Evidence:
+1. public GitHub repository is the canonical workspace;
+2. `/doc` is the only normative documentation root; legacy `/docs` and duplicate root changelog are removed;
+3. full Gradle 9.6.0 wrapper including `gradle-wrapper.jar` is committed;
+4. local Windows wrapper/build evidence is green;
+5. GitHub Actions uses the committed wrapper directly and completes the repository CI path without bootstrap generation.
+
+F-DOC1-008 and F-DOC1-010 are closed.
+
 ## Build 149 Acceptance — pending real evidence
 1. `:app:testDebugUnitTest :app:assembleDebug` vollständig grün.
 2. JVM policy: HERE => `shouldLoadRoutePreview=false`; Nicht-HERE benötigt ORS-Key + Ziel.
