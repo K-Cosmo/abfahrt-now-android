@@ -116,3 +116,12 @@ Ein bestehendes `onboardingCompleted=true` reicht nicht, wenn der entschlüsselt
 
 ### I-064 Release braucht echte Abnahme
 Kompilieren allein ist keine Freigabe: Unit-Tests, Release-Minify-Build und definierte Smoke-/Runtime-Evidence sind erforderlich.
+
+### I-065 Externe Runtime-Dienste brauchen dokumentierten Zweck
+Jede neue externe Runtime-Anbindung muss vor Produktivnutzung in `14-community-and-service-policy.md` mit Zweck, übertragenen Daten, Credential-Bedarf, Alternativen und EU-/Open-Source-Einordnung dokumentiert sein.
+
+### I-066 Credentials überschreiten keine Service-Grenze
+Der abfahrt.now-Key darf ausschließlich an den vorgesehenen abfahrt.now-Host, der ORS-Key ausschließlich an den vorgesehenen HeiGIT/openrouteservice-Host gesendet werden. Credential-tragende OkHttp-/Retrofit-Clients oder Interceptors dürfen nicht für Photon, OSM-Tiles, GitHub oder andere Hosts wiederverwendet werden.
+
+### I-067 UI-Lokalisierung ist lokal gebündelt
+Die unterstützten UI-Sprachen werden als Android-Ressourcen mitgeliefert. Für die normale UI-Lokalisierung ist kein externer Übersetzungsdienst zur Laufzeit zulässig; neue Locale-Sets müssen den Paritätsgate erfüllen oder eine explizit dokumentierte Ausnahme haben.
