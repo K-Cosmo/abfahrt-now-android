@@ -35,6 +35,7 @@ Eine neue fachliche oder technische Regel gilt erst als Projektentscheidung, wen
 | [`11-test-and-evidence.md`](11-test-and-evidence.md) | Test-, Evidence- und Abnahmeprozess |
 | [`12-android-compatibility.md`](12-android-compatibility.md) | Android-/Toolchain-Kompatibilität |
 | [`13-localization.md`](13-localization.md) | Lokalisierungsregeln |
+| [`14-community-and-service-policy.md`](14-community-and-service-policy.md) | Community-Identität, EU-first-Prinzip und externe Runtime-Dienste |
 | [`AI-CODING-GUARDRAILS.md`](AI-CODING-GUARDRAILS.md) | verbindliche Regeln für KI-gestützte Entwicklung |
 | [`CHANGELOG.md`](CHANGELOG.md) | chronologische Build-Historie |
 
@@ -43,6 +44,7 @@ Eine neue fachliche oder technische Regel gilt erst als Projektentscheidung, wen
 - `.specify/memory/constitution.md`: Prozess-Governance, verweist auf `/doc`; darf keine konkurrierende Produktwahrheit enthalten.
 - `/specs/<build-or-feature>/`: Specification, Plan und Tasks für eine konkrete Änderung; nach Abnahme wird die bleibende Wahrheit nach `/doc` konvergiert.
 - `/evidence`: reale Build-, Test-, Logcat-, Screenshot- und QA-Belege. Evidence ist beobachtete Realität, aber keine Policy.
+- Ein paralleler `/docs`-Baum und ein zweiter Root-`CHANGELOG.md` sind nicht zulässig; historische Referenzen in alten Texten bleiben reine Historie.
 
 ## DOC1/DOC1.1 und Runtime Builds 123–138
 
