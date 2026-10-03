@@ -12,5 +12,5 @@
 - [x] Windows fresh-wrapper gate: `gradlew.bat --version` → Gradle 9.6.0; `:app:testDebugUnitTest :app:assembleDebug` → `BUILD SUCCESSFUL`.
 - [x] GitHub Actions static + unit/debug-build gate added.
 - [x] REPO1 governance/community baseline merged to `main`.
-- [ ] GitHub Actions run using the committed wrapper directly is green.
-- [ ] Close F-DOC1-008 after the direct-wrapper CI gate.
+- [x] GitHub Actions run using the committed wrapper directly is green.
+- [x] F-DOC1-008 closed after local + direct-wrapper CI evidence.
