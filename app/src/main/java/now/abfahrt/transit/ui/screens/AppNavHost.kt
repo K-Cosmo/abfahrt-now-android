@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.*
+import now.abfahrt.transit.ui.viewmodel.AccessGateViewModel
 import now.abfahrt.transit.ui.viewmodel.DepartureViewModel
 import now.abfahrt.transit.ui.viewmodel.RoutePlannerViewModel
 import now.abfahrt.transit.ui.viewmodel.SavedPlacesViewModel
@@ -13,6 +14,7 @@ import now.abfahrt.transit.ui.viewmodel.SavedPlacesViewModel
  *
  * Routing logic:
  *  • abfahrt.now access requires completed onboarding + a non-blank API key.
+ *  • the access decision waits for a real DataStore-backed preference emission.
  *  • ORS remains optional.
  *  • A missing/rejected key re-enters onboarding from every protected app route.
  *  • Alternate-location departures are a dedicated secondary route from Build 137.
@@ -21,17 +23,19 @@ import now.abfahrt.transit.ui.viewmodel.SavedPlacesViewModel
 fun AppNavHost() {
     val navController = rememberNavController()
     val viewModel: DepartureViewModel = hiltViewModel()
+    val accessGateViewModel: AccessGateViewModel = hiltViewModel()
     val routePlannerViewModel: RoutePlannerViewModel = hiltViewModel()
     val routePlannerState by routePlannerViewModel.uiState.collectAsState()
-    val prefs by viewModel.preferences.collectAsState()
-    val preferencesLoaded by viewModel.preferencesLoaded.collectAsState()
+    val accessPrefs by accessGateViewModel.preferences.collectAsState()
+
+    // null means the real DataStore/Keystore-backed preference snapshot has not
+    // arrived yet. Render no protected destination instead of guessing onboarding.
+    val prefs = accessPrefs ?: return
 
     val hasRequiredAccess = hasRequiredAbfahrtAccess(
         onboardingCompleted = prefs.onboardingCompleted,
         apiKey = prefs.apiKey
     )
-
-    if (!preferencesLoaded) return
 
     NavHost(
         navController    = navController,
