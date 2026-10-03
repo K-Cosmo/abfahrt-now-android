@@ -5,11 +5,13 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-152-001 UI/UX-Konvergenz
-- **Status:** planned after Build 151.
+- **Status:** in progress in PR #6; Teil A ist implementiert und Android CI #52 ist grün, reale Abnahme und Teil B stehen aus.
 - Erststart/Onboarding: Fließtext linksbündig statt Blocksatz; sinnvolle Absatztrennung zwischen verpflichtendem abfahrt.now-Key und optionalem ORS-Key.
 - RoutePlanner: Start/Ziel-Eingabe als gemeinsamer kompakter Container mit zwei Zeilen, Trenner und platzsparender Tauschaktion; bestehende Photon-/Saved-Places-/`/trips`-Logik bleibt erhalten.
-- Startup-Access-Gate: API-Key-Onboarding darf bei bereits eingerichteter App nicht kurz sichtbar werden. Ursache ist die künstliche `AppPreferences()`-Initialemission von `stateIn`; `preferencesLoaded` darf erst nach einer echten Repository/DataStore-Emission öffnen.
+- Startup-Access-Gate: API-Key-Onboarding darf bei bereits eingerichteter App nicht kurz sichtbar werden. Ursache ist die künstliche `AppPreferences()`-Initialemission von `stateIn`; die Access-Entscheidung darf erst nach einer echten Repository/DataStore-Emission geöffnet werden.
+- Vor weiterer Runtime-Konvergenz F-152-001 klären: keine dauerhaft parallelen Preference-State-Projektionen für dieselbe Access-Entscheidung ohne ausdrückliche Architekturentscheidung.
 - Legacy-`AppFooter`-Deadcode im Settings-Sheet wird entfernt, damit keine historische Schatten-UX im Source verbleibt.
+- **Noch offen:** kompakter RoutePlanner-Kopf, ORS→Community-Footer-Abstand, Legacy-Footer-Entfernung, Realgeräte-Kaltstart/RoutePlanner/Compact-Width-Smokes und abschließende `/doc`-Konvergenz.
 
 ### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
 - **Status:** planned after Build 152.
