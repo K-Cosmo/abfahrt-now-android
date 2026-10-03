@@ -7,12 +7,12 @@
 - [x] Project link points to the canonical GitHub repository.
 - [x] API privacy/terms links are labeled as provider/API links.
 - [x] New strings supplied for all 22 bundled locales.
-- [ ] Bump versionCode to 1510.
+- [x] Bump versionCode to 1510.
 
 ## Governance / acceptance
-- [ ] Converge `/doc` and close F-DOC1-015 only after evidence.
+- [x] `/doc` converged to Build 151; F-DOC1-015 remains pending until evidence.
 - [ ] Locale/static gates green.
 - [ ] `:app:testDebugUnitTest :app:assembleDebug` green.
 - [ ] `:app:assembleRelease` green.
 - [ ] Real-device settings footer smoke: community identity visible, GitHub link correct, API legal links correctly labeled.
-- [ ] AB-018 remains separate as Build 152.
+- [x] AB-018 remains separate as Build 152.
