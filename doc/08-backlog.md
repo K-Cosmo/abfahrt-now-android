@@ -4,17 +4,15 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-COMMUNITY-001 In-App-Community-Abgrenzung — Build 151
-- **Status:** implemented; CI/runtime evidence pending.
-- Settings-Footer zeigt die App als unabhängiges Community-Projekt und grenzt sie ausdrücklich von abfahrt.now ab.
-- abfahrt.now bleibt als Daten-/API-Quelle sichtbar, nicht als App-Betreiber.
-- Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`.
-- Privacy/Terms-Links sind ausdrücklich als API-Provider-Links beschriftet.
-- sechs neue Community-Texte sind in allen 22 gebündelten Locale-Sets vorhanden.
-- Release-Blocker F-DOC1-015 wird erst nach Build-/Runtime-Evidence geschlossen.
-
-### B-152-001 Startup/Main-Thread-Instrumentierung (AB-018)
+### B-152-001 UI/UX-Konvergenz
 - **Status:** planned after Build 151.
+- Erststart/Onboarding: Fließtext linksbündig statt Blocksatz; sinnvolle Absatztrennung zwischen verpflichtendem abfahrt.now-Key und optionalem ORS-Key.
+- RoutePlanner: Start/Ziel-Eingabe als gemeinsamer kompakter Container mit zwei Zeilen, Trenner und platzsparender Tauschaktion; bestehende Photon-/Saved-Places-/`/trips`-Logik bleibt erhalten.
+- Startup-Access-Gate: API-Key-Onboarding darf bei bereits eingerichteter App nicht kurz sichtbar werden. Ursache ist die künstliche `AppPreferences()`-Initialemission von `stateIn`; `preferencesLoaded` darf erst nach einer echten Repository/DataStore-Emission öffnen.
+- Legacy-`AppFooter`-Deadcode im Settings-Sheet wird entfernt, damit keine historische Schatten-UX im Source verbleibt.
+
+### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
+- **Status:** planned after Build 152.
 - zunächst Messinstrumentierung der Kaltstart-/Main-Thread-Schritte; keine Optimierung ohne Ursache/Evidence.
 - erst nach Messung gezielte Verschiebung/Lazy-Initialisierung, falls tatsächlich erforderlich.
 
@@ -24,6 +22,14 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - Nicht-HERE-RoutePreview bleibt unverändert.
 
 ## Abgeschlossen
+
+### B-COMMUNITY-001 In-App-Community-Abgrenzung — Build 151
+- **Status:** closed Build 151.
+- Settings-Footer zeigt die App als unabhängiges Community-Projekt und grenzt sie ausdrücklich von abfahrt.now ab.
+- abfahrt.now bleibt als Daten-/API-Quelle sichtbar, nicht als App-Betreiber.
+- Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`; Privacy/Terms sind als API-Provider-Links beschriftet.
+- alle sechs Community-Texte sind in 22 Locale-Sets vorhanden.
+- Realgeräte-Screenshot positiv; Android CI #42 inklusive Debug-, Unit-Test- und Release/R8-Build grün.
 
 ### B-150-001 GitHub Release Update Checker
 - **Status:** closed Build 150; in `main` integriert.
