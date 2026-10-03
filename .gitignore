@@ -22,7 +22,8 @@ local.properties
 
 # Gradle
 .gradle/
-# The Gradle wrapper JAR should be committed once F-DOC1-008 is closed.
+# `gradle/wrapper/gradle-wrapper.jar` is intentionally NOT ignored.
+# Commit it after the verified bootstrap; until then CI bootstraps/checksums it (F-DOC1-008).
 
 # Keystore — NEVER commit these
 *.jks
