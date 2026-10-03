@@ -18,7 +18,10 @@ Reduce avoidable visual friction without changing transit semantics or introduci
    - compact layout must work on narrow phone widths.
 4. Startup access gate
    - an already configured user must never see a transient API-key/onboarding screen while preferences are loading;
-   - `preferencesLoaded` becomes true only after the first real preferences repository/DataStore emission, never because of the artificial `stateIn(..., AppPreferences())` initial value.
+   - `AccessGateViewModel` is the sole owner of the startup access decision;
+   - its nullable state stays unresolved until the first real `UserPreferencesRepository.preferencesFlow` emission;
+   - protected feature ViewModels are created only after that access snapshot exists;
+   - `DepartureViewModel.preferences` remains feature/settings state and does not select the app start destination.
 
 ## Non-goals
 - no departure-list redesign in this build;
