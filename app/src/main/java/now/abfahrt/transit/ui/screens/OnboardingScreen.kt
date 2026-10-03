@@ -89,7 +89,8 @@ fun OnboardingScreen(
                             text = stringResource(R.string.onboarding_welcome_body),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Justify,
+                            textAlign = TextAlign.Start,
+                            lineHeight = 26.sp,
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -147,7 +148,8 @@ fun OnboardingScreen(
                             text = stringResource(R.string.onboarding_ors_body),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Justify,
+                            textAlign = TextAlign.Start,
+                            lineHeight = 26.sp,
                             modifier = Modifier.fillMaxWidth()
                         )
 
