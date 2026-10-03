@@ -14,9 +14,9 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 | F-DOC1-005 | P1 | closed Build 125 | API-Key-Migration und Keystore-geschützte Speicherung real bestätigt. |
 | F-DOC1-006 | P1 | closed Build 132 | Android-17/API-37-Toolchain und reale HTTPS-Kernpfade erfolgreich bestätigt. |
 | F-DOC1-007 | P1 | closed Build 130 | 16-KB-Readiness abgenommen: Release-Artefakt-Audit, AAB `PAGE_ALIGNMENT_16K` und echter Runtime-Smoke mit Page Size 16384. |
-| F-DOC1-008 | P1 | mitigated / open | Repo-Housekeeping ergänzt `gradlew`, `gradlew.bat`, gehärtete Wrapper-Properties, SHA-256-verifizierenden Bootstrap und CI. `gradle-wrapper.jar` ist noch nicht eingecheckt; vollständige Source-Selbstständigkeit ist erst mit dem verifizierten eingecheckten JAR geschlossen. |
+| F-DOC1-008 | P1 | pending evidence | Der vollständige Gradle-9.6.0-Wrapper inklusive `gradle-wrapper.jar` ist jetzt auf `main` eingecheckt. Lokaler Windows-Nachweis: `gradlew.bat --version` meldet 9.6.0 und `:app:testDebugUnitTest :app:assembleDebug` ist grün. Letztes Gate ist ein GitHub-Actions-Lauf, der den eingecheckten Wrapper direkt ohne Bootstrap verwendet. |
 | F-DOC1-009 | P2 | open | `DepartureViewModel.kt` bleibt ein großer Wartungshotspot. Refactoring nur problemgetrieben und in kleinen Schritten; kein Big-Bang-Refactor. |
-| F-DOC1-010 | P2 | closed REPO1 | Paralleler Root-`CHANGELOG.md` und Legacy-`/docs` werden entfernt. Normative Historie bleibt ausschließlich `/doc/CHANGELOG.md`; `/doc` ist die einzige Policy-/Spec-Wahrheitsfläche. |
+| F-DOC1-010 | P2 | closed REPO1 | Paralleler Root-`CHANGELOG.md` und Legacy-`/docs` sind entfernt. Normative Historie bleibt ausschließlich `/doc/CHANGELOG.md`; `/doc` ist die einzige Policy-/Spec-Wahrheitsfläche. |
 | F-DOC1-011 | P2 | open | `::N` in Provider-IDs wirkt in VBB-Daten wie Stop-Point/Steig/Plattform, ist aber nicht verbundübergreifend bestätigt und darf nicht als universelle Semantik genutzt werden. |
 | F-DOC1-012 | P2 | closed Build 138 | `/trips` ist im RoutePlanner produktiv genutzt; Contract- und Runtime-Evidence liegen vor. |
 | F-DOC1-013 | P2 | observed Build 134 | `Station.walkSeconds`, `/journey`, `regionBounds` und `routingBounds` sind im Contract vorhanden; Nutzung bleibt separat zu entscheiden. `walkSeconds` zeigte im geprüften Pfad reale Abdeckung, ersetzt ORS aber nicht pauschal. |
