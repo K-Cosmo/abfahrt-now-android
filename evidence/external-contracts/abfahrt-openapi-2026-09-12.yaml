@@ -1,0 +1,13 @@
+# Public evidence marker for the historical OpenAPI snapshot reviewed on 2026-09-12.
+#
+# The raw evidence bundle used during the original contract convergence was not
+# imported into the public repository. It may contain material that was not
+# separately reviewed for publication. The normative conclusions derived from
+# that review live in /doc/03-api-contracts.md.
+#
+# This marker intentionally does NOT reconstruct or silently replace that
+# historical source document.
+evidence_status: reference-only
+review_date: 2026-09-12
+raw_artifact_published: false
+normative_summary: ../../doc/03-api-contracts.md
