@@ -1,6 +1,6 @@
 # Android Compatibility
 
-## Aktueller Stand Build 149
+## Aktueller Stand Build 151
 
 | Wert | Stand |
 |---|---:|
@@ -16,6 +16,10 @@
 | Hilt | 2.60.1 |
 
 `minSdk 34` bleibt bewusste Produktpolitik: drei Android-Hauptversionen hinter Android 17, moderne Plattformbasis und begrenzte Kompatibilitätslast.
+
+REPO1 sowie Builds 150 und 151 haben diese Android-/Toolchain-Baseline nicht verändert. REPO1 hat den vollständigen Gradle-9.6.0-Wrapper als kanonischen Buildpfad eingecheckt. Seit Build 151 gehört `:app:assembleRelease` dauerhaft zum normalen Android-CI-Gate, sodass Unit-Tests, Debug- und Release/R8-Build auf demselben PR-Stand geprüft werden.
+
+Build 152 ist noch nicht Teil dieser akzeptierten Compatibility-Baseline. Android CI #52 ist zwar inklusive Release/R8 grün, die Runtime-/UI-Abnahme steht jedoch noch aus.
 
 ## Android 17 / API 37 — gestufte Migration
 
