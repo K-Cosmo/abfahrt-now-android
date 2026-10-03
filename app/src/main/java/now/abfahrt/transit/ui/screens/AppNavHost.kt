@@ -15,6 +15,8 @@ import now.abfahrt.transit.ui.viewmodel.SavedPlacesViewModel
  * Routing logic:
  *  • abfahrt.now access requires completed onboarding + a non-blank API key.
  *  • the access decision waits for a real DataStore-backed preference emission.
+ *  • AccessGateViewModel is the only state holder that decides the startup destination.
+ *  • feature ViewModels are created only after that access decision is available.
  *  • ORS remains optional.
  *  • A missing/rejected key re-enters onboarding from every protected app route.
  *  • Alternate-location departures are a dedicated secondary route from Build 137.
@@ -22,20 +24,21 @@ import now.abfahrt.transit.ui.viewmodel.SavedPlacesViewModel
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
-    val viewModel: DepartureViewModel = hiltViewModel()
     val accessGateViewModel: AccessGateViewModel = hiltViewModel()
-    val routePlannerViewModel: RoutePlannerViewModel = hiltViewModel()
-    val routePlannerState by routePlannerViewModel.uiState.collectAsState()
     val accessPrefs by accessGateViewModel.preferences.collectAsState()
 
     // null means the real DataStore/Keystore-backed preference snapshot has not
-    // arrived yet. Render no protected destination instead of guessing onboarding.
+    // arrived yet. Do not instantiate protected feature state or guess onboarding.
     val prefs = accessPrefs ?: return
 
     val hasRequiredAccess = hasRequiredAbfahrtAccess(
         onboardingCompleted = prefs.onboardingCompleted,
         apiKey = prefs.apiKey
     )
+
+    val viewModel: DepartureViewModel = hiltViewModel()
+    val routePlannerViewModel: RoutePlannerViewModel = hiltViewModel()
+    val routePlannerState by routePlannerViewModel.uiState.collectAsState()
 
     NavHost(
         navController    = navController,
