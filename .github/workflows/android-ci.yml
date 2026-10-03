@@ -40,10 +40,8 @@ jobs:
           ls -1 "$ANDROID_HOME/platforms" | grep '^android-37' >/dev/null
           test -d "$ANDROID_HOME/build-tools/37.0.0"
 
-      - name: Set up Gradle 9.6.0
+      - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.6.0'
 
       - name: Static governance and compatibility gates
         run: |
@@ -57,12 +55,11 @@ jobs:
           python3 scripts/check_ors_endpoint.py
           python3 scripts/check_graphics_path_compat.py
 
-      # F-DOC1-008 bootstrap: CI generates the missing Wrapper JAR from the
-      # pinned Gradle 9.6.0 installation until that binary is committed.
-      - name: Bootstrap Gradle wrapper
+      - name: Verify committed Gradle wrapper
         run: |
-          gradle wrapper --gradle-version 9.6.0 --distribution-type bin
+          test -f gradle/wrapper/gradle-wrapper.jar
           chmod +x ./gradlew
+          ./gradlew --version
 
       - name: Unit tests and debug build
         env:
