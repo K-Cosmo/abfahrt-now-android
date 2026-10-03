@@ -21,7 +21,7 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 | F-DOC1-012 | P2 | closed Build 138 | `/trips` ist im RoutePlanner produktiv genutzt; Contract- und Runtime-Evidence liegen vor. |
 | F-DOC1-013 | P2 | observed Build 134 | `Station.walkSeconds`, `/journey`, `regionBounds` und `routingBounds` sind im Contract vorhanden; Nutzung bleibt separat zu entscheiden. `walkSeconds` zeigte im geprüften Pfad reale Abdeckung, ersetzt ORS aber nicht pauschal. |
 | F-DOC1-014 | P2 | open | Das öffentliche Community-Repository hat noch keine Projektlizenz. Bis zur Lizenzentscheidung ist es öffentlich einsehbarer Community-Source, aber nicht als Open-Source-Projekt mit allgemeinen Nutzungsrechten zu bezeichnen. |
-| F-DOC1-015 | P1 | pending evidence Build 151 | Build 151 ersetzt die sichtbare historische Riles-Tech-/Legal-Zuordnung im Settings-Footer durch eine eigene Community-Identitätsfläche: unabhängige/unoffizielle App, abfahrt.now nur als Daten-/API-Quelle, Projektlink auf das kanonische GitHub-Repository, Privacy/Terms explizit als API-Provider-Links. Source- und Locale-Konvergenz sind implementiert; Runtime-/Build-Evidence steht noch aus. |
+| F-DOC1-015 | P1 | closed Build 151 | Build 151 ersetzt die sichtbare historische Riles-Tech-/Legal-Zuordnung im Settings-Footer durch die unabhängige Community-Identität. Der Realgeräte-Screenshot bestätigt die sichtbare Darstellung; Repository- und API-Provider-Links sind im `CommunityFooter` fest verdrahtet. Android CI #42 ist inklusive Locale-/Static-Gates, Unit-Tests, Debug-Build und Release/R8-Build grün. |
 | F-148-001 | P1 | closed | Der erste Build-148-Overlayversuch ließ den alten Testpfad zurück; korrigiertes Source-Paket überschreibt den Legacy-Test. Reales Gradle-Gate und Runtime-Evidence waren anschließend grün. |
 | F-149-001 | P2 | pending evidence | HERE-Standortkarte ist sichtbar wie gewünscht und Nutzer-Screenshot ist positiv. Formales kombiniertes Gradle-/Logcat-Gate bleibt gemäß `/doc/11-test-and-evidence.md` separat zu dokumentieren. |
 | F-150-001 | P1 | closed Build 150 | Anonymer, credential-isolierter GitHub-Release-Update-Checker ist technisch abgenommen. Branch-CI ist grün; realer E2E bestätigt: ohne Release kein Dialog, älterer Build erkennt `v1.1.0-b150` und öffnet die feste Release-Seite, gleicher Build zeigt keinen Hinweis. Zusätzlich ist `gradlew.bat :app:assembleRelease` mit R8/Minify erfolgreich (`BUILD SUCCESSFUL in 52s`). |
@@ -30,6 +30,7 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 
 - **REPO1** ist als Repository-/Governance-Baseline abgeschlossen; der eingecheckte Gradle-Wrapper ist der Standard-Buildpfad.
 - **Build 150** ist technisch accepted und in `main` integriert.
-- **Build 151** implementiert B-COMMUNITY-001/F-DOC1-015 als eigenständige Produktänderung; erster öffentlicher Community-App-Release bleibt bis zur Build-/Runtime-Abnahme blockiert.
-- **Build 152** ist für AB-018 Startup/Main-Thread-Instrumentierung reserviert; erst messen, dann optimieren.
+- **Build 151** schließt B-COMMUNITY-001/F-DOC1-015; der Community-Release-Blocker ist damit technisch beseitigt.
+- **Build 152** bündelt das vereinbarte UI/UX-Paket: Onboarding-Lesbarkeit, kompakter Route-Header und Beseitigung des API-Key-Startflackerns.
+- **Build 153** ist für AB-018 Startup/Main-Thread-Instrumentierung reserviert; erst messen, dann optimieren.
 - Neue externe Runtime-Dienste werden vor Integration nach [`14-community-and-service-policy.md`](14-community-and-service-policy.md) bewertet.
