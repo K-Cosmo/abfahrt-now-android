@@ -28,18 +28,17 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      # GitHub-hosted Ubuntu runners include the Android SDK, but sdkmanager is
-      # not guaranteed to be on PATH. API 37 is still exposed through the SDK
-      # preview channel on the hosted runner, so request that channel explicitly.
-      - name: Install Android 37 platform
+      # The current GitHub Ubuntu image already ships Android 37.x platforms
+      # and Build Tools 37.0.0. Do not re-install or request retired SDK
+      # packages; the Gradle build below is the real availability gate.
+      - name: Verify hosted Android SDK
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
-          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
-          test -x "$SDKMANAGER"
-          yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" --channel=3 "platforms;android-37"
+          test -d "$ANDROID_HOME/platforms"
+          ls -1 "$ANDROID_HOME/platforms" | grep '^android-37' >/dev/null
+          test -d "$ANDROID_HOME/build-tools/37.0.0"
 
       - name: Set up Gradle 9.6.0
         uses: gradle/actions/setup-gradle@v4
@@ -66,4 +65,7 @@ jobs:
           chmod +x ./gradlew
 
       - name: Unit tests and debug build
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: ./gradlew :app:testDebugUnitTest :app:assembleDebug --no-daemon
