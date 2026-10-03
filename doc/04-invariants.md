@@ -116,3 +116,6 @@ Ein bestehendes `onboardingCompleted=true` reicht nicht, wenn der entschlüsselt
 
 ### I-064 Release braucht echte Abnahme
 Kompilieren allein ist keine Freigabe: Unit-Tests, Release-Minify-Build und definierte Smoke-/Runtime-Evidence sind erforderlich.
+
+### I-065 Update-Checker ist anonym, optional und nicht installierend
+Der GitHub-Update-Check darf keinen abfahrt.now-/ORS-Key oder Standort-/Such-/Transitdaten übertragen. Er nutzt einen separaten anonymen Client, darf Startup/Kernfunktion bei Fehlern nicht blockieren und darf ohne explizite Nutzeraktion weder APKs herunterladen noch Installationen starten. Ein Update-Hinweis öffnet ausschließlich die validierte Release-Seite des festen Community-Repositories.
