@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_available_message">Nueva versión disponible: %1$s</string>
+    <string name="update_action">Abrir actualización</string>
+</resources>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_available_message">Na voljo je nova različica: %1$s</string>
+    <string name="update_action">Odpri posodobitev</string>
+</resources>
