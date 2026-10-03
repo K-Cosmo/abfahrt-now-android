@@ -14,7 +14,7 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 | F-DOC1-005 | P1 | closed Build 125 | API-Key-Migration und Keystore-geschützte Speicherung real bestätigt. |
 | F-DOC1-006 | P1 | closed Build 132 | Android-17/API-37-Toolchain und reale HTTPS-Kernpfade erfolgreich bestätigt. |
 | F-DOC1-007 | P1 | closed Build 130 | 16-KB-Readiness abgenommen: Release-Artefakt-Audit, AAB `PAGE_ALIGNMENT_16K` und echter Runtime-Smoke mit Page Size 16384. |
-| F-DOC1-008 | P1 | pending evidence | Der vollständige Gradle-9.6.0-Wrapper inklusive `gradle-wrapper.jar` ist jetzt auf `main` eingecheckt. Lokaler Windows-Nachweis: `gradlew.bat --version` meldet 9.6.0 und `:app:testDebugUnitTest :app:assembleDebug` ist grün. Letztes Gate ist ein GitHub-Actions-Lauf, der den eingecheckten Wrapper direkt ohne Bootstrap verwendet. |
+| F-DOC1-008 | P1 | closed REPO1 | Vollständiger Gradle-9.6.0-Wrapper inklusive `gradle-wrapper.jar` ist eingecheckt. Lokaler Windows-Nachweis (`gradlew.bat --version`, `:app:testDebugUnitTest :app:assembleDebug`) und GitHub Actions mit direkter Nutzung des committed Wrappers sind grün; kein Bootstrap-Schritt mehr erforderlich. |
 | F-DOC1-009 | P2 | open | `DepartureViewModel.kt` bleibt ein großer Wartungshotspot. Refactoring nur problemgetrieben und in kleinen Schritten; kein Big-Bang-Refactor. |
 | F-DOC1-010 | P2 | closed REPO1 | Paralleler Root-`CHANGELOG.md` und Legacy-`/docs` sind entfernt. Normative Historie bleibt ausschließlich `/doc/CHANGELOG.md`; `/doc` ist die einzige Policy-/Spec-Wahrheitsfläche. |
 | F-DOC1-011 | P2 | open | `::N` in Provider-IDs wirkt in VBB-Daten wie Stop-Point/Steig/Plattform, ist aber nicht verbundübergreifend bestätigt und darf nicht als universelle Semantik genutzt werden. |
@@ -27,7 +27,7 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 
 ## Aktuelle Konsequenzen
 
-- **REPO1** darf keine Runtime-Produktlogik ändern; Build 149 / `versionCode 1490` bleibt Baseline.
+- **REPO1** ist als Repository-/Governance-Baseline abgeschlossen; Build 149 / `versionCode 1490` bleibt die Produktbaseline.
 - **Build 150** ist für den GitHub-Release-Update-Checker reserviert. Der GitHub-Client muss anonym und credential-isoliert sein.
 - **Build 151** ist für AB-018 Startup/Main-Thread-Instrumentierung reserviert; erst messen, dann optimieren.
 - Neue externe Runtime-Dienste werden vor Integration nach [`14-community-and-service-policy.md`](14-community-and-service-policy.md) bewertet.
