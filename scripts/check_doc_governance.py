@@ -19,18 +19,17 @@ missing = sorted(name for name in required if not (DOC / name).is_file())
 if missing:
     errors.append("missing /doc files: " + ", ".join(missing))
 
-# REPO1 deliberately removes the old /docs redirect tree. A second documentation
-# root would undermine the single-source-of-truth rule.
-legacy_docs = ROOT / "docs"
-if legacy_docs.exists():
-    errors.append("legacy /docs tree must not exist; /doc is the only documentation root")
+if (ROOT / "docs").exists():
+    errors.append("legacy /docs tree must not exist; /doc is the only normative documentation tree")
+if (ROOT / "CHANGELOG.md").exists():
+    errors.append("duplicate root CHANGELOG.md must not exist; use /doc/CHANGELOG.md")
 
 index = (DOC / "00-index.md").read_text(encoding="utf-8") if (DOC / "00-index.md").exists() else ""
 if "einzige normative Quelle der Wahrheit" not in index:
     errors.append("/doc/00-index.md does not declare the single normative source rule")
 
 link_re = re.compile(r"\[[^\]]*\]\((?!https?://|mailto:|#)([^)]+)\)")
-for md in [ROOT / "README.md", ROOT / "CHANGELOG.md", *sorted(DOC.glob("*.md")), ROOT / "evidence/README.md"]:
+for md in [ROOT / "README.md", ROOT / "AGENTS.md", *sorted(DOC.glob("*.md")), ROOT / "evidence/README.md"]:
     if not md.exists():
         continue
     text = md.read_text(encoding="utf-8")

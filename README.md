@@ -1,113 +1,108 @@
-# Abfahrt! Community Android App
+# Abfahrt! — Community Android App
 
-A community-developed Android client for nearby public-transport departures and route planning across Europe.
+**Independent community Android client for nearby public transport departures and route planning.**
 
-> **Unofficial community project**  
-> This project uses the **abfahrt.now API**, but it is **not the official abfahrt.now Android app**. This project is not developed, endorsed, operated, or maintained by the developer/operator of abfahrt.now, and this repository does not develop or operate the abfahrt.now API.
+> [!IMPORTANT]
+> This is an **independent community project**. It is **not the official abfahrt.now Android app**, is not affiliated with the operator or developer of the abfahrt.now API, and this project does not develop or operate that API. The app is an independent client that consumes public/authorised interfaces provided by external services.
 
-## What the app does
-
-Abfahrt! prioritizes nearby departures, supports location-aware place search, plans public-transport trips, and can optionally enrich access to stops with precise walking and cycling routes.
-
-Current baseline:
-
-- Version: **1.1.0**
-- Build: **149** (`versionCode 1490`)
-- Android: **Android 14+** (`minSdk 34`, `compileSdk 37`, `targetSdk 37`)
-- Stack: Kotlin, Jetpack Compose, Material 3, Hilt, Retrofit/OkHttp, DataStore, MapLibre
-- **22 bundled UI languages**; no cloud translation service is required at runtime
+Abfahrt! focuses on a simple everyday question: which useful public transport departures are near me right now, and how do I reach them? The UI deliberately stays compact while the app combines live departure data, location-aware search, optional walking/cycling routing, and public-transport trip planning.
 
 ## What you need
 
-### Required: abfahrt.now API key
+- **Android 14 or newer** (`minSdk 34`).
+- A personal **abfahrt.now API key** — required for departures and public-transport routing. See the [abfahrt.now API documentation](https://www.abfahrt.now/docs/).
+- Optional: a **HeiGIT / openrouteservice API key** for precise walking/cycling routes and reachability enrichment. A free Standard API key can be requested through the [HeiGIT account signup](https://account.heigit.org/signup); API information is available at [api.heigit.org](https://api.heigit.org/).
 
-The app needs a personal **abfahrt.now API key** for departure and public-transport routing data.
+API keys are entered at runtime and stored locally as Android-Keystore-backed encrypted values. Keys are never part of this repository.
 
-- Website: https://abfahrt.now/
-- Documentation: https://www.abfahrt.now/docs/
+## Features
 
-The API key is entered in the app and stored locally using Android Keystore-backed encryption. No API key is part of this repository.
+- Nearby public transport departures with realtime/schedule status.
+- Distance-aware ordering with a dedicated **Here** state for already reached stops.
+- Individually selectable transport modes; at least one always remains active.
+- Configurable radius, departure window and refresh interval.
+- Location-aware place and station search with Photon/OpenStreetMap data.
+- Public-transport route planning through the abfahrt.now `/trips` API.
+- Optional walking/bicycle enrichment with HeiGIT/openrouteservice.
+- MapLibre route/location previews using OpenStreetMap raster tiles.
+- Saved Home/Work destinations stored locally.
+- **22 bundled UI language resource sets**; no runtime translation service is required.
 
-### Optional: OpenRouteService API key
+Bundled UI languages: German, English, Dutch, Danish, Norwegian Bokmål, Swedish, Finnish, Italian, Spanish, Portuguese, French, Polish, Czech, Hungarian, Romanian, Slovak, Croatian, Slovenian, Estonian, Latvian, Lithuanian and Klingon.
 
-An **OpenRouteService (ORS)** key enables precise walking and cycling route enrichment. The app also works without ORS; in that case these enhancements are unavailable or use the documented fallback behavior.
+## EU-first service policy
 
-- OpenRouteService: https://openrouteservice.org/
-- Developer signup: https://openrouteservice.org/dev/#/signup
-- HeiGIT API portal: https://api.heigit.org/
+The project follows an **EU-first, open-standards and data-minimisation** approach when choosing runtime services. This is a design preference, not a claim that every dependency or hosting component is located in the EU.
 
-ORS is operated by **HeiGIT (Heidelberg Institute for Geoinformation Technology)** in Germany.
+Current runtime/service relationships are documented normatively in [`doc/14-community-and-service-policy.md`](doc/14-community-and-service-policy.md). In short:
 
-## EU-first, open and transparent
+| Service | Purpose | Key | Notes |
+|---|---|---:|---|
+| [abfahrt.now](https://www.abfahrt.now/docs/) | departures and public-transport routing | required | European transit API consumed by this independent client |
+| [Photon](https://github.com/komoot/photon) + OpenStreetMap | place/station geocoding | no | open-source geocoder; only query/bias data needed for search is sent |
+| [HeiGIT / openrouteservice](https://api.heigit.org/) | optional walking/bicycle matrix and directions | optional | operated by HeiGIT in Heidelberg, Germany |
+| [OpenStreetMap](https://www.openstreetmap.org/) tiles | map background | no | requested only when map previews are shown |
+| Google Play Services Location | device location | no project key | Android platform dependency and documented EU-first exception |
+| GitHub | source code and releases | no app key | project infrastructure; update metadata use is treated as a documented exception |
 
-The project follows an **EU-first** approach for operational runtime services. European and open providers are preferred where they are technically suitable. Deliberate exceptions are documented and kept as small as practical.
+Credentials are service-scoped: an abfahrt.now key must never be sent to HeiGIT, Photon, GitHub or another host, and the HeiGIT key must only be sent to the HeiGIT/openrouteservice endpoint.
 
-| Service | Purpose | Required? | Notes |
-| --- | --- | --- | --- |
-| **abfahrt.now** | Departures and public-transport routing | Yes | External API; this project is not its operator |
-| **Photon / OpenStreetMap** | Place and destination search | Built in | Open-source geocoding based on OSM data; public Photon service operated by komoot |
-| **OpenRouteService / HeiGIT** | Precise walking and cycling routing | Optional | European service operated from Germany |
-| **GitHub** | Source code and releases | Development/distribution | Documented non-EU exception; no abfahrt.now or ORS API key is sent to GitHub |
+## Current development state
 
-A new external runtime service should not be added silently: purpose, data flow, provider, necessity, and an EU/open alternative must be considered first and documented in `/doc`.
+- Version: **1.1.0**
+- Build: **149** (`versionCode 1490`)
+- Android: **minSdk 34**, **compileSdk 37**, **targetSdk 37**
+- Stack: Kotlin, Jetpack Compose, Material 3, Hilt, Retrofit/OkHttp, DataStore, MapLibre
 
-## Languages
+## Build / development
 
-The Android app currently bundles **22 UI locales**:
+Open the **repository root** in a current Android Studio installation — the directory containing `settings.gradle.kts`, not the `app` subdirectory.
 
-Deutsch, English, Nederlands, Dansk, Norsk Bokmål, Svenska, Suomi, Italiano, Español, Português, Français, Polski, Čeština, Magyar, Română, Slovenčina, Hrvatski, Slovenščina, Eesti, Latviešu, Lietuvių and Klingon (`tlh`).
+The project uses **Gradle 9.6.0**. The repository contains the wrapper configuration and launcher scripts. Until `gradle/wrapper/gradle-wrapper.jar` is committed, run the verified bootstrap helper once on Windows:
 
-These are packaged Android resources. The UI does not depend on an online translation service.
-
-## Development
-
-Clone the repository and open the **repository root** in a current Android Studio installation.
-
-Windows example:
-
-```text
-D:\Android\abfahrt-now-android
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\bootstrap-gradle-wrapper.ps1
 ```
 
-Do not open only the `app` subdirectory. `settings.gradle.kts`, the Gradle configuration, `/doc`, `/specs`, and Git metadata all live at repository root.
+The helper downloads the official Gradle 9.6.0 Wrapper JAR and verifies its published SHA-256 before saving it. The JAR is intended to be committed after verification; this remaining source-packaging item is tracked as `F-DOC1-008`.
 
-Expected local/CI Gradle gate once the wrapper bootstrap is complete:
+Once the JAR is present:
+
+```powershell
+.\gradlew.bat :app:testDebugUnitTest :app:assembleDebug
+```
+
+or on POSIX systems:
 
 ```bash
 ./gradlew :app:testDebugUnitTest :app:assembleDebug
 ```
 
-Windows:
+GitHub Actions performs the same bootstrap/checksum verification when the JAR is absent, then runs the repository's static gates plus the debug unit/build gate.
 
-```bat
-gradlew.bat :app:testDebugUnitTest :app:assembleDebug
-```
+## Source of truth and contribution workflow
 
-`local.properties`, build outputs, keystores, API keys, and raw runtime logs are intentionally not committed.
+The only normative product and technical documentation lives in [`/doc`](doc/00-index.md). Spec Kit and [`/specs`](specs/) provide **process governance**, not a second product specification.
 
-## Project governance
+The development flow is:
 
-The **only normative product and technical source of truth is [`/doc`](doc/00-index.md)**.
-
-- `/doc` — normative product, architecture, decisions, invariants, findings, release/test rules
-- `/specs` — process history for Specification → Plan → Tasks; not a competing policy/specification world
-- `/evidence` — sanitized test/evidence material
-- `.specify` — process governance only
+**Specification → Plan → Tasks → implementation → analysis/convergence → real tests/evidence → acceptance**
 
 Useful entry points:
 
-- [`doc/00-index.md`](doc/00-index.md) — documentation index
-- [`doc/06-decisions.md`](doc/06-decisions.md) — architectural/product decisions
-- [`doc/07-findings.md`](doc/07-findings.md) — findings
-- [`doc/08-backlog.md`](doc/08-backlog.md) — backlog
-- [`doc/09-release-plan.md`](doc/09-release-plan.md) — release plan
+- [`doc/00-index.md`](doc/00-index.md) — documentation index / source-of-truth rule
 - [`doc/10-build-handoff.md`](doc/10-build-handoff.md) — current development handoff
+- [`doc/07-findings.md`](doc/07-findings.md) — open findings
+- [`doc/08-backlog.md`](doc/08-backlog.md) — backlog
 - [`doc/11-test-and-evidence.md`](doc/11-test-and-evidence.md) — test/evidence process
+- [`AGENTS.md`](AGENTS.md) — entry point for coding agents
+
+`README.md`, `/specs`, source code and `/evidence` must not become competing policy/specification trees.
 
 ## Public evidence policy
 
-Raw Logcat/device evidence is intentionally not published by default because it may contain precise coordinates, device identifiers, or local filesystem paths. Only sanitized evidence belongs under [`/evidence`](evidence/README.md).
+Raw Logcat/device evidence is intentionally not published by default because it may contain precise coordinates, device identifiers or local paths. Only sanitised evidence belongs under [`/evidence`](evidence/README.md).
 
 ## License
 
-No project license has been selected yet. Until a license is added, the source is publicly visible but no open-source usage rights are granted beyond those provided by applicable law. Third-party components keep their respective licenses and notices.
+A project license has **not yet been selected**. The repository is publicly visible and community-developed, but it must not be described as open source until an explicit project license has been chosen. Third-party components retain their respective licenses and notices.
