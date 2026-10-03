@@ -15,4 +15,4 @@
 - [x] Build 151 is consistently the latest accepted runtime baseline.
 - [x] Build 152 is consistently in progress/pending real-device evidence.
 - [x] AB-018 remains Build 153.
-- [ ] Documentation/governance CI is green.
+- [x] Documentation/governance CI is green (Android CI #53).
