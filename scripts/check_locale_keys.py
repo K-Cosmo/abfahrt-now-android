@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Check Android string key parity and placeholder compatibility for AbfahrtApp locales.
 
-All XML resource files below values/ and values-*/ are considered. This keeps locale
-parity intact even when a feature uses a small dedicated string resource file instead
-of growing the historical strings.xml further.
+All XML resource files inside the base values/ directory and each actual language
+resource directory are considered. Non-language qualifiers such as values-night are
+not locale sets and are deliberately excluded.
 """
 from __future__ import annotations
 
@@ -44,8 +44,9 @@ def main() -> int:
         print(f"[values] {error}", file=sys.stderr)
         return 1
 
+    locale_dirs = sorted({path.parent for path in RES.glob("values-*/strings.xml")})
     failed = False
-    for locale_dir in sorted(path for path in RES.glob("values-*") if path.is_dir()):
+    for locale_dir in locale_dirs:
         try:
             values = load_strings(locale_dir)
         except (ET.ParseError, ValueError) as error:
