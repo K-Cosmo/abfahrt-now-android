@@ -21,7 +21,7 @@
 - [x] Unit tests for valid/invalid tags and newer/same/older build comparison.
 - [x] Unit test protecting GitHub-client credential isolation.
 - [x] Locale parity gate expanded to all XML string resources per locale directory.
-- [x] Final GitHub Actions run on the fully converged Build-150 branch is green (Android CI run #32, commit `2425ef465adc502b04d85d31d422104f3aec544a`).
+- [x] Final GitHub Actions run on the fully converged implementation branch is green (Android CI run #32, commit `2425ef465adc502b04d85d31d422104f3aec544a`).
 
 ## Runtime / acceptance evidence
 - [x] App starts and works normally when no GitHub release exists; no update dialog is shown.
@@ -29,8 +29,8 @@
 - [x] Update action opens the expected fixed GitHub release page for `v1.1.0-b150`.
 - [x] Restored Build 150 / `versionCode 1500` does not show an update prompt for the same `b150` release.
 - [x] No update-check-induced core startup failure was observed; credential isolation remains additionally protected by the focused unit test.
-- [ ] Release/minify gate required by I-064 (`:app:assembleRelease`) is green.
-- [ ] After the remaining release gate, mark F-150-001/Build 150 accepted and add final changelog evidence.
+- [x] Release/minify gate required by I-064: `gradlew.bat :app:assembleRelease` completed with `BUILD SUCCESSFUL` in 52s.
+- [x] Build 150 / F-150-001 is accepted on the supplied CI, Runtime-E2E and Release-build evidence.
 
 ## Release boundary
 - [ ] First public community APK release remains blocked until B-COMMUNITY-001 / F-DOC1-015 is resolved in its own product change.
