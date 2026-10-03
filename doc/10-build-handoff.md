@@ -2,7 +2,7 @@
 
 ## Aktuell: v1.1.0 Build 150 (`versionCode 1500`) — GitHub Release Update Checker
 
-Basis: Build 149 ist die bisherige Runtime-Baseline. REPO1 ist abgeschlossen: das öffentliche Repository `K-Cosmo/abfahrt-now-android` ist der kanonische Workspace, `/doc` die einzige normative Dokumentationswurzel und der vollständige Gradle-9.6.0-Wrapper ist lokal sowie in GitHub Actions grün.
+Basis: Build 149 ist die vorherige Runtime-Baseline. REPO1 ist abgeschlossen: das öffentliche Repository `K-Cosmo/abfahrt-now-android` ist der kanonische Workspace, `/doc` die einzige normative Dokumentationswurzel und der vollständige Gradle-9.6.0-Wrapper ist lokal sowie in GitHub Actions grün.
 
 Build 148 ist real abgenommen: Runtime-Evidence bestätigt D-069 mit roher Photon-Query, `lat/lon`-Bias und sinnvoller Provider-Reihenfolge. Build 149 implementiert D-070: HERE ist Standortzustand statt Routingfall. Der Nutzer-Screenshot bestätigt die sichtbare Darstellung; formales Build-/Logcat-Evidence für F-149-001 bleibt separat nachzuführen.
 
@@ -15,13 +15,13 @@ Build 148 ist real abgenommen: Runtime-Evidence bestätigt D-069 mit roher Photo
 - die Release-Seite wird nur aus festem Repository + validiertem Tag gebildet; beliebige Remote-URLs werden nicht übernommen.
 - `UpdateViewModel` prüft einmal asynchron pro Activity-Lebensdauer. Fehler bleiben still und blockieren den normalen App-Start nicht.
 - ein neueres Release zeigt einen kleinen lokalisierten Dialog. Die Nutzeraktion öffnet die Release-Seite im Browser; kein APK-Autodownload, keine stille Installation.
-- Update-Texte sind in allen 22 gebündelten UI-Locale-Sets vorhanden. Der Locale-Gate prüft nun alle String-XML-Dateien der echten Sprachverzeichnisse.
+- Update-Texte sind in allen 22 gebündelten UI-Locale-Sets vorhanden. Der Locale-Gate prüft alle String-XML-Dateien der echten Sprachverzeichnisse.
 - fokussierte Tests schützen Release-Tag/Buildvergleich und die Credential-Isolation des GitHub-Clients.
 - keine Änderung an Departure-Sortierung, Photon-Ranking, ORS-Routing, `/trips`, Persistenz oder MapLibre.
 
 ### Automatische Evidence
 
-GitHub Actions auf dem vollständig konvergierten Branch ist grün (Android CI Run #32, Commit `2425ef465adc502b04d85d31d422104f3aec544a`):
+GitHub Actions auf dem vollständig konvergierten Implementierungsstand ist grün (Android CI Run #32, Commit `2425ef465adc502b04d85d31d422104f3aec544a`):
 
 ```text
 ./gradlew :app:testDebugUnitTest :app:assembleDebug
@@ -39,15 +39,17 @@ Der Updatepfad wurde auf einem realen Android-Gerät mit dem Build-150-Code gepr
 
 Damit sind Tag-/Buildvergleich, reale GitHub-Metadatenabfrage, sichtbare UI-Entscheidung und feste Release-URL im E2E bestätigt. Der Test-Release enthält kein APK/Asset und ersetzt keinen öffentlichen Community-App-Release.
 
-### Noch offen vor vollständiger Build-Acceptance
+### Release-/R8-Gate
 
-I-064 verlangt zusätzlich einen Release-Minify-Build. Vor `accepted/closed` ist daher noch auszuführen:
+Der von I-064 geforderte Release-Build wurde lokal auf dem finalen Build-150-Quellstand ausgeführt:
 
 ```text
-./gradlew :app:assembleRelease
+gradlew.bat :app:assembleRelease
 ```
 
-Erst bei grünem Release-/R8-Gate wird F-150-001 geschlossen und der finale Build-150-Changelog-Eintrag geschrieben.
+Ergebnis: `BUILD SUCCESSFUL in 52s`, 54 Tasks ausgeführt. `stripReleaseDebugSymbols` meldete, dass `libdatastore_shared_counter.so` und `libmaplibre.so` nicht gestripped werden konnten und daher unverändert paketiert wurden; der Task und der gesamte Release-Build blieben erfolgreich. Build 150 führt keine neue Native-Library oder Dependency-Version ein, daher entsteht daraus kein neuer 16-KB-Kompatibilitätsbefund.
+
+**F-150-001 ist damit geschlossen; Build 150 ist technisch accepted.**
 
 ## Release-Sperre vor erstem öffentlichen Community-App-Release
 
