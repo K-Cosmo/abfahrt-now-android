@@ -2,11 +2,13 @@
 
 ## Unterstützte UI-Sprachressourcen
 
-Build 122 enthält den deutschen Basissatz plus:
+Die App liefert aktuell **22 gebündelte UI-Locale-Sets** aus:
 
-`en, nl, da, nb, sv, fi, it, es, pt, fr, pl, cs, hu, ro, sk, hr, sl, et, lv, lt, tlh`
+`de, en, nl, da, nb, sv, fi, it, es, pt, fr, pl, cs, hu, ro, sk, hr, sl, et, lv, lt, b+tlh`
 
-Zusätzlich gibt es die App-Einstellung `SYSTEM`, die der Systemsprache folgt.
+Damit benötigt die UI-Lokalisierung keinen externen Übersetzungsdienst zur Laufzeit. Zusätzlich gibt es die App-Einstellung `SYSTEM`, die der Systemsprache folgt.
+
+Die 22 sichtbaren Sprachvarianten entsprechen Deutsch, Englisch, Niederländisch, Dänisch, Norwegisch Bokmål, Schwedisch, Finnisch, Italienisch, Spanisch, Portugiesisch, Französisch, Polnisch, Tschechisch, Ungarisch, Rumänisch, Slowakisch, Kroatisch, Slowenisch, Estnisch, Lettisch, Litauisch und Klingonisch.
 
 ## Source of truth
 
