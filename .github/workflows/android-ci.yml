@@ -29,7 +29,8 @@ jobs:
           java-version: '17'
 
       # GitHub-hosted Ubuntu runners include the Android SDK, but sdkmanager is
-      # not guaranteed to be on PATH. Use the runner's stable SDK root explicitly.
+      # not guaranteed to be on PATH. API 37 is still exposed through the SDK
+      # preview channel on the hosted runner, so request that channel explicitly.
       - name: Install Android 37 platform
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
@@ -38,7 +39,7 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           test -x "$SDKMANAGER"
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" "platforms;android-37"
+          "$SDKMANAGER" --channel=3 "platforms;android-37"
 
       - name: Set up Gradle 9.6.0
         uses: gradle/actions/setup-gradle@v4
