@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java 17
         uses: actions/setup-java@v5
@@ -28,13 +28,17 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      # GitHub-hosted Ubuntu runners already include the Android command-line
-      # SDK. Install only the project platform explicitly; do not request the
-      # retired legacy `tools` package.
+      # GitHub-hosted Ubuntu runners include the Android SDK, but sdkmanager is
+      # not guaranteed to be on PATH. Use the runner's stable SDK root explicitly.
       - name: Install Android 37 platform
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
         run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platforms;android-37"
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          test -x "$SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" "platforms;android-37"
 
       - name: Set up Gradle 9.6.0
         uses: gradle/actions/setup-gradle@v4
