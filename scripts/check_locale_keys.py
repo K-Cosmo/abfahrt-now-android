@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Check Android string key parity and placeholder compatibility for AbfahrtApp locales.
 
-Base Android resource set: app/src/main/res/values/strings.xml
-Fails when any declared values-xx/strings.xml file misses a key from the base file
-or when printf-style placeholders differ.
+All XML resource files inside the base values/ directory and each actual language
+resource directory are considered. Non-language qualifiers such as values-night are
+not locale sets and are deliberately excluded.
 """
 from __future__ import annotations
 
@@ -16,15 +16,19 @@ PLACEHOLDER_RE = re.compile(r"%(?:\d+\$)?[sdif]")
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "app" / "src" / "main" / "res"
-BASE = RES / "values" / "strings.xml"
+BASE_DIR = RES / "values"
 
 
-def load_strings(path: Path) -> dict[str, str]:
-    tree = ET.parse(path)
+def load_strings(directory: Path) -> dict[str, str]:
     out: dict[str, str] = {}
-    for elem in tree.getroot().findall("string"):
-        name = elem.attrib.get("name")
-        if name:
+    for path in sorted(directory.glob("*.xml")):
+        tree = ET.parse(path)
+        for elem in tree.getroot().findall("string"):
+            name = elem.attrib.get("name")
+            if not name:
+                continue
+            if name in out:
+                raise ValueError(f"duplicate string key {name!r} in {directory.name}")
             out[name] = "".join(elem.itertext())
     return out
 
@@ -34,11 +38,22 @@ def placeholders(value: str) -> list[str]:
 
 
 def main() -> int:
-    base = load_strings(BASE)
+    try:
+        base = load_strings(BASE_DIR)
+    except (ET.ParseError, ValueError) as error:
+        print(f"[values] {error}", file=sys.stderr)
+        return 1
+
+    locale_dirs = sorted({path.parent for path in RES.glob("values-*/strings.xml")})
     failed = False
-    for locale_file in sorted(RES.glob("values-*/strings.xml")):
-        locale = locale_file.parent.name
-        values = load_strings(locale_file)
+    for locale_dir in locale_dirs:
+        try:
+            values = load_strings(locale_dir)
+        except (ET.ParseError, ValueError) as error:
+            failed = True
+            print(f"[{locale_dir.name}] {error}", file=sys.stderr)
+            continue
+
         missing = sorted(set(base) - set(values))
         extra = sorted(set(values) - set(base))
         mismatches = []
@@ -47,7 +62,7 @@ def main() -> int:
                 mismatches.append((key, placeholders(base[key]), placeholders(values[key])))
         if missing or extra or mismatches:
             failed = True
-            print(f"[{locale}]", file=sys.stderr)
+            print(f"[{locale_dir.name}]", file=sys.stderr)
             if missing:
                 print("  missing:", ", ".join(missing), file=sys.stderr)
             if extra:

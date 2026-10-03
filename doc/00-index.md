@@ -1,8 +1,8 @@
 # AbfahrtApp — normative Dokumentation
 
-Stand: **v1.1.0 / Build 149 (`versionCode 1490`)** auf Basis der DOC1.1-Governance.
+Stand: **v1.1.0 / Build 150 (`versionCode 1500`)** auf Basis der DOC1.1-Governance.
 
-Build 123–130 schlossen ORS-, Provider-ID-, Secret-Storage- und 16-KB-Themen; Build 131–135 migrierten auf Android 17/API 37 und stabilisierten Toolchain/Tests. Build 136 machte den abfahrt.now-Key verpflichtend. Build 137 trennte Alternativstandort-Abfahrten vom Startscreen, Build 138 führte den `/trips`-RoutePlanner ein. Builds 139–142 konvergierten Darstellung, Zwischenhalte, Fehlerzustände und Routing-UI. Build 143 ergänzte Zuhause/Arbeit, Build 144 machte diese Orte direkt auf der Startseite auswählbar. Build 145 ergänzte lokale Routensortierung. Build 146 konvergierte die Routing-UX; Build 147 zeigte die Grenzen der City-Heuristik. Build 148 ersetzte sie durch rohe Photon-Queries plus weichen Standort-Bias und ist real abgenommen. Build 149 schließt den HERE-/Map-Restpunkt: Bei `Hier` wird keine ORS-Route mehr geladen oder gezeichnet; die Detailkarte zeigt Standort und Haltestelle.
+Build 123–130 schlossen ORS-, Provider-ID-, Secret-Storage- und 16-KB-Themen; Build 131–135 migrierten auf Android 17/API 37 und stabilisierten Toolchain/Tests. Build 136 machte den abfahrt.now-Key verpflichtend. Build 137 trennte Alternativstandort-Abfahrten vom Startscreen, Build 138 führte den `/trips`-RoutePlanner ein. Builds 139–142 konvergierten Darstellung, Zwischenhalte, Fehlerzustände und Routing-UI. Build 143 ergänzte Zuhause/Arbeit, Build 144 machte diese Orte direkt auf der Startseite auswählbar. Build 145 ergänzte lokale Routensortierung. Build 146 konvergierte die Routing-UX; Build 147 zeigte die Grenzen der City-Heuristik. Build 148 ersetzte sie durch rohe Photon-Queries plus weichen Standort-Bias und ist real abgenommen. Build 149 schloss den HERE-/Map-Restpunkt. REPO1 machte GitHub zum kanonischen Workspace, entfernte `/docs` und schloss den reproduzierbaren Gradle-Wrapper. Build 150 ergänzt einen anonymen, credential-isolierten GitHub-Release-Update-Check ohne Auto-Download oder stille Installation.
 
 ## Harte Governance-Regel
 

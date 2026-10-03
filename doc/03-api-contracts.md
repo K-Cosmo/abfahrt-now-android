@@ -82,7 +82,7 @@ ORS bleibt für Geh-/Radwege und die bestehende Detail-Routenvorschau zuständig
 
 ## 3. `/journey`
 
-Die aktualisierte OpenAPI bietet `/journey` für die verbleibenden Stopps einer konkreten Abfahrt. Auch im aktuellen Build 149 existiert dafür noch kein Client-/UI-Pfad. Die vorhandenen Detailsheet-Folgezeiten sind etwas anderes: Sie zeigen weitere Abfahrtszeiten derselben Linie/Richtung aus dem lokalen Rohdatenhorizont.
+Die aktualisierte OpenAPI bietet `/journey` für die verbleibenden Stopps einer konkreten Abfahrt. Auch im aktuellen Build existiert dafür noch kein Client-/UI-Pfad. Die vorhandenen Detailsheet-Folgezeiten sind etwas anderes: Sie zeigen weitere Abfahrtszeiten derselben Linie/Richtung aus dem lokalen Rohdatenhorizont.
 
 ## 4. Photon
 
@@ -107,6 +107,32 @@ Damit entstehen die von ORS dokumentierten Zielpfade unter `https://api.heigit.o
 
 Der frühere Host `api.openrouteservice.org` bleibt ausschließlich historische Evidence und darf im Runtime-Code nicht mehr verwendet werden.
 
+## 6. GitHub Releases — Update-Metadaten ab Build 150
+
+Basis: `https://api.github.com/`
+
+Die App nutzt ausschließlich:
+
+`GET /repos/K-Cosmo/abfahrt-now-android/releases/latest`
+
+Aus der Antwort wird nur `tag_name` benötigt. Der Client:
+
+- ist ein separater anonymer OkHttp-/Retrofit-Client;
+- verwendet **keinen** GitHub-Token;
+- enthält keinen `ApiKeyInterceptor`;
+- sendet weder abfahrt.now- noch ORS-Credentials;
+- sendet keine Standort-, Such- oder Transitdaten.
+
+Das akzeptierte Release-Tag-Schema ist exakt:
+
+`v<major>.<minor>.<patch>-b<build>`
+
+Beispiel: `v1.1.0-b150`.
+
+Tags außerhalb dieses Schemas werden ignoriert. Für die Update-Entscheidung ist die monotone Buildnummer maßgeblich. Android `versionCode` folgt aktuell `build * 10`, also Build 150 → `versionCode 1500`. Die Release-URL wird nicht aus einem beliebigen Remote-Feld übernommen, sondern nach erfolgreicher Tag-Validierung fest aus diesem Repository und dem validierten Tag gebildet.
+
+Fehler des Update-Metadatenchecks sind nicht kritisch: 404, Offline, Timeout, Rate-Limit oder sonstige GitHub-Fehler dürfen Startup und Kernfunktion nicht blockieren.
+
 ## Quellen / Evidence
 
 - Aktuelle Projekt-OpenAPI: [`/evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml`](../evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml)
@@ -115,7 +141,7 @@ Der frühere Host `api.openrouteservice.org` bleibt ausschließlich historische 
 - ORS-Migrationsankündigung: <https://ask.openrouteservice.org/t/deprecating-api-openrouteservice-org-in-favour-of-api-heigit-org/7912>
 - ORS-Quotenreduktion/Abschaltung Alt-Host: <https://ask.openrouteservice.org/t/reducing-the-quota-of-deprecated-api-api-openrouteservice-org/8013>
 
-## 6. Linienfarben
+## 7. Linienfarben
 
 Zielvertrag für eine spätere datengetriebene Lösung:
 

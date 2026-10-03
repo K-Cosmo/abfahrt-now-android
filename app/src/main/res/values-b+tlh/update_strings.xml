@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_available_message">Version chu’ tu’lu’: %1$s</string>
+    <string name="update_action">Update yIpoS</string>
+</resources>

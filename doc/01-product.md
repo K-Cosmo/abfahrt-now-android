@@ -16,14 +16,24 @@ Die App soll ausdrücklich **kein Google-Maps-Ersatz** sein. Kern ist eine schne
 - Echtzeit-Abfahrten haben Priorität vor optionaler ORS-Anreicherung.
 - Teilresultate dürfen früh erscheinen, solange sie nicht wissentlich fachlich falsch dargestellt werden.
 - Fehlende Zusatzdaten dürfen die Kernfunktion nicht blockieren.
+- Update-Verfügbarkeit ist Zusatzkomfort: ein fehlgeschlagener Update-Check darf die App weder blockieren noch als Kernfehler erscheinen.
 
-## Aktueller Funktionsumfang Build 149
+## Aktueller Funktionsumfang Build 150
 
 ### Routing-/Such-UX Build 146–148
 - Uhrzeiten in Route-Legs sind in derselben festen linken Spalte wie Modus-Symbol und Linienbadge zentriert; Namen/Details beginnen auf einer gemeinsamen Inhaltsachse.
 - erster und letzter Fußweg bieten oben rechts eine Aktion zum Öffnen der Geh-Navigation; Android-Intent mit Karten-Fallback, ohne neue App-Abhängigkeit.
 - gespeicherte Orte `Zuhause`/`Arbeit` werden nur bei leerem Suchfeld als Schnellwahl gezeigt und verschwinden sofort beim Tippen.
 - allgemeine Photon-Zielsuche verändert den Nutzereingabetext nicht mehr. Photon erhält den getrimmten Originaltext plus vorhandenen `lat/lon`-Standort-Bias; es gibt keine PLZ-/City-/Transit-Heuristik und kein clientseitiges Re-Ranking dieser allgemeinen Treffer. Der separate Flow „Abfahrten an anderem Ort“ behält dagegen seine stationsspezifische Transit-Priorisierung.
+
+### Update-Hinweis Build 150
+- pro Activity-/App-Start wird einmal asynchron die öffentliche `latest`-Release-Metadatenquelle dieses Community-Repositories geprüft;
+- nur ein Release-Tag im Schema `v<semver>-b<build>` kann einen Hinweis auslösen;
+- die monotone Buildnummer entscheidet, ob das Release neuer ist;
+- ein verfügbares Update erscheint als kompakter lokalisierter Dialog;
+- „Update öffnen“ öffnet ausschließlich die konkrete GitHub-Release-Seite im Browser;
+- Fehler, Offline oder fehlendes Release bleiben still;
+- kein automatischer APK-Download und keine stille Installation.
 
 Im Quellstand nachweisbar:
 
@@ -46,13 +56,15 @@ Im Quellstand nachweisbar:
 - Detailsheet mit bis zu drei lokal vorhandenen Folgeabfahrten ohne zusätzlichen Departure-API-Request.
 - ORS-Routenvorschau mit MapLibre und externem Karten-Fallback.
 - mehrsprachige UI mit 22 Sprach-Ressourcensätzen plus Systemsprache.
+- anonymer GitHub-Release-Update-Hinweis ohne Credential-Weitergabe.
 
 ## Bewusste Nicht-Ziele
 
 - der Routenplaner bleibt ein direkter, aber sekundärer Flow neben der Abfahrtstafel; er ersetzt nicht den schnellen Departure-Hauptzweck;
 - keine zweite parallele Daten-/Sortierarchitektur im UI;
 - keine aggressive Optimierung oder Cache-Komplexität ohne reale Messdaten;
-- keine providerübergreifend hartkodierten Linienfarben ohne belastbare Quelle.
+- keine providerübergreifend hartkodierten Linienfarben ohne belastbare Quelle;
+- kein eigener Paketinstaller/Background-Downloader für Updates.
 
 ## Route-planen-Flow ab Build 138
 

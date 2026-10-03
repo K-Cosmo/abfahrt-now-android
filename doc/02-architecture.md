@@ -13,6 +13,8 @@
 - Coroutines / Flow
 - `minSdk 34`, `compileSdk 37`, `targetSdk 37`
 
+Das öffentliche Repository `K-Cosmo/abfahrt-now-android` ist der kanonische Entwicklungsworkspace. Der vollständige Gradle-9.6.0-Wrapper (`gradlew`, `gradlew.bat`, `gradle-wrapper.jar`, `gradle-wrapper.properties`) ist eingecheckt und wird lokal sowie in GitHub Actions direkt verwendet.
+
 ## Access-Gate
 
 Ab Build 136 wird der Departure-Hauptflow nur gerendert, wenn `onboardingCompleted == true` **und** der entschlüsselte abfahrt.now-Key nichtleer ist. Diese Entscheidung ist ein eigener, reiner Access-Gate und keine Netzwerk-/UI-Heuristik. HTTP 401 setzt nur den Access-Status zurück; der gespeicherte Key bleibt zur Korrektur erhalten. ORS ist von diesem Gate unabhängig.
@@ -31,6 +33,30 @@ Compose UI
 
 Die fachliche Verarbeitung sichtbarer Abfahrten bleibt zentral im ViewModel/den dafür extrahierten Utilities. UI-Composables dürfen keine alternative Dedup-/Sortierlogik aufbauen.
 
+## Update-Checker ab Build 150
+
+Der Update-Checker ist bewusst ein separater Komfortpfad und nicht Teil der Transit-/Routingarchitektur:
+
+```text
+MainActivity / Compose
+  -> UpdateViewModel
+      -> GitHubReleaseApi
+          -> eigener anonymer OkHttpClient
+          -> https://api.github.com/repos/K-Cosmo/abfahrt-now-android/releases/latest
+      -> UpdateReleasePolicy
+          -> validiert v<semver>-b<build>
+          -> vergleicht monotone Buildnummer
+```
+
+Architekturgrenzen:
+
+- der GitHub-Client ist vom `abfahrtClient` und dessen `ApiKeyInterceptor` getrennt;
+- GitHub erhält keinen abfahrt.now-/ORS-Key und keine Standort-, Such- oder Transitdaten;
+- der Check läuft asynchron und darf Startup/Kernfunktion bei Fehlern nicht blockieren;
+- Remote-Metadaten dürfen keinen beliebigen Installations-/Downloadpfad vorgeben: nach erfolgreicher Tag-Validierung wird ausschließlich die feste Release-Seite dieses Repositories geöffnet;
+- kein eigener APK-Downloader und kein stiller Installer;
+- `UpdateReleasePolicy` enthält die reine, unit-testbare Tag-/Buildlogik; die UI entscheidet diese Semantik nicht selbst.
+
 ## Zentrale fachliche Bausteine
 
 - `DepartureDisplayOrdering`: zentrale sichtbare Reihenfolge und effektive Distanz.
@@ -39,6 +65,7 @@ Die fachliche Verarbeitung sichtbarer Abfahrten bleibt zentral im ViewModel/den 
 - `DepartureFollowUpTimes`: lokale Folgeabfahrten im Detailsheet.
 - `StationNameNormalizer`: generische Normalisierung für technische Zuordnung/UI.
 - `DepartureFetchPolicy`: breiter Rohdatenhorizont für Detailsheet-Folgezeiten.
+- `UpdateReleasePolicy`: reine Validierung von Release-Tag und Buildvergleich für den optionalen Update-Hinweis.
 
 ## Refresh-/ORS-Modell
 
@@ -49,7 +76,7 @@ Die fachliche Verarbeitung sichtbarer Abfahrten bleibt zentral im ViewModel/den 
 5. ORS-Anreicherung asynchron nachziehen.
 6. Neue ORS-Daten dürfen denselben Kandidatenpool neu bewerten; stale Ergebnisse eines alten Ziel-/Request-Kontexts werden verworfen.
 
-Ein laufendes ORS-Enrichment darf den Core-Refresh fachlich nicht blockieren.
+Ein laufendes ORS-Enrichment darf den Core-Refresh fachlich nicht blockieren. Der unabhängige Update-Check darf den Core-Refresh ebenfalls weder verzögern noch fehlschlagen lassen.
 
 ## Standortkontext
 
@@ -63,11 +90,9 @@ Ein laufendes ORS-Enrichment darf den Core-Refresh fachlich nicht blockieren.
 - `DepartureViewModel.kt` ist mit rund 2.000 Zeilen ein Wartbarkeitshotspot.
 - API-Keys liegen in Preferences DataStore nur als versionierter AES-GCM-Ciphertext. Der AES-256-Schlüssel wird nicht exportierbar im Android Keystore gehalten. Klartext existiert nur zur Laufzeit im App-Prozess, wenn Requests oder Key-Editor ihn benötigen.
 - Linienfarb-Mapping ist regional teilweise hardcodiert; langfristig datengetriebene Quelle erwünscht.
-- Die mitgelieferte Source-ZIP enthält Wrapper-Properties, aber keine ausführbaren Gradle-Wrapper-Skripte/JAR; isolierte CLI-Reproduzierbarkeit ist deshalb noch nicht vollständig.
 
 Große Refactorings sind **kein** Selbstzweck. Aufteilung nur bei konkretem Nutzen und in kleinen, regressionsgesicherten Schritten.
 
-
-## Geplanter Routingfluss
+## Routingfluss
 
 Build 137 lagert die Photon-Nebenfunktion „Abfahrten an anderem Ort“ aus der Startseite in die geschützte Nav-Route `alternate_departures` aus. Startseite und Nebenflow teilen weiterhin denselben `DepartureViewModel`-/Repository-Unterbau; es entsteht keine zweite Departure-Architektur. Beim Verlassen der Nebenroute wird der SearchTarget-Zustand auf `CurrentLocation` und der UI-State auf `Idle` zurückgesetzt, damit keine Alternate-Response auf der Startseite aufblitzt. Build 138 verwendet dasselbe `GeocodingRepository` zusätzlich für allgemeine Photon-Zielsuche und ruft danach den bereits vorhandenen `/trips`-Pfad im `TransitRepository` auf. Route-spezifischer UI-State liegt im kleinen `RoutePlannerViewModel`; Departure-Sortierung/-Filterung bleibt vollständig im bestehenden `DepartureViewModel`. Beide nutzen dieselben Repository-/API-Schichten; keine zweite Routing- oder Departure-Architektur.

@@ -29,7 +29,7 @@ EU-first ist ausdrücklich **keine** Behauptung, dass sämtliche Infrastruktur o
 | `api.heigit.org/openrouteservice/` | optionale WALK/BIKE-Matrix und Directions | Start-/Zielkoordinaten, Routingprofil | persönlicher HeiGIT/ORS-Key, optional | HeiGIT, Heidelberg; bevorzugte europäische Routinganbindung |
 | OpenStreetMap-Kartenressourcen | Kartenhintergrund für MapLibre-Vorschauen | Requests aus sichtbarem Kartenausschnitt | keines | offene Kartendaten; nur bei sichtbarer Karte |
 | Google Play Services Location | Geräteposition | Standortzugriff über Android-Plattform-API | kein Projekt-Key | dokumentierte Plattformausnahme; kein eigener App-Backenddienst |
-| GitHub | öffentliches Repository und Releases; geplanter Update-Metadatencheck | künftig ausschließlich anonyme Release-Metadatenanfrage | kein GitHub-Token in der App | bewusste Infrastruktur-/Runtime-Ausnahme; keine Transit-, Such- oder Standortdaten an GitHub |
+| `api.github.com` / GitHub Releases | anonymer Check auf ein neueres Community-App-Release | User-Agent und öffentliche Release-Metadatenanfrage; **keine** Transit-, Such- oder Standortdaten | keines | bewusste Nicht-EU-Runtime-Ausnahme für Distribution; strikt credential-isoliert |
 
 ## Credential-Isolation
 
@@ -41,7 +41,22 @@ Credentials sind strikt dienstgebunden:
 - ein OkHttp-/Retrofit-Client mit Credential-Interceptor darf nicht für einen fremden Host wiederverwendet werden;
 - Logs und öffentliche Evidence dürfen keine Keys/Ciphertexte enthalten.
 
-Für den geplanten GitHub-Update-Checker ist deshalb ein separater anonymer HTTP-Client Pflicht.
+Build 150 setzt den GitHub-Update-Checker deshalb über einen **eigenen anonymen OkHttp-/Retrofit-Client** um. Ein fokussierter JVM-Test schützt zusätzlich, dass der GitHub-Client keinen `ApiKeyInterceptor` installiert.
+
+## Update- und Release-Metadaten
+
+Für den Community-Update-Check gilt ab Build 150:
+
+- Quelle ist ausschließlich `GET https://api.github.com/repos/K-Cosmo/abfahrt-now-android/releases/latest`;
+- die App verwendet keinen GitHub-Token und sendet keine abfahrt.now-/ORS-Credentials an GitHub;
+- Release-Tags für App-Updates folgen `v<semver>-b<build>`, z. B. `v1.1.0-b150`;
+- die monotone **Buildnummer** ist für die Update-Entscheidung maßgeblich; Android `versionCode` entspricht derzeit `build * 10`;
+- ein nicht passendes/unsicheres Tag wird ignoriert;
+- Netzwerk-, 404-, Rate-Limit- oder sonstige GitHub-Fehler blockieren die App nicht und werden dem Nutzer nicht als Kernfehler präsentiert;
+- ein verfügbares Update öffnet nach Nutzeraktion nur die feste Release-Seite dieses Repositories im Browser;
+- kein automatischer APK-Download, keine stille Installation und kein eigener Updater mit Installationsrechten.
+
+Damit bleibt GitHub eine kleine, klar abgegrenzte Distribution-Ausnahme innerhalb des EU-first-Prinzips. Sollte später ein gleichwertiger EU-gehosteter Release-Metadatenpfad betrieben werden, kann diese Ausnahme separat neu bewertet werden.
 
 ## Lokalisierung
 
