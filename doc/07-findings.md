@@ -24,10 +24,12 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 | F-DOC1-015 | P1 | open | README/`/doc` definieren die unabhängige Community-Identität, während die bestehende In-App-About-/Legal-UX noch `Built by Riles Tech UG` und abfahrt.now-Rechtslinks enthält. Vor dem ersten Community-Release muss die Runtime-UI diese Abgrenzung eindeutig widerspiegeln; eigene Produktänderung mit Buildnummer/Gate. |
 | F-148-001 | P1 | closed | Der erste Build-148-Overlayversuch ließ den alten Testpfad zurück; korrigiertes Source-Paket überschreibt den Legacy-Test. Reales Gradle-Gate und Runtime-Evidence waren anschließend grün. |
 | F-149-001 | P2 | pending evidence | HERE-Standortkarte ist sichtbar wie gewünscht und Nutzer-Screenshot ist positiv. Formales kombiniertes Gradle-/Logcat-Gate bleibt gemäß `/doc/11-test-and-evidence.md` separat zu dokumentieren. |
+| F-150-001 | P1 | pending evidence | Build 150 implementiert den anonymen, credential-isolierten GitHub-Release-Update-Checker. Source-/Policy-Tests sind vorhanden; die technische Abnahme benötigt noch den finalen CI-Gate auf dem konvergierten Branch sowie den realen Runtime-/Release-E2E-Test. Bis dahin ist Build 150 nicht accepted. |
 
 ## Aktuelle Konsequenzen
 
-- **REPO1** ist als Repository-/Governance-Baseline abgeschlossen; Build 149 / `versionCode 1490` bleibt die Produktbaseline.
-- **Build 150** ist für den GitHub-Release-Update-Checker reserviert. Der GitHub-Client muss anonym und credential-isoliert sein.
-- **Build 151** ist für AB-018 Startup/Main-Thread-Instrumentierung reserviert; erst messen, dann optimieren.
+- **REPO1** ist als Repository-/Governance-Baseline abgeschlossen; der eingecheckte Gradle-Wrapper ist der Standard-Buildpfad.
+- **Build 150** ist implementiert, aber noch `pending evidence`: erst finaler CI-Gate, danach Runtime-/Release-E2E. Kein Merge-/Release-Status darf daraus vorzeitig abgeleitet werden.
+- **B-COMMUNITY-001 / F-DOC1-015** bleibt Release-Blocker vor dem ersten öffentlichen Community-App-Release und wird nicht still in Build 150 vermischt.
+- **Build 151** bleibt für AB-018 Startup/Main-Thread-Instrumentierung reserviert; erst messen, dann optimieren.
 - Neue externe Runtime-Dienste werden vor Integration nach [`14-community-and-service-policy.md`](14-community-and-service-policy.md) bewertet.
