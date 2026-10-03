@@ -5,13 +5,13 @@ $ExpectedSha256 = "497c8c2a7e5031f6aa847f88104aa80a93532ec32ee17bdb8d1d2f67a194a
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $WrapperDir = Join-Path $ProjectRoot "gradle\wrapper"
 $WrapperJar = Join-Path $WrapperDir "gradle-wrapper.jar"
-$DownloadUrl = "https://services.gradle.org/distributions/gradle-$GradleVersion-wrapper.jar"
+$DownloadUrl = "https://raw.githubusercontent.com/gradle/gradle/v$GradleVersion/gradle/wrapper/gradle-wrapper.jar"
 
 New-Item -ItemType Directory -Force -Path $WrapperDir | Out-Null
 $tempFile = Join-Path ([System.IO.Path]::GetTempPath()) "gradle-$GradleVersion-wrapper-$([guid]::NewGuid().ToString('N')).jar"
 
 try {
-    Write-Host "Downloading official Gradle $GradleVersion Wrapper JAR..."
+    Write-Host "Downloading Gradle $GradleVersion Wrapper JAR from the official Gradle source tag..."
     Invoke-WebRequest -Uri $DownloadUrl -OutFile $tempFile -UseBasicParsing
 
     $actual = (Get-FileHash -Path $tempFile -Algorithm SHA256).Hash.ToLowerInvariant()
