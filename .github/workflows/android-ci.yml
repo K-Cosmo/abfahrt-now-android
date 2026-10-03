@@ -28,6 +28,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 37 platform
+        run: sdkmanager "platforms;android-37"
+
       - name: Set up Gradle 9.6.0
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -35,20 +41,22 @@ jobs:
 
       - name: Static governance and compatibility gates
         run: |
-          python scripts/check_doc_governance.py
-          python scripts/check_doc_defaults.py
-          python scripts/check_readme_defaults.py
-          python scripts/check_locale_keys.py
-          python scripts/check_android17_readiness.py
-          python scripts/check_16kb_readiness.py
-          python scripts/check_api_key_storage.py
-          python scripts/check_ors_endpoint.py
-          python scripts/check_graphics_path_compat.py
+          python3 scripts/check_doc_governance.py
+          python3 scripts/check_doc_defaults.py
+          python3 scripts/check_readme_defaults.py
+          python3 scripts/check_locale_keys.py
+          python3 scripts/check_android17_readiness.py
+          python3 scripts/check_16kb_readiness.py
+          python3 scripts/check_api_key_storage.py
+          python3 scripts/check_ors_endpoint.py
+          python3 scripts/check_graphics_path_compat.py
 
-      # F-DOC1-008 bootstrap: the generated wrapper is validated in CI until
-      # gradlew/gradlew.bat/gradle-wrapper.jar are committed to the repository.
+      # F-DOC1-008 bootstrap: CI generates the missing Wrapper JAR from the
+      # pinned Gradle 9.6.0 installation until that binary is committed.
       - name: Bootstrap Gradle wrapper
-        run: gradle wrapper --gradle-version 9.6.0
+        run: |
+          gradle wrapper --gradle-version 9.6.0 --distribution-type bin
+          chmod +x ./gradlew
 
       - name: Unit tests and debug build
         run: ./gradlew :app:testDebugUnitTest :app:assembleDebug --no-daemon
