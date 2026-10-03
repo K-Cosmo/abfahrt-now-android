@@ -4,21 +4,23 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-REPO1-001 Public-Repo-Housekeeping / Community-Baseline
-- **Status:** implemented on housekeeping branch; final CI/merge evidence pending.
-- `/doc` bleibt einzige normative Quelle; `/docs` und doppelter Root-`CHANGELOG.md` werden entfernt.
-- README/Service-Policy grenzen die Community-App klar von abfahrt.now ab und dokumentieren EU-first, 22 gebündelte UI-Locale-Sets und benötigte API-Keys.
-- Gradle-Wrapper-Launcher, verifizierter Bootstrap und GitHub Actions werden ergänzt; F-DOC1-008 bleibt bis zum eingecheckten verifizierten `gradle-wrapper.jar` offen.
-
 ### B-150-001 GitHub Release Update Checker
-- **Status:** planned; follows REPO1 merge.
+- **Status:** implemented in Build-150 branch; CI/runtime evidence pending.
 - einmaliger asynchroner Check pro App-Start gegen öffentliche GitHub-Release-Metadaten; kein GitHub-Token.
 - separater anonymer GitHub-HTTP-Client; keinerlei Wiederverwendung des abfahrt.now-Clients/`ApiKeyInterceptor`.
-- Release-Tag-Schema `v<versionName>-b<build>`; Vergleich über monotone Buildnummer.
-- Update-Hinweis bleibt unaufdringlich; Aktion öffnet die konkrete Release-Seite. Keine stille Installation und kein automatischer APK-Download.
+- Release-Tag-Schema `v<versionName>-b<build>`; Vergleich über monotone Buildnummer (`versionCode = build * 10`).
+- lokalisierter Hinweis in allen 22 gebündelten UI-Sprachressourcen; Aktion öffnet die feste Release-Seite des Community-Repositories.
+- Fehler/404/Offline bleiben still; keine stille Installation und kein automatischer APK-Download.
+- Unit-Tests schützen Tag-/Buildvergleich sowie die Credential-Isolation des GitHub-Clients.
+
+### B-COMMUNITY-001 In-App-Community-Abgrenzung
+- **Status:** open; Release-Blocker vor dem ersten öffentlichen Community-App-Release.
+- bestehende About-/Legal-UX muss mit der neuen Community-Identität konvergieren.
+- insbesondere darf die App keine offizielle Zugehörigkeit zu abfahrt.now oder einem API-Entwickler suggerieren. Siehe F-DOC1-015.
+- eigene Produktänderung mit Buildnummer/Gate; nicht still in Build 150 vermischen.
 
 ### B-151-001 Startup/Main-Thread-Instrumentierung (AB-018)
-- **Status:** planned after Build 150.
+- **Status:** planned after Build 150 bzw. nach notwendiger Community-Release-Konvergenz.
 - zunächst Messinstrumentierung der Kaltstart-/Main-Thread-Schritte; keine Optimierung ohne Ursache/Evidence.
 - erst nach Messung gezielte Verschiebung/Lazy-Initialisierung, falls tatsächlich erforderlich.
 
@@ -26,6 +28,14 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
 - Nicht-HERE-RoutePreview bleibt unverändert.
+
+## Abgeschlossenes Repository-Housekeeping
+
+### B-REPO1-001 Public-Repo-Housekeeping / Community-Baseline
+- **Status:** closed.
+- `/doc` ist einzige normative Quelle; `/docs` und doppelter Root-`CHANGELOG.md` entfernt.
+- README/Service-Policy grenzen die Community-App klar von abfahrt.now ab und dokumentieren EU-first, 22 gebündelte UI-Locale-Sets und benötigte API-Keys.
+- vollständiger Gradle-9.6.0-Wrapper inklusive JAR eingecheckt; lokaler Windows-Gate und GitHub Actions mit direkter Wrapper-Nutzung grün. F-DOC1-008 geschlossen.
 
 ## Blockiert / abhängig von externem Contract
 
@@ -55,9 +65,3 @@ AB-010/011/013 und B-005 nur mit konkretem Anlass abbauen; kein Big-Bang-Refacto
 
 ### B-DOC1-012 ORS-/RoutePreview-Restbeobachtung
 ORS-Abdeckung, Jank und MapLibre-Lifecycle nur anhand neuer Evidence weiter optimieren.
-
-### B-DOC1-013 Reproduzierbares Source-Paket
-Verifizierten `gradle-wrapper.jar` einchecken und damit F-DOC1-008 vollständig schließen.
-
-### B-COMMUNITY-001 In-App-Community-Abgrenzung
-Vor dem ersten öffentlichen Community-Release die bestehende About-/Legal-UX mit der neuen Community-Identität konvergieren. Insbesondere darf die App keine offizielle Zugehörigkeit zu abfahrt.now oder einem API-Entwickler suggerieren. Siehe F-DOC1-015.
