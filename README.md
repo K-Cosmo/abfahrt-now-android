@@ -58,27 +58,23 @@ Credentials are service-scoped: an abfahrt.now key must never be sent to HeiGIT,
 
 Open the **repository root** in a current Android Studio installation — the directory containing `settings.gradle.kts`, not the `app` subdirectory.
 
-The project uses **Gradle 9.6.0**. The repository contains the wrapper configuration and launcher scripts. Until `gradle/wrapper/gradle-wrapper.jar` is committed, run the verified bootstrap helper once on Windows:
+The repository contains the complete **Gradle 9.6.0 Wrapper** (`gradlew`, `gradlew.bat`, `gradle-wrapper.jar` and pinned wrapper properties). A fresh clone therefore needs no separately installed Gradle distribution.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\tools\bootstrap-gradle-wrapper.ps1
-```
-
-The helper downloads the official Gradle 9.6.0 Wrapper JAR and verifies its published SHA-256 before saving it. The JAR is intended to be committed after verification; this remaining source-packaging item is tracked as `F-DOC1-008`.
-
-Once the JAR is present:
+Windows:
 
 ```powershell
 .\gradlew.bat :app:testDebugUnitTest :app:assembleDebug
 ```
 
-or on POSIX systems:
+POSIX:
 
 ```bash
 ./gradlew :app:testDebugUnitTest :app:assembleDebug
 ```
 
-GitHub Actions performs the same bootstrap/checksum verification when the JAR is absent, then runs the repository's static gates plus the debug unit/build gate.
+The wrapper pins and verifies the Gradle 9.6.0 distribution. GitHub Actions uses the committed wrapper directly and runs the repository's static governance/compatibility checks plus the same unit/debug-build gate.
+
+`local.properties`, Android Studio metadata, build outputs, keystores, API keys and raw runtime logs remain local and are intentionally not committed.
 
 ## Source of truth and contribution workflow
 
