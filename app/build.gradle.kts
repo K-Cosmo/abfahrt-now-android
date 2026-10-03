@@ -22,7 +22,7 @@ android {
         applicationId   = "now.abfahrt.transit"
         minSdk          = 34       // Android 14 — three major versions behind Android 17
         targetSdk       = 37       // Android 17 target behavior accepted in Build 132
-        versionCode = 1500
+        versionCode = 1510
         versionName     = "1.1.0"
     }
 

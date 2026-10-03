@@ -1,76 +1,67 @@
 # Build-Handoff
 
-## Aktuell: v1.1.0 Build 150 (`versionCode 1500`) — GitHub Release Update Checker
+## Aktuell: v1.1.0 Build 151 (`versionCode 1510`) — Community identity accepted
 
-Basis: Build 149 ist die vorherige Runtime-Baseline. REPO1 ist abgeschlossen: das öffentliche Repository `K-Cosmo/abfahrt-now-android` ist der kanonische Workspace, `/doc` die einzige normative Dokumentationswurzel und der vollständige Gradle-9.6.0-Wrapper ist lokal sowie in GitHub Actions grün.
+Build 150 ist technisch accepted und in `main` integriert. REPO1 bleibt die abgeschlossene Repository-/Governance-Baseline.
 
-Build 148 ist real abgenommen: Runtime-Evidence bestätigt D-069 mit roher Photon-Query, `lat/lon`-Bias und sinnvoller Provider-Reihenfolge. Build 149 implementiert D-070: HERE ist Standortzustand statt Routingfall. Der Nutzer-Screenshot bestätigt die sichtbare Darstellung; formales Build-/Logcat-Evidence für F-149-001 bleibt separat nachzuführen.
+### Build-151-Scope
 
-### Build-150-Scope
+Build 151 schließt die sichtbare Lücke zwischen öffentlicher Community-Identität und historischer In-App-Zuordnung:
 
-- `versionCode = 1500`, `versionName = 1.1.0`.
-- neuer `GitHubReleaseApi` nutzt ausschließlich `GET repos/K-Cosmo/abfahrt-now-android/releases/latest`.
-- GitHub erhält einen **eigenen anonymen OkHttp-/Retrofit-Client**; kein `ApiKeyInterceptor`, kein GitHub-Token, keine abfahrt.now-/ORS-Credentials.
-- `UpdateReleasePolicy` akzeptiert ausschließlich Tags `v<semver>-b<build>` und vergleicht die Buildnummer gegen `versionCode = build * 10`.
-- die Release-Seite wird nur aus festem Repository + validiertem Tag gebildet; beliebige Remote-URLs werden nicht übernommen.
-- `UpdateViewModel` prüft einmal asynchron pro Activity-Lebensdauer. Fehler bleiben still und blockieren den normalen App-Start nicht.
-- ein neueres Release zeigt einen kleinen lokalisierten Dialog. Die Nutzeraktion öffnet die Release-Seite im Browser; kein APK-Autodownload, keine stille Installation.
-- Update-Texte sind in allen 22 gebündelten UI-Locale-Sets vorhanden. Der Locale-Gate prüft alle String-XML-Dateien der echten Sprachverzeichnisse.
-- fokussierte Tests schützen Release-Tag/Buildvergleich und die Credential-Isolation des GitHub-Clients.
-- keine Änderung an Departure-Sortierung, Photon-Ranking, ORS-Routing, `/trips`, Persistenz oder MapLibre.
+- `versionCode = 1510`, `versionName = 1.1.0`.
+- Settings verwendet einen separaten `CommunityFooter`.
+- sichtbarer Hinweis: unabhängige/unoffizielle Community-App; keine Zugehörigkeit zu abfahrt.now.
+- abfahrt.now bleibt als Transitdaten-/API-Quelle sichtbar.
+- Community-Projektlink öffnet `https://github.com/K-Cosmo/abfahrt-now-android`.
+- Privacy/Terms-Links bleiben externe abfahrt.now-Links, sind aber ausdrücklich als **API**-Privacy/Terms beschriftet.
+- sechs neue Texte liegen in allen 22 gebündelten Locale-Sets.
+- bestehender API-Feedback- und Key-Anforderungsflow bleibt provider-spezifisch und unverändert.
+- keine Änderung an Departure-/Routinglogik, ORS, Photon, `/trips`, Persistenz, Credentials, Update-Checker oder MapLibre.
 
-### Automatische Evidence
+### Acceptance / Evidence
 
-GitHub Actions auf dem vollständig konvergierten Implementierungsstand ist grün (Android CI Run #32, Commit `2425ef465adc502b04d85d31d422104f3aec544a`):
+Der Nutzer-Screenshot des realen Build-151-Settings-Footers bestätigt die sichtbare Community-Abgrenzung, Datenquellenkennzeichnung, GitHub-CTA, API-Rechtslink-Beschriftung und Versionsanzeige `Build 151`.
 
-```text
-./gradlew :app:testDebugUnitTest :app:assembleDebug
-```
-
-plus bestehende Static-/Governance-/Compatibility-/Locale-Gates.
-
-### Reale Runtime-/Release-E2E-Evidence
-
-Der Updatepfad wurde auf einem realen Android-Gerät mit dem Build-150-Code geprüft:
-
-1. **Kein GitHub Release vorhanden:** temporär lokal `versionCode 1490`; App startet normal und zeigt keinen Update-Dialog.
-2. **Neueres Release vorhanden:** metadata-only GitHub Release `v1.1.0-b150`; derselbe Build-150-Code mit temporär `versionCode 1490` zeigt den Update-Hinweis für Build 150. „Update öffnen“ führt auf die erwartete feste Release-Seite `.../releases/tag/v1.1.0-b150`.
-3. **Gleiche Buildnummer:** lokaler Test-Hack zurückgesetzt, echter Build 150 / `versionCode 1500` installiert; bei weiterhin vorhandenem `v1.1.0-b150` erscheint kein Update-Hinweis.
-
-Damit sind Tag-/Buildvergleich, reale GitHub-Metadatenabfrage, sichtbare UI-Entscheidung und feste Release-URL im E2E bestätigt. Der Test-Release enthält kein APK/Asset und ersetzt keinen öffentlichen Community-App-Release.
-
-### Release-/R8-Gate
-
-Der von I-064 geforderte Release-Build wurde lokal auf dem finalen Build-150-Quellstand ausgeführt:
+Android CI #42 führt erstmals dauerhaft den vollständigen kombinierten Gate aus:
 
 ```text
-gradlew.bat :app:assembleRelease
+./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon
 ```
 
-Ergebnis: `BUILD SUCCESSFUL in 52s`, 54 Tasks ausgeführt. `stripReleaseDebugSymbols` meldete, dass `libdatastore_shared_counter.so` und `libmaplibre.so` nicht gestripped werden konnten und daher unverändert paketiert wurden; der Task und der gesamte Release-Build blieben erfolgreich. Build 150 führt keine neue Native-Library oder Dependency-Version ein, daher entsteht daraus kein neuer 16-KB-Kompatibilitätsbefund.
+Ergebnis:
 
-**F-150-001 ist damit geschlossen; Build 150 ist technisch accepted.**
+```text
+BUILD SUCCESSFUL in 3m 47s
+106 actionable tasks: 106 executed
+```
 
-## Release-Sperre vor erstem öffentlichen Community-App-Release
+Damit sind Locale-/Static-/Governance-Gates, Unit-Tests, Debug-Build und Release/R8-Build auf demselben PR-Stand grün. F-DOC1-015/B-COMMUNITY-001 ist geschlossen; der technische Community-Release-Blocker ist beseitigt.
 
-F-DOC1-015/B-COMMUNITY-001 bleibt bewusst **außerhalb** von Build 150: die bestehende In-App-About-/Legal-UX enthält noch historische Riles-Tech-/abfahrt.now-Zuordnungen. Diese sichtbare Community-Abgrenzung muss als eigene kleine Produktänderung konvergiert werden, bevor erstmals ein öffentliches Community-App-Release veröffentlicht wird.
+### CI-Regel ab Build 151
 
-## Danach
+Der Release-/R8-Build gehört künftig direkt zum normalen Android-CI-Gate. Ein separates manuelles `assembleRelease` ist nur noch nötig, wenn gezielte lokale Release-Evidence verlangt wird.
 
-AB-018 Startup/Main-Thread-Performance bleibt separat. Erst instrumentieren/messen, danach nur bei belegter Ursache optimieren.
+## Als Nächstes: Build 152 UI/UX-Paket
+
+1. Onboarding-Fließtext linksbündig und sinnvoll in Pflicht-Key/optionalen ORS-Abschnitt gliedern.
+2. RoutePlanner-Start/Ziel-Kopf in einen gemeinsamen kompakten Container überführen; vorhandene Such-/Swap-/Saved-Places-/`/trips`-Logik erhalten.
+3. API-Key-Onboarding-Flash beim Start einer bereits eingerichteten App beseitigen. Konkreter Befund: `stateIn(..., AppPreferences())` liefert einen künstlichen leeren Initialzustand; `preferencesLoaded` wird derzeit dadurch zu früh geöffnet. Gate künftig erst nach echter `prefsRepo.preferencesFlow`-Emission.
+4. nicht mehr genutzten historischen `AppFooter`-Deadcode entfernen.
+
+AB-018 Startup/Main-Thread-Messung folgt separat als **Build 153**.
 
 ## Lokaler Workspace
 
-Android Studio öffnet den Repository-Root, unter Windows:
+Android Studio öffnet den Repository-Root:
 
 ```text
 D:\Android\abfahrt-now-android
 ```
 
-Der eingecheckte Wrapper ist der Standard-Buildpfad:
+Standard-Buildpfad lokal:
 
 ```text
-.\gradlew.bat :app:testDebugUnitTest :app:assembleDebug
+.\gradlew.bat :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease
 ```
 
 `local.properties`, Build-Ausgaben, Keystores und rohe Runtime-Evidence bleiben lokal und werden nicht committed.

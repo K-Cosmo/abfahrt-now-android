@@ -61,8 +61,8 @@ jobs:
           chmod +x ./gradlew
           ./gradlew --version
 
-      - name: Unit tests and debug build
+      - name: Unit tests, debug and release build
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
           ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-        run: ./gradlew :app:testDebugUnitTest :app:assembleDebug --no-daemon
+        run: ./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon

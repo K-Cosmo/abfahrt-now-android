@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Niezależna aplikacja społecznościowa · niezwiązana z abfahrt.now</string>
+    <string name="community_data_source">Dane transportowe przez abfahrt.now</string>
+    <string name="community_project_link">Projekt społecznościowy na GitHubie ↗</string>
+    <string name="community_api_privacy">Prywatność API</string>
+    <string name="community_api_terms">Warunki API</string>
+    <string name="community_disclaimer">Nieoficjalna aplikacja. Dane o odjazdach dostarcza abfahrt.now.</string>
+</resources>

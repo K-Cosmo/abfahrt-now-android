@@ -4,36 +4,39 @@ Dieser Plan beschreibt die **aktuelle Reihenfolge**. Historische Build-Details l
 
 ## REPO1 — abgeschlossen
 
-Das öffentliche Repository ist der kanonische Entwicklungsworkspace. `/doc` ist die einzige normative Dokumentationswurzel, Community-/EU-first-Policy ist dokumentiert, und der vollständige Gradle-9.6.0-Wrapper wird lokal sowie in GitHub Actions direkt und erfolgreich verwendet. REPO1 verändert keine Runtime-Buildnummer.
+Das öffentliche Repository ist der kanonische Entwicklungsworkspace. `/doc` ist die einzige normative Dokumentationswurzel, Community-/EU-first-Policy ist dokumentiert, und der vollständige Gradle-9.6.0-Wrapper wird lokal sowie in GitHub Actions direkt und erfolgreich verwendet.
 
-## Build 150 — GitHub Release Update Checker
+## Build 150 — abgeschlossen
+
+Der GitHub-Release-Update-Checker ist technisch accepted und in `main` integriert: credential-isolierter anonymer Client, 22 Locale-Sets, realer `releases/latest`-E2E und erfolgreicher Release-/R8-Build.
+
+## Build 151 — abgeschlossen
+
+Die Runtime-UI zeigt die unabhängige/unoffizielle Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
+
+Der Android-CI-Gate baut ab Build 151 dauerhaft sowohl Debug als auch Release, damit der Release-/R8-Nachweis nicht mehr manuell nachgeführt werden muss.
+
+## Build 152 — UI/UX-Konvergenz
 
 Scope:
-- `versionCode 1500`, `versionName 1.1.0`;
-- separater anonymer GitHub-HTTP-Client ohne abfahrt.now-/ORS-Credentials;
-- einmaliger asynchroner Check pro App-/Activity-Start gegen `releases/latest`;
-- Release-Tag-Schema `v<versionName>-b<build>` und Vergleich über die monotone Buildnummer;
-- Fehler/Offline/404/Rate-Limit bleiben still und beeinträchtigen die Kernfunktion nicht;
-- lokalisierter Update-Hinweis in allen gebündelten UI-Sprachen;
-- Aktion öffnet nur die konkrete Release-Seite des festen Community-Repositories;
-- keine stille Installation und kein automatischer APK-Download.
+- `versionCode 1520`, `versionName 1.1.0`;
+- Onboarding-Fließtext linksbündig und in verständliche Absätze gegliedert;
+- kompakter RoutePlanner-Kopf mit gemeinsamer Start-/Ziel-Fläche statt zwei großen separaten Feldern und großem Zwischenraum;
+- vorhandene Photon-, Saved-Places-, Swap- und `/trips`-Logik bleibt fachlich unverändert;
+- API-Key-Onboarding darf bei bereits eingerichtetem Nutzer nicht kurz beim App-Start erscheinen;
+- `preferencesLoaded` wird erst nach einer echten Preference-Repository/DataStore-Emission geöffnet, nicht durch den künstlichen `stateIn`-Initialwert;
+- historischer, nicht mehr genutzter `AppFooter`-Deadcode wird entfernt.
 
-Automatischer Gate:
-- Locale-Parität über alle String-Ressourcen der 22 Locale-Sets;
-- Unit-Tests für Tag-Parsing/Buildvergleich;
-- Test, dass der GitHub-Client keinen `ApiKeyInterceptor` enthält;
-- `:app:testDebugUnitTest :app:assembleDebug` in GitHub Actions.
+Gate:
+1. Locale-/Static-/Governance-Gates grün;
+2. Unit-Tests + Debug + Release/R8 in GitHub Actions grün;
+3. Realgerät: eingerichtete App startet ohne sichtbaren Onboarding/API-Key-Flash;
+4. RoutePlanner-Kopf auf schmalem Smartphone kompakt und ohne Funktionsverlust;
+5. Onboarding Schritt 1 und 2 bleiben auf kleinen Displays scrollbar und verständlich.
 
-Runtime-/Release-Gate:
-1. ohne vorhandenes GitHub-Release bzw. bei Offline/Fehler: normale App-Nutzung ohne sichtbaren Update-Fehler;
-2. für echten Ende-zu-Ende-Test: ältere App installieren, Release mit höherem Tag nach Schema bereitstellen, Update-Hinweis prüfen und Release-Seite öffnen;
-3. nach Installation derselben/neuesten Buildnummer darf kein Update-Hinweis mehr erscheinen.
+## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018)
 
-**Wichtig:** Ein öffentlicher Community-Release soll erst erfolgen, nachdem B-COMMUNITY-001/F-DOC1-015 die In-App-About-/Legal-Abgrenzung zur unabhängigen Community-App konvergiert hat. Build 150 kann technisch abgenommen werden, ohne diese Release-Sperre zu umgehen.
-
-## Danach — Community-Release-Konvergenz und Performance
-
-Vor dem ersten öffentlichen Community-App-Release wird F-DOC1-015 als eigene kleine Produktänderung geschlossen. Die bereits geplante AB-018 Startup/Main-Thread-Instrumentierung bleibt danach separat: zuerst messen, keine spekulative Optimierung.
+Nach Build 152 ausschließlich messen/instrumentieren. Keine spekulative Optimierung; konkrete Verschiebung/Lazy-Initialisierung erst anhand reproduzierbarer Messwerte.
 
 ## Release-Grundsatz
 

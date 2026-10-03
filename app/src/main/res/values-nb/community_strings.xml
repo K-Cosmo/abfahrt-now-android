@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Uavhengig fellesskapsapp · ikke tilknyttet abfahrt.now</string>
+    <string name="community_data_source">Kollektivdata via abfahrt.now</string>
+    <string name="community_project_link">Fellesskapsprosjekt på GitHub ↗</string>
+    <string name="community_api_privacy">API-personvern</string>
+    <string name="community_api_terms">API-vilkår</string>
+    <string name="community_disclaimer">Ikke en offisiell app fra abfahrt.now. Kollektivdata leveres av abfahrt.now.</string>
+</resources>

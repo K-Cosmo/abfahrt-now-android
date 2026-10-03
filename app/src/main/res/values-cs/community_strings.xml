@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Nezávislá komunitní aplikace · není spojena s abfahrt.now</string>
+    <string name="community_data_source">Data veřejné dopravy přes abfahrt.now</string>
+    <string name="community_project_link">Komunitní projekt na GitHubu ↗</string>
+    <string name="community_api_privacy">Soukromí API</string>
+    <string name="community_api_terms">Podmínky API</string>
+    <string name="community_disclaimer">Neoficiální aplikace. Data veřejné dopravy poskytuje abfahrt.now.</string>
+</resources>

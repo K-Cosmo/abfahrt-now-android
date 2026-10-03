@@ -486,7 +486,7 @@ fun SettingsSheet(
             // ── Footer / Legal ────────────────────────────────────────────────
             HorizontalDivider()
             Spacer(Modifier.height(16.dp))
-            AppFooter()
+            CommunityFooter()
             Spacer(Modifier.height(8.dp))
         }
     }

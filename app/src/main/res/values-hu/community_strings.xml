@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Független közösségi alkalmazás · nincs kapcsolatban az abfahrt.now szolgáltatással</string>
+    <string name="community_data_source">Közlekedési adatok az abfahrt.now szolgáltatástól</string>
+    <string name="community_project_link">Közösségi projekt a GitHubon ↗</string>
+    <string name="community_api_privacy">API-adatvédelem</string>
+    <string name="community_api_terms">API-feltételek</string>
+    <string name="community_disclaimer">Nem hivatalos alkalmazás. A közlekedési adatokat az abfahrt.now biztosítja.</string>
+</resources>

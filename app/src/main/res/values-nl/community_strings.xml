@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Onafhankelijke community-app · niet verbonden met abfahrt.now</string>
+    <string name="community_data_source">OV-gegevens via abfahrt.now</string>
+    <string name="community_project_link">Communityproject op GitHub ↗</string>
+    <string name="community_api_privacy">API-privacy</string>
+    <string name="community_api_terms">API-voorwaarden</string>
+    <string name="community_disclaimer">Geen officiële app van abfahrt.now. OV-gegevens worden geleverd door abfahrt.now.</string>
+</resources>

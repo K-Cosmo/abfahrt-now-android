@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">tlhab community app · abfahrt.now muvbe</string>
+    <string name="community_data_source">abfahrt.nowvo leng data</string>
+    <string name="community_project_link">GitHubDaq community project ↗</string>
+    <string name="community_api_privacy">API privacy</string>
+    <string name="community_api_terms">API terms</string>
+    <string name="community_disclaimer">abfahrt.now app rasmi oHbe. abfahrt.now nob leng data.</string>
+</resources>

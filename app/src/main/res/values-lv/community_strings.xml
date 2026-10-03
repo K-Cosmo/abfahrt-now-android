@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="community_identity">Neatkarīga kopienas lietotne · nav saistīta ar abfahrt.now</string>
+    <string name="community_data_source">Sabiedriskā transporta dati caur abfahrt.now</string>
+    <string name="community_project_link">Kopienas projekts GitHub ↗</string>
+    <string name="community_api_privacy">API privātums</string>
+    <string name="community_api_terms">API noteikumi</string>
+    <string name="community_disclaimer">Neoficiāla lietotne. Sabiedriskā transporta datus nodrošina abfahrt.now.</string>
+</resources>
