@@ -1,3 +1,45 @@
+## DOC2 — Build-151-Dokumentationskonvergenz — 03.10.2026
+
+- reine Dokumentations-/Governance-Konvergenz; keine Android-Runtime-, Ressourcen-, Dependency- oder Versionsänderung.
+- REPO1 sowie die bereits akzeptierten Builds 150 und 151 werden in Changelog, Decision Log, Test-/Evidence-Historie, Compatibility, Localization, Backlog, Release-Plan und Handoff konsistent nachgeführt.
+- Build 151 (`versionCode 1510`, `versionName 1.1.0`) bleibt der letzte akzeptierte Runtime-Stand.
+- Build 152 ist in PR #6 in Arbeit. Android CI #52 ist inklusive Governance-/Compatibility-Gates, Unit-Tests, Debug- und Release/R8-Build grün, ersetzt aber nicht die noch ausstehende Realgeräte-/UX-Abnahme.
+- F-152-001 dokumentiert vor weiterer Build-152-Konvergenz die doppelte Preference-State-Projektion im aktuellen Access-Gate-Ansatz.
+- AB-018 Startup/Main-Thread-Instrumentierung bleibt separat für Build 153 reserviert.
+
+## v1.1.0 Build 151 — Community identity footer — accepted
+
+- `versionCode = 1510`.
+- sichtbarer Settings-Footer durch `CommunityFooter` auf die unabhängige/unoffizielle Community-App konvergiert; keine Zugehörigkeit zu abfahrt.now wird behauptet.
+- abfahrt.now bleibt klar als Transitdaten-/API-Quelle sichtbar.
+- Projekt-CTA öffnet das kanonische Repository `K-Cosmo/abfahrt-now-android`.
+- Privacy-/Terms-Links sind ausdrücklich als externe API-Provider-Links beschriftet.
+- sechs Community-/Provider-Texte liegen in allen 22 gebündelten Locale-Sets vor.
+- keine Änderung an Departure-/Routinglogik, ORS, Photon, `/trips`, Persistenz, Credentials, Update-Checker oder MapLibre.
+- Realgeräte-Screenshot bestätigt die sichtbare Community-Abgrenzung und Versionsanzeige Build 151.
+- Android CI #42 ist vollständig grün; der normale CI-Gate enthält ab diesem Build dauerhaft `:app:testDebugUnitTest :app:assembleDebug :app:assembleRelease` inklusive Release/R8.
+- F-DOC1-015 / B-COMMUNITY-001 geschlossen.
+
+## v1.1.0 Build 150 — GitHub release update checker — accepted
+
+- `versionCode = 1500`.
+- separater anonymer und credential-isolierter GitHub-Releases-Client für `GET /repos/K-Cosmo/abfahrt-now-android/releases/latest`.
+- kein GitHub-Token; kein abfahrt.now-/ORS-Key, Standort-, Such- oder Transitdatum wird an GitHub weitergegeben.
+- akzeptiertes Tag-Schema exakt `v<semver>-b<build>`; monotone Buildnummer entscheidet über Verfügbarkeit eines Updates.
+- lokalisierter Update-Hinweis in allen 22 UI-Locale-Sets; Nutzeraktion öffnet ausschließlich die feste Release-Seite des Community-Repositories.
+- kein APK-Autodownload, kein stiller Installer und kein Blockieren des Kernflows bei Offline/404/Rate-Limit/sonstigem GitHub-Fehler.
+- fokussierte JVM-Tests schützen Tag-/Build-Policy und Credential-Isolation.
+- Branch-CI, realer E2E (kein Release → kein Dialog; älterer Build erkennt `v1.1.0-b150`; gleicher Build → kein Hinweis) und lokaler Release/R8-Build erfolgreich.
+
+## REPO1 — Public-Repository-/Governance-Baseline — abgeschlossen
+
+- öffentliches Repository `K-Cosmo/abfahrt-now-android` ist der kanonische Entwicklungsworkspace.
+- `/doc` bleibt einzige normative Produkt-/Technik-Wahrheit; Legacy-`/docs` und doppelter Root-`CHANGELOG.md` wurden entfernt.
+- README und Community-/Service-Policy grenzen die App als unabhängiges Community-Projekt von abfahrt.now ab und dokumentieren EU-first, Runtime-Dienste und Credential-Isolation.
+- vollständiger Gradle-9.6.0-Wrapper inklusive `gradle-wrapper.jar` eingecheckt; direkte lokale und GitHub-Actions-Nutzung grün.
+- Android CI führt statische Governance-/Compatibility-Gates, Unit-Tests und Debug-Build aus; Release/R8 wird ab Build 151 dauerhaft in denselben Standard-Gate aufgenommen.
+- kein Runtime-/Versionssprung allein durch REPO1.
+
 ## v1.1.0 Build 149 — HERE detail location map
 
 - `versionCode = 1490`.
@@ -102,7 +144,7 @@
 - no locale-key, dependency, API/model, ORS, MapLibre, route-ranking or departure-list change.
 
 ### Gate
-`:app:testDebugUnitTest :app:assembleDebug`; runtime smoke confirms no visible region and correct transport symbols.
+`:app:testDebugUnitTest :app:assembleDebug`; runtime smoke confirms no visible region und correct transport symbols.
 
 ## v1.1.0 Build 141 — RoutePlanner Empty/Error/Coverage convergence
 
@@ -1018,4 +1060,3 @@ Basis: Build 100 fix1.
 
 - AB-045 closed: data catchment window decoupled from visible window; detail sheet can show next follow-up times beyond the overview window without a detail API request.
 - AB-046 closed: direct stops add-ons now use bounded nearby stop coverage, not only missing stations. This addresses cases where a station had at least one departure but was still incomplete, e.g. only one U-Bahn direction surfaced.
-
