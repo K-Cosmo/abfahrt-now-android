@@ -10,28 +10,33 @@ Das öffentliche Repository ist der kanonische Entwicklungsworkspace. `/doc` ist
 
 Der GitHub-Release-Update-Checker ist technisch accepted und in `main` integriert: credential-isolierter anonymer Client, 22 Locale-Sets, realer `releases/latest`-E2E und erfolgreicher Release-/R8-Build.
 
-## Build 151 — Community-Identität in der Runtime-UI
+## Build 151 — abgeschlossen
+
+Die Runtime-UI zeigt die unabhängige/unoffizielle Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
+
+Der Android-CI-Gate baut ab Build 151 dauerhaft sowohl Debug als auch Release, damit der Release-/R8-Nachweis nicht mehr manuell nachgeführt werden muss.
+
+## Build 152 — UI/UX-Konvergenz
 
 Scope:
-- `versionCode 1510`, `versionName 1.1.0`;
-- bestehendes Settings-/About-Footer-Layout bleibt grundsätzlich erhalten;
-- sichtbare Identität wird auf unabhängige/unoffizielle Community-App konvergiert;
-- abfahrt.now wird eindeutig als Daten-/API-Quelle bezeichnet, nicht als App-Betreiber;
-- Projektlink zeigt auf das kanonische GitHub-Repository;
-- externe Privacy-/Terms-Links werden ausdrücklich als API-Provider-Links bezeichnet;
-- neue Texte in allen 22 gebündelten Locale-Sets;
-- keine Änderung an Transitlogik, Routing, Credentials, Update-Checker oder Performance.
+- `versionCode 1520`, `versionName 1.1.0`;
+- Onboarding-Fließtext linksbündig und in verständliche Absätze gegliedert;
+- kompakter RoutePlanner-Kopf mit gemeinsamer Start-/Ziel-Fläche statt zwei großen separaten Feldern und großem Zwischenraum;
+- vorhandene Photon-, Saved-Places-, Swap- und `/trips`-Logik bleibt fachlich unverändert;
+- API-Key-Onboarding darf bei bereits eingerichtetem Nutzer nicht kurz beim App-Start erscheinen;
+- `preferencesLoaded` wird erst nach einer echten Preference-Repository/DataStore-Emission geöffnet, nicht durch den künstlichen `stateIn`-Initialwert;
+- historischer, nicht mehr genutzter `AppFooter`-Deadcode wird entfernt.
 
 Gate:
 1. Locale-/Static-/Governance-Gates grün;
-2. `:app:testDebugUnitTest :app:assembleDebug` grün;
-3. `:app:assembleRelease` grün;
-4. realer Settings-Footer-Smoke: Community-Abgrenzung sichtbar, GitHub-Link korrekt, API Privacy/Terms korrekt beschriftet und verlinkt;
-5. erst danach F-DOC1-015 schließen und ersten öffentlichen Community-App-Release freigeben.
+2. Unit-Tests + Debug + Release/R8 in GitHub Actions grün;
+3. Realgerät: eingerichtete App startet ohne sichtbaren Onboarding/API-Key-Flash;
+4. RoutePlanner-Kopf auf schmalem Smartphone kompakt und ohne Funktionsverlust;
+5. Onboarding Schritt 1 und 2 bleiben auf kleinen Displays scrollbar und verständlich.
 
-## Build 152 — Startup/Main-Thread-Instrumentierung (AB-018)
+## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018)
 
-Nach Build 151 ausschließlich messen/instrumentieren. Keine spekulative Optimierung; konkrete Verschiebung/Lazy-Initialisierung erst anhand reproduzierbarer Messwerte.
+Nach Build 152 ausschließlich messen/instrumentieren. Keine spekulative Optimierung; konkrete Verschiebung/Lazy-Initialisierung erst anhand reproduzierbarer Messwerte.
 
 ## Release-Grundsatz
 
