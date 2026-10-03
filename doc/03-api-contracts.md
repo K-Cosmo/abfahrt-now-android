@@ -4,7 +4,7 @@
 
 Produktionsbasis: `https://api.abfahrt.now/`
 
-Primäre externe Vertragsreferenz im Projekt: [`/evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml`](../evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml).
+Primäre externe Vertragsreferenz der internen Evidence-Basis: `/evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml`. Die rohe Vertrags-Evidence wird im öffentlichen Repository nicht automatisch veröffentlicht; der konvergierte normative Vertrag steht in diesem Dokument.
 
 ### `/departures`
 
@@ -109,8 +109,8 @@ Der frühere Host `api.openrouteservice.org` bleibt ausschließlich historische 
 
 ## Quellen / Evidence
 
-- Aktuelle Projekt-OpenAPI: [`/evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml`](../evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml)
-- Contract-Konvergenz: [`/evidence/external-contracts/2026-09-12_openapi-convergence.md`](../evidence/external-contracts/2026-09-12_openapi-convergence.md)
+- Interne/raw Projekt-OpenAPI: `/evidence/external-contracts/abfahrt-openapi-2026-09-12.yaml` (nicht automatisch öffentlich versioniert)
+- Interne/raw Contract-Konvergenz: `/evidence/external-contracts/2026-09-12_openapi-convergence.md` (nicht automatisch öffentlich versioniert)
 - Historische Eingabe-OpenAPI/PDF bleiben unter `/evidence/legacy-docs/`.
 - ORS-Migrationsankündigung: <https://ask.openrouteservice.org/t/deprecating-api-openrouteservice-org-in-favour-of-api-heigit-org/7912>
 - ORS-Quotenreduktion/Abschaltung Alt-Host: <https://ask.openrouteservice.org/t/reducing-the-quota-of-deprecated-api-api-openrouteservice-org/8013>
