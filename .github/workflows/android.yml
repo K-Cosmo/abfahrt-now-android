@@ -22,14 +22,6 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
-
-      - name: Install Android 37 platform
-        run: sdkmanager "platforms;android-37"
-
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v6.3.0
 
@@ -62,3 +54,9 @@ jobs:
 
       - name: Unit tests and debug build
         run: ./gradlew :app:testDebugUnitTest :app:assembleDebug --stacktrace
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: abfahrt-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
