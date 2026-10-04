@@ -5,13 +5,14 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-152-001 UI/UX-Konvergenz
-- **Status:** implementation complete in Draft-PR #6; Android CI #62 ist grün, reale Abnahme steht aus.
-- Erststart/Onboarding: Fließtext linksbündig statt Blocksatz; verpflichtender abfahrt.now-Key und optionaler ORS-Hinweis bleiben als getrennte, einfache Information sichtbar.
-- RoutePlanner: Start/Ziel-Eingabe als gemeinsamer kompakter Container mit zwei Zeilen, Trenner und platzsparender Tauschaktion; bestehende Photon-/Saved-Places-/`/trips`-Logik wird weiterverwendet.
-- Startup-Access-Gate: `AccessGateViewModel` ist alleiniger Owner der Start-/Onboarding-Entscheidung und wartet auf die erste echte Preference-Emission. Geschützte Feature-ViewModels entstehen erst danach; der `DepartureViewModel.preferences`-State bleibt Feature-/Settings-State.
-- Settings-Footer: gestapelte Root-Spacer vor dem `CommunityFooter` entfernt; Footer als ein zusammenhängender Block in den 24-dp-Settings-Rhythmus integriert.
+- **Status:** implementation complete in Draft-PR #6; Follow-up nach erstem Realgeräte-Smoke umgesetzt, erneute Abnahme steht aus.
+- Erststart/Onboarding: Fließtext linksbündig; vertikale Abstände und Karteninnenraum weiter verdichtet, damit Pflicht-Key und optionaler ORS-Hinweis ohne große Leerzonen lesbar bleiben.
+- RoutePlanner: Start/Ziel-Eingabe als gemeinsamer kompakter Container mit zwei Zeilen, Trenner und platzsparender Tauschaktion; bestehende Photon-/Saved-Places-/`/trips`-Logik wird weiterverwendet. Nutzerfeedback zum aktuellen Kopf ist positiv; optionales weiteres Verkleinern wurde nach KIS bewusst nicht vorgenommen.
+- Startup-Access-Gate: `AccessGateViewModel` ist alleiniger Owner der Start-/Onboarding-Entscheidung und wartet auf die erste echte Preference-Emission. Der ursprüngliche API-Key-/Onboarding-Flicker ist auf dem Realgerät bestätigt beseitigt (F-152-001 closed).
+- Location-Follow-up: Beim ersten Build-152-Smoke erschien trotz erteilter Berechtigung kurz `Standort erlauben`. Ursache war die Permission-UI im `Idle`-Zweig; bei bereits erteilter Berechtigung wird sie jetzt nicht mehr gerendert. F-152-002 wartet auf Kaltstart-Retest.
+- Settings-Footer: gestapelte Root-Spacer vor dem `CommunityFooter` entfernt; der missverständliche sichtbare Block `nicht mit abfahrt.now verbunden` ist entfernt. Der Schluss-Disclaimer wird satzweise als zentrierte Einzelzeilen gerendert.
 - historischer, ungenutzter `AppFooter`-/Legal-Deadcode inklusive Riles-Tech-Link ist entfernt; `CommunityFooter` bleibt die einzige Runtime-Footer-Implementierung.
-- **Noch offen:** wiederholte Kaltstarts mit eingerichtetem Key ohne Onboarding-Flash; RoutePlanner-Smoke für Start-/Zielsuche, Current location, Home/Work, Swap und `Route finden`; Compact-Width-Smoke für RoutePlanner und Onboarding; Footer-Abstand visuell abnehmen; finale Build-152-Abnahme und Merge.
+- **Noch offen:** wiederholte Kaltstarts mit eingerichtetem Key und erteilter Standortberechtigung ohne Onboarding-/Location-Flash; RoutePlanner-Funktionssmoke für Start-/Zielsuche, Current location, Home/Work, Swap und `Route finden`; Compact-Width-Smoke für Onboarding; Footer-/Onboarding-Follow-up visuell abnehmen; keine neue FATAL/ANR/Navigation-Regression; finale Build-152-Abnahme und Merge.
 
 ### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
 - **Status:** planned after Build 152.
@@ -27,11 +28,11 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ### B-COMMUNITY-001 In-App-Community-Abgrenzung — Build 151
 - **Status:** closed Build 151.
-- Settings-Footer zeigt die App als unabhängiges Community-Projekt und grenzt sie ausdrücklich von abfahrt.now ab.
-- abfahrt.now bleibt als Daten-/API-Quelle sichtbar, nicht als App-Betreiber.
+- Settings-Footer zeigt die App als unabhängiges Community-Projekt; abfahrt.now bleibt klar als Daten-/API-Quelle sichtbar.
 - Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`; Privacy/Terms sind als API-Provider-Links beschriftet.
 - alle sechs Community-Texte sind in 22 Locale-Sets vorhanden.
 - Realgeräte-Screenshot positiv; Android CI #42 inklusive Debug-, Unit-Test- und Release/R8-Build grün.
+- Build 152 vereinfacht die sichtbare Formulierung weiter: Der zusätzliche Identitätskasten mit `nicht mit abfahrt.now verbunden` wird nicht mehr gerendert, weil die bereits vorhandene Community-/Datenquellenkennzeichnung ausreicht und die Formulierung missverständlich war.
 
 ### B-150-001 GitHub Release Update Checker
 - **Status:** closed Build 150; in `main` integriert.
