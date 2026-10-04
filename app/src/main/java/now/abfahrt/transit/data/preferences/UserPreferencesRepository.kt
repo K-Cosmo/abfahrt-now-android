@@ -210,8 +210,6 @@ class UserPreferencesRepository @Inject constructor(
         )
     }
 
-    private fun savedPlaceKeys(prefs: Preferences, type: SavedPlaceType): SavedPlaceKeys = savedPlaceKeys(type)
-
     private fun savedPlaceKeys(type: SavedPlaceType): SavedPlaceKeys = when (type) {
         SavedPlaceType.HOME -> SavedPlaceKeys(Keys.HOME_TITLE, Keys.HOME_SUBTITLE, Keys.HOME_LAT, Keys.HOME_LON)
         SavedPlaceType.WORK -> SavedPlaceKeys(Keys.WORK_TITLE, Keys.WORK_SUBTITLE, Keys.WORK_LAT, Keys.WORK_LON)
