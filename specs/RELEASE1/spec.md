@@ -23,7 +23,7 @@ RELEASE1 ist **Release Engineering**, kein neuer Produktbuild. Es ändert keine 
 1. Der bereits vorhandene Release-Key wird unverändert weiterverwendet; ein neuer Key ist für RELEASE1 ausdrücklich ausgeschlossen.
 2. Keystore und Passwörter dürfen **niemals** in Git, GitHub Actions Logs, `/doc`, `/evidence/public` oder anderen öffentlichen Artefakten landen.
 3. Der vorhandene Keystore liegt außerhalb des Repository-Workspaces und muss mindestens ein separates, lesbares Backup haben.
-4. Vor Verwendung muss der Signer Certificate SHA-256 des Keystore-Alias mit dem Zertifikat einer bereits installierten Release-App übereinstimmen.
+4. Vor Verwendung muss der Signer Certificate SHA-256 des Keystore-Alias mit dem Zertifikat einer bereits signierten Release-APK übereinstimmen. Als Referenz dient entweder eine frühere signierte APK-Datei oder eine Base-APK, die von einem noch Release-signierten Gerät gezogen wurde.
 5. Der öffentliche Repository-Code darf nur die **Mechanik** der Signing-Konfiguration enthalten, niemals Werte/Secrets.
 6. Die bestehende normale Android-CI bleibt credential-frei und muss `assembleRelease` weiterhin ohne Signing-Secrets ausführen können.
 7. Wenn eine Release-Signierung ausdrücklich angefordert wird, muss eine unvollständige Signing-Konfiguration hart fehlschlagen; ein versehentlich als Release-Kandidat behandeltes unsigniertes APK ist nicht zulässig.
@@ -50,15 +50,16 @@ Semantik:
 
 RELEASE1 definiert **keine neuen kryptografischen Sollparameter** für das vorhandene Keypair. Alias, Store-Typ, Algorithmus, Schlüsselgröße, Subject und Gültigkeit werden aus dem real bestehenden Keystore übernommen.
 
-Entscheidend ist ausschließlich die Identität desselben privaten Keypairs, das bereits die drei installierten App-Instanzen signiert hat.
+Entscheidend ist ausschließlich die Identität desselben privaten Keypairs, das bereits die installierten Release-Instanzen signiert hat.
 
 Vor dem Release:
 
 1. vorhandenen Keystore mit `keytool -list -v` prüfen;
 2. tatsächlichen Alias bestimmen;
 3. Signer Certificate SHA-256 des Alias erfassen;
-4. APK einer bestehenden Installation vom Gerät ziehen und mit `apksigner verify --print-certs` prüfen;
-5. beide Signer Certificate SHA-256 müssen exakt identisch sein.
+4. als Referenz entweder eine frühere mit diesem Key signierte APK-Datei oder die Base-APK einer noch Release-signierten Installation verwenden;
+5. Referenz-APK mit `apksigner verify --print-certs` prüfen;
+6. beide Signer Certificate SHA-256 müssen exakt identisch sein.
 
 Bei Abweichung: RELEASE1 stoppen; keinen neuen Key erzeugen und nicht durch Deinstallation kaschieren.
 
@@ -101,4 +102,4 @@ Nur Geräte, die bislang ausschließlich eine Debug-signierte APK tragen, benöt
 
 ## Stop-Regel
 
-Ohne Fingerprint-Match zwischen bestehendem Keystore und real installierter Release-App, gesicherten Keystore-Backup-Pfad, erfolgreiche `apksigner`-Verifikation, In-place-Update, 16-KB-Gate und Realgeräte-Smoke wird kein öffentlicher APK-Release erstellt.
+Ohne Fingerprint-Match zwischen bestehendem Keystore und einer realen früher signierten APK, gesicherten Keystore-Backup-Pfad, erfolgreiche `apksigner`-Verifikation, In-place-Update, 16-KB-Gate und Realgeräte-Smoke wird kein öffentlicher APK-Release erstellt.
