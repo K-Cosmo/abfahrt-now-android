@@ -10,13 +10,13 @@ Der private Key, Keystore und Passwörter sind **kein Repository-Inhalt** und **
 
 ## Release-Key
 
-Für RELEASE1 wird **kein neuer Key erzeugt**. Es wird der bereits vorhandene Release-Keystore weiterverwendet, mit dem die App heute auf drei realen Geräten installiert ist.
+Für RELEASE1 wird **kein neuer Key erzeugt**. Es wird der bereits vorhandene Release-Keystore weiterverwendet, mit dem die App heute auf drei realen Geräten installiert ist. Die Identität dieses bestehenden privaten Keypairs ist damit ein dauerhafter Release-Invariant.
 
 Vor dem ersten öffentlichen GitHub-APK-Release muss nachgewiesen werden, dass:
 
 1. der vorhandene Keystore lesbar ist;
 2. der korrekte Alias bekannt ist;
-3. das Zertifikat dieses Alias exakt dem Signer-Zertifikat der bereits installierten App entspricht;
+3. das Zertifikat dieses Alias exakt dem Signer-Zertifikat einer bereits signierten Release-APK entspricht;
 4. ein unabhängiges Backup des vorhandenen Keystores existiert und lesbar ist.
 
 Alias, Store-Typ, Algorithmus, Schlüsselgröße und historische Gültigkeit werden **nicht** nachträglich auf neu erfundene Sollwerte umgestellt. Für die Update-Fähigkeit ist die Identität desselben privaten Keypairs entscheidend.
@@ -58,7 +58,7 @@ Passwörter dürfen nicht:
 
 ## Signer-Identität vor dem Build prüfen
 
-Vor dem ersten öffentlichen Release muss der Signer-Fingerprint des vorhandenen Keystores gegen eine bereits installierte Release-App geprüft werden.
+Vor dem ersten öffentlichen Release muss der Signer-Fingerprint des vorhandenen Keystores gegen eine bereits signierte Release-APK geprüft werden.
 
 Keystore-Seite:
 
@@ -66,9 +66,7 @@ Keystore-Seite:
 keytool -list -v -keystore <bestehender-keystore> -alias <bestehender-alias>
 ```
 
-Installierte APK-Seite: APK des installierten Pakets lokal ziehen und mit `apksigner verify --print-certs` prüfen. Die Signer Certificate SHA-256-Werte müssen identisch sein.
-
-Falls noch eine früher mit demselben Key signierte APK-Datei vorhanden ist, darf diese anstelle des Pulls vom Gerät als zweite Fingerprint-Quelle verwendet werden.
+Referenz-APK-Seite: Entweder eine noch vorhandene frühere signierte APK verwenden oder die APK einer noch Release-signierten Installation vom Gerät ziehen und mit `apksigner verify --print-certs` prüfen. Die Signer Certificate SHA-256-Werte müssen identisch sein.
 
 Erst nach diesem Match gilt der vorhandene Keystore als RELEASE1-Key.
 
