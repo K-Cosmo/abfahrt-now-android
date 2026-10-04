@@ -4,23 +4,24 @@ Dieses Dokument ist die normative Release-Signing-Regel für direkte GitHub-APK-
 
 ## Grundsatz
 
-Ab RELEASE1 wird jede öffentlich als Release angebotene APK mit demselben dauerhaften privaten Android-Release-Key signiert. Der Verlust oder Austausch dieses Keys unterbricht die direkte Update-Kette für bereits installierte APKs.
+Ab RELEASE1 wird jede öffentlich als Release angebotene APK mit demselben dauerhaften privaten Android-Release-Key signiert, der bereits für die aktuell auf realen Geräten installierten Release-Builds verwendet wurde. Der Verlust oder Austausch dieses Keys unterbricht die direkte Update-Kette für bereits installierte APKs.
 
 Der private Key, Keystore und Passwörter sind **kein Repository-Inhalt** und **keine Evidence**.
 
 ## Release-Key
 
-Für RELEASE1:
+Für RELEASE1 wird **kein neuer Key erzeugt**. Es wird der bereits vorhandene Release-Keystore weiterverwendet, mit dem die App heute auf drei realen Geräten installiert ist.
 
-- Algorithmus: RSA
-- Schlüsselgröße: 4096 Bit
-- Keystore: JKS
-- Alias: `abfahrt-now-release`
-- Gültigkeit: mindestens 10.000 Tage
-- Speicherort: außerhalb des Repository-Workspaces
-- mindestens ein separates Backup vor Veröffentlichung
+Vor dem ersten öffentlichen GitHub-APK-Release muss nachgewiesen werden, dass:
 
-Zertifikatsmetadaten dürfen öffentlich sein. Private Keydaten und Passwörter dürfen niemals öffentlich werden.
+1. der vorhandene Keystore lesbar ist;
+2. der korrekte Alias bekannt ist;
+3. das Zertifikat dieses Alias exakt dem Signer-Zertifikat der bereits installierten App entspricht;
+4. ein unabhängiges Backup des vorhandenen Keystores existiert und lesbar ist.
+
+Alias, Store-Typ, Algorithmus, Schlüsselgröße und historische Gültigkeit werden **nicht** nachträglich auf neu erfundene Sollwerte umgestellt. Für die Update-Fähigkeit ist die Identität desselben privaten Keypairs entscheidend.
+
+Zertifikatsmetadaten und Fingerprints dürfen öffentlich sein. Private Keydaten und Passwörter dürfen niemals öffentlich werden.
 
 ## Gradle-Konfiguration
 
@@ -55,6 +56,20 @@ Passwörter dürfen nicht:
 - als Literal in der PowerShell-History landen;
 - in `/doc` oder `/evidence/public` auftauchen.
 
+## Signer-Identität vor dem Build prüfen
+
+Vor dem ersten öffentlichen Release muss der Signer-Fingerprint des vorhandenen Keystores gegen eine bereits installierte Release-App geprüft werden.
+
+Keystore-Seite:
+
+```text
+keytool -list -v -keystore <bestehender-keystore> -alias <bestehender-alias>
+```
+
+Installierte APK-Seite: APK des installierten Pakets lokal ziehen und mit `apksigner verify --print-certs` prüfen. Die Signer Certificate SHA-256-Werte müssen identisch sein.
+
+Erst nach diesem Match gilt der vorhandene Keystore als RELEASE1-Key.
+
 ## Verifikation vor Veröffentlichung
 
 Ein GitHub-APK-Release ist erst zulässig, wenn **genau das hochzuladende APK** erfolgreich geprüft wurde:
@@ -63,23 +78,26 @@ Ein GitHub-APK-Release ist erst zulässig, wenn **genau das hochzuladende APK** 
 2. Signer Certificate SHA-256 dokumentieren
 3. APK-Datei-SHA-256 dokumentieren
 4. `zipalign -c -P 16 -v 4`
-5. Installation auf dem 16-KB-Testgerät
-6. Runtime `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`
-7. Kernsmoke ohne FATAL/ANR
+5. In-place-Update auf mindestens einem der bereits mit demselben Key installierten Geräte
+6. Installation/Update auf dem 16-KB-Testgerät
+7. Runtime `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`
+8. Kernsmoke ohne FATAL/ANR
 
-## Erster Wechsel von Debug auf Release
+## Bestehende Release-Installationen
 
-Eine mit dem Android-Debug-Key installierte App kann nicht als normales Update durch die erste Release-Key-APK ersetzt werden.
+Da die App bereits auf drei Geräten mit dem vorhandenen Release-Key installiert ist, ist für diese Geräte **keine Deinstallation** vorgesehen. RELEASE1 muss dort als normales Update funktionieren.
 
-Für RELEASE1:
+Acceptance:
 
-1. benötigte Nutzer-API-Keys/Einstellungen außerhalb der App griffbereit halten;
-2. Debug-App deinstallieren;
-3. signierte Release-APK frisch installieren;
-4. API-Keys/Einstellungen neu setzen;
-5. Release-Smoke durchführen.
+```text
+adb install -r <signierte-release-apk>
+```
 
-Ab dann müssen alle Folge-APKs mit demselben Release-Key signiert werden. Ein reguläres Update muss ohne Deinstallation möglich sein.
+muss auf mindestens einem bestehenden Release-Gerät ohne Signaturfehler erfolgreich sein und lokale App-Daten/Preferences erhalten.
+
+Falls Android `INSTALL_FAILED_UPDATE_INCOMPATIBLE` oder einen Signaturkonflikt meldet, wird RELEASE1 gestoppt. Es wird **nicht** deinstalliert, um den Fehler zu umgehen; stattdessen wird zuerst die Signer-Identität geklärt.
+
+Geräte, die heute nur eine Debug-Signatur tragen, benötigen weiterhin einmalig Deinstallation/Neuinstallation. Dieser Debug→Release-Sonderfall darf nicht mit den drei bestehenden Release-Installationen verwechselt werden.
 
 ## GitHub Release Contract
 
@@ -100,9 +118,8 @@ Die Release Notes enthalten mindestens:
 - Version und Build
 - APK-Datei-SHA-256
 - Signer Certificate SHA-256
-- Hinweis, dass dies die erste APK mit dem dauerhaften Release-Key ist
-- Hinweis für frühere Debug-Tester auf die einmalig erforderliche Neuinstallation
+- Hinweis, dass der bereits bestehende dauerhafte Release-Key weiterverwendet wird
 
 ## CI
 
-Die normale Android-CI bleibt credential-frei. Ein späterer signierter GitHub-Actions-Release-Workflow ist optional und wird erst eingeführt, nachdem RELEASE1 lokal erfolgreich signiert, verifiziert, installiert und veröffentlicht wurde.
+Die normale Android-CI bleibt credential-frei. Ein späterer signierter GitHub-Actions-Release-Workflow ist optional und wird erst eingeführt, nachdem RELEASE1 lokal erfolgreich mit dem bestehenden Key signiert, verifiziert, als In-place-Update installiert und veröffentlicht wurde.
