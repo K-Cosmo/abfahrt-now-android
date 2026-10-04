@@ -5,10 +5,14 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
-- **Status:** next after accepted Build 152.
-- zunächst Messinstrumentierung der Kaltstart-/Main-Thread-Schritte; keine Optimierung ohne Ursache/Evidence.
-- erst nach Messung gezielte Verschiebung/Lazy-Initialisierung, falls tatsächlich erforderlich.
-- Baseline für die Messung ist der akzeptierte Build 152; Startup-UI-Flicker werden nicht mit Performance-Optimierung vermischt.
+- **Status:** in progress in Draft-PR #9; Instrumentierungsstufe A implementiert, automatisierte und reale Evidence pending.
+- `versionCode = 1530`, `versionName = 1.1.0`; Android-/Toolchain-Baseline bleibt unverändert.
+- neue leichte `StartupTrace`-Diagnostik mit Prozess-Uptime, Activity-Session (`cold`/`warm`) und Android-Trace-Sections; keine neue Dependency.
+- Application/MapLibre, Activity/Compose/erster Frame, Access-Gate/erste echte Preference-Emission und der nicht-kritische Update-Check sind markiert.
+- read-only `StartupDiagnosticsObserver` misst die vorhandene Departure-State-Kette (`Idle`/`Loading`/progressive `Success`/finaler `Success`/`Error`) ohne den großen `DepartureViewModel` zu verändern.
+- bestehende `AbfahrtLocation`-, OkHttp- und `AbfahrtWalk`-Logs werden für Location/Core/ORS zunächst zeitlich korreliert; direkte Marker im `DepartureViewModel` folgen nur, falls diese erste Runde die Ursache nicht ausreichend eingrenzt.
+- **Noch offen:** vollständiges CI-Gate, drei Cold Starts, Warm-/Resume-Evidence, Abgleich mit Davey-/Skipped-Frame-Signaturen, Analyse und Entscheidung über etwaige Instrumentierungsstufe B bzw. Optimierung.
+- Baseline für die Messung bleibt der akzeptierte Build 152; Startup-UI-Flicker werden nicht mit Performance-Optimierung vermischt.
 
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
