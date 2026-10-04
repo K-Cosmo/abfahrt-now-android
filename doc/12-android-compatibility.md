@@ -1,6 +1,6 @@
 # Android Compatibility
 
-## Aktueller Stand Build 151
+## Aktueller Stand Build 152
 
 | Wert | Stand |
 |---|---:|
@@ -17,9 +17,9 @@
 
 `minSdk 34` bleibt bewusste Produktpolitik: drei Android-Hauptversionen hinter Android 17, moderne Plattformbasis und begrenzte Kompatibilitätslast.
 
-REPO1 sowie Builds 150 und 151 haben diese Android-/Toolchain-Baseline nicht verändert. REPO1 hat den vollständigen Gradle-9.6.0-Wrapper als kanonischen Buildpfad eingecheckt. Seit Build 151 gehört `:app:assembleRelease` dauerhaft zum normalen Android-CI-Gate, sodass Unit-Tests, Debug- und Release/R8-Build auf demselben PR-Stand geprüft werden.
+REPO1 sowie Builds 150–152 haben diese Android-/Toolchain-Baseline nicht verändert. REPO1 hat den vollständigen Gradle-9.6.0-Wrapper als kanonischen Buildpfad eingecheckt. Seit Build 151 gehört `:app:assembleRelease` dauerhaft zum normalen Android-CI-Gate, sodass Unit-Tests, Debug- und Release/R8-Build auf demselben PR-Stand geprüft werden.
 
-Build 152 ist noch nicht Teil dieser akzeptierten Compatibility-Baseline. Android CI #52 ist zwar inklusive Release/R8 grün, die Runtime-/UI-Abnahme steht jedoch noch aus.
+Build 152 ist Teil der akzeptierten Compatibility-Baseline. Der installierte Realgeräte-Stand bestätigt `versionCode 1520`, `minSdk 34`, `targetSdk 37` und `versionName 1.1.0`; Android CI #72 ist inklusive Release/R8 grün. Der finale Runtime-Smoke zeigt keinen App-FATAL-/ANR-/Native-Linker-Crash. Der dabei beobachtete Testlauf lief auf einem 4-KB-Gerät; die separat bereits akzeptierte 16-KB-Readiness aus Build 130 bleibt dadurch unverändert bestehen.
 
 ## Android 17 / API 37 — gestufte Migration
 
