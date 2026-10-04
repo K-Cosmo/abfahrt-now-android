@@ -68,6 +68,8 @@ keytool -list -v -keystore <bestehender-keystore> -alias <bestehender-alias>
 
 Installierte APK-Seite: APK des installierten Pakets lokal ziehen und mit `apksigner verify --print-certs` prüfen. Die Signer Certificate SHA-256-Werte müssen identisch sein.
 
+Falls noch eine früher mit demselben Key signierte APK-Datei vorhanden ist, darf diese anstelle des Pulls vom Gerät als zweite Fingerprint-Quelle verwendet werden.
+
 Erst nach diesem Match gilt der vorhandene Keystore als RELEASE1-Key.
 
 ## Verifikation vor Veröffentlichung
@@ -96,6 +98,8 @@ adb install -r <signierte-release-apk>
 muss auf mindestens einem bestehenden Release-Gerät ohne Signaturfehler erfolgreich sein und lokale App-Daten/Preferences erhalten.
 
 Falls Android `INSTALL_FAILED_UPDATE_INCOMPATIBLE` oder einen Signaturkonflikt meldet, wird RELEASE1 gestoppt. Es wird **nicht** deinstalliert, um den Fehler zu umgehen; stattdessen wird zuerst die Signer-Identität geklärt.
+
+Wichtig: Ein Gerät, auf dem während der Entwicklung inzwischen eine Debug-APK installiert wurde, ist für diesen Update-Kompatibilitätstest nicht geeignet. Mindestens eines der drei Geräte muss noch eine mit dem bestehenden Release-Key signierte Installation tragen, oder es muss eine frühere signierte APK-Datei als Fingerprint-Referenz vorliegen.
 
 Geräte, die heute nur eine Debug-Signatur tragen, benötigen weiterhin einmalig Deinstallation/Neuinstallation. Dieser Debug→Release-Sonderfall darf nicht mit den drei bestehenden Release-Installationen verwechselt werden.
 
