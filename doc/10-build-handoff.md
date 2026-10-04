@@ -1,57 +1,82 @@
 # Build-Handoff
 
-## Aktuell akzeptiert: v1.1.0 Build 152 (`versionCode 1520`) — UI/UX convergence accepted
+## Aktuell akzeptiert: v1.1.0 Build 153 (`versionCode 1530`) — Startup/Main-Thread-Instrumentierung accepted
 
-Build 152 ist am 04.10.2026 nach vollständigem CI-Gate und Realgeräte-Smoke akzeptiert. Build 151 bleibt die vorherige akzeptierte Community-Identity-Baseline; REPO1 bleibt die abgeschlossene Repository-/Governance-Basis.
+Build 153 ist am 04.10.2026 nach vollständigem Android-CI-Gate und realer Stage-A-Evidence als Mess-/Diagnostik-Build akzeptiert. Build 152 bleibt die vorherige akzeptierte UI/UX-Baseline; REPO1 bleibt die abgeschlossene Repository-/Governance-Basis.
 
-### Build-152-Scope
+### Build-153-Scope
 
-- `versionCode = 1520`, `versionName = 1.1.0`.
-- `minSdk = 34`, `targetSdk = 37`; Android-/Toolchain-Baseline unverändert.
-- Onboarding-Fließtext linksbündig; Follow-up verdichtet Außenabstände, Kartenpadding, Zeilenhöhe und Zwischenräume, ohne den Wortlaut unnötig zu verändern. Pflicht-Key und optionaler ORS-Hinweis bleiben getrennt und die Seite bleibt scrollbar.
-- `AccessGateViewModel` ist alleiniger Owner der Startup-Access-Entscheidung. Bis zur ersten echten Preference-Repository/DataStore-Emission bleibt der Gate-State geschlossen; geschützte Feature-ViewModels entstehen erst danach.
-- Der frühere API-Key-/Onboarding-Kaltstart-Flash ist real bestätigt beseitigt (F-152-001 closed).
-- Ein im ersten Build-152-Smoke entdeckter kurzer `Standort erlauben`-Flash trotz bereits erteilter Berechtigung wurde kausal im `PermissionOrIdleContent`-Pfad behoben. Der Follow-up-Retest bestätigt, dass der Flicker nicht mehr erscheint und Location-Updates direkt starten (F-152-002 closed).
-- RoutePlanner-Start/Ziel liegen in einer gemeinsamen kompakten Surface mit Trenner und kleiner Tauschaktion. Photon, Current location, Home/Work, Swap und `/trips` bleiben fachlich auf den bestehenden Pfaden.
-- Settings-Footer ist als zusammenhängender Block verdichtet. Der missverständliche zusätzliche Identitätskasten `nicht mit abfahrt.now verbunden` wurde entfernt; abfahrt.now bleibt als Daten-/API-Quelle sichtbar. Der Schluss-Disclaimer wird satzweise zentriert dargestellt.
-- Der historische, ungenutzte `AppFooter` inklusive alter Riles-Tech-/Legal-Hilfsfunktionen ist entfernt; `CommunityFooter` bleibt einzige Runtime-Footer-Implementierung.
+1. `versionCode = 1530`, `versionName = 1.1.0`; `minSdk 34`, `compileSdk 37`, `targetSdk 37` unverändert.
+2. Dependency-freie Utility `StartupTrace` verwendet Prozess-Uptime, `AbfahrtStartup` und Android `Trace` für leichte Messpunkte.
+3. `AbfahrtApplication` misst Application-Lifecycle und die unveränderte synchrone MapLibre-Initialisierung.
+4. `MainActivity` misst Cold-/Warm-Activity-Create, Splash, `super.onCreate`, `setContent`, Compose-Commit, ersten Frame sowie Start/Resume/Stop.
+5. `AccessGateViewModel` markiert Erstellung und erste echte Preference-Emission; `AppNavHost` Waiting/Ready und protected navigation composition.
+6. `UpdateViewModel` misst den vorhandenen nicht-kritischen GitHub-Release-Check ohne Release-Inhalte oder Credentials zu loggen.
+7. `StartupDiagnosticsObserver` beobachtet read-only `DepartureViewModel.uiState`: Idle, Loading, progressive Success, erster finaler Success und Error.
+8. Der große `DepartureViewModel` wurde in Stage A nicht umgebaut. Location/Core/ORS wurden über vorhandene Logs korreliert.
+9. Keine Produkt-, Routing-, Provider-, Filter-, Sortier-, Credential- oder UI-Semantik wurde durch Build 153 verändert.
 
 ### Automatisierte Evidence
 
-Android CI #72 bestätigte den Follow-up-Code plus den damaligen Pending-Evidence-Dokumentationsstand. Der **finale Acceptance-/Dokumentations-Head** wurde anschließend mit Android CI #81 vollständig geprüft:
+Android CI #94 ist auf dem letzten Runtime-Finding-Head vollständig grün:
 
 ```text
 ./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon
 ```
 
-Ergebnis: Static-/Governance-Gates, committed Wrapper, Unit Tests, Debug und Release/R8 vollständig grün. Für den akzeptierten Stand ist CI #81 maßgeblich.
-
-Frühere Build-152-Gates #60, #62 und #64 bleiben historische Zwischen-Evidence.
+Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8 sind erfolgreich. Frühere Build-153-Gates #91 und #93 bleiben historische Zwischen-Evidence.
 
 ### Realgeräte-Evidence 04.10.2026
 
-- installierter Stand bestätigt: `versionCode=1520`, `versionName=1.1.0`, `minSdk=34`, `targetSdk=37`.
-- Footer visuell akzeptiert.
-- kompakter RoutePlanner zeigt keine beobachtete Regression; Nutzerfeedback: unverändert gegenüber dem bereits positiv bewerteten Stand.
-- Onboarding-/Starttext bleibt inhaltlich unverändert; nur Layout-/Spacing-Änderung war vorgesehen.
-- ursprünglicher API-Key-/Onboarding-Flicker weg.
-- Location-Prompt-Flicker nach Follow-up weg.
-- Logcat trennt Einrichtungs-/Permission-Flow und späteren eingerichteten Prozessstart. Beim eingerichteten Start läuft die Activity ohne erneuten Permission-Dialog hoch; Location-Updates starten direkt.
-- Photon-Zielsuche (`s potsd`) liefert reale Treffer; `/trips` antwortet HTTP 200 und `AbfahrtTrips` meldet sieben Verbindungen.
-- kein `FATAL EXCEPTION`, kein `AndroidRuntime` und keine App-ANR-Signatur im finalen Logcat.
+Drei **saubere vollständig instrumentierte Cold Starts** bilden die Acceptance-Basis:
 
-F-152-001 und F-152-002 sind geschlossen. B-152-001 ist abgeschlossen.
+- Cold 1: erster Compose-Frame ca. 436 ms, AccessGate ready ca. 671 ms, Departure `Loading` ca. 733 ms, erster Core-Request ca. 3,45 s; `Loading`→Core ca. 2,72 s.
+- Cold 2: erster Compose-Frame ca. 455 ms, AccessGate ready ca. 705 ms, Departure `Loading` ca. 753 ms, erster Core-Request ca. 3,34 s; `Loading`→Core ca. 2,59 s.
+- Cold 3/final: Application/MapLibre ca. 27 ms, erster Compose-Frame ca. 0,52 s, AccessGate ready ca. 0,77 s, Departure `Loading` ca. 0,83 s, erster Core-Request ca. 3,85 s; `Loading`→Core ca. 3,02 s.
 
-## Nächster Runtime-Build: Build 153 — AB-018 Startup/Main-Thread-Instrumentierung
+Der finale Lauf bestätigt zusätzlich:
+- der erste Core-Hauptrequest antwortet HTTP 200 in 629 ms; spätere Add-on-Netzwerkphasen variieren stärker, liegen aber **nach** dem bereits identifizierten initialen Warteblock;
+- finaler Core-State wird erreicht, danach startet ORS asynchron;
+- beide ORS-Matrix-Batches antworten mit korrigiertem Key HTTP 200 und werden vollständig geparst;
+- Same-Process-Home→App: Activity `onStop`, später `onStart`/`onResume` im selben Prozess ohne neues `onCreate`; Location-Updates starten wieder;
+- ein separater Warm-Activity-Recreate war nicht reproduzierbar. Das Gate verlangte ihn nur „sofern reproduzierbar“; der tatsächliche Same-Process-Resume-Pfad ist real belegt.
 
-Build 153 beginnt **nicht** mit Optimierung, sondern mit Messung. Baseline ist der akzeptierte Build 152.
+Ein zusätzlicher früher Lauf im finalen Gesamtlog wurde durch Doze/Wake sowie frühen Activity-Stop/Resume verunreinigt. Dieser Lauf enthält Choreographer-Skips und wird bewusst **nicht** als Cold-Start-Performance-Benchmark verwendet. Im sauberen finalen Cold-Start-Segment wurden keine `Choreographer: Skipped`-Zeilen beobachtet.
 
-Ziel der ersten Runde:
-1. Cold/Warm-Start getrennt erfassen.
-2. Process-/Activity-/Compose-/Preference-Gate-/Location-/initiale-Departure-Fetch-Zeitpunkte instrumentieren.
-3. Main-Thread-Arbeit lokalisieren.
-4. erst danach gezielt verschieben/lazy initialisieren, sofern reale Messdaten das begründen.
-5. keine parallele UI-/Routing-/Provider-Semantikänderung.
+Keine App-`FATAL EXCEPTION`, kein App-Prozess-Crash/`AndroidRuntime`, keine App-ANR- oder Navigation-Regression im Abnahmeumfang. `AndroidRuntime`-Zeilen des Gesamtlogs gehören zum Shell-`monkey`-Prozess und enden regulär.
+
+### Technisches Ergebnis aus AB-018
+
+Der dominante wiederholbare Cold-Start-Warteblock liegt **vor dem ersten abfahrt.now-Core-Netzwerkrequest**. Application/MapLibre, Compose, Preference-Gate und der erste Core-HTTP-Call sind dafür nicht dominant.
+
+Im Current-Location-Pfad wird vor dem Netzwerk ausgeführt:
+
+```text
+resolveCurrentTargetCoordinates()
+  -> getBestLocation()
+     -> getCurrentLocation(PRIORITY_HIGH_ACCURACY)
+     -> lastLocation nur bei null
+```
+
+Stage A plus realer Zeitstrahl grenzen den Befund ausreichend auf diese Location-Auflösung ein. Direkte Stage-B-Marker sind daher nicht erforderlich. Build 153 löst den Befund absichtlich **nicht**; F-153-001 bleibt offen.
+
+## Nächster Build: 154 — Current-Location-Startup-Optimierung
+
+B-154-001 ist der nächste P0-Arbeitspunkt. Vor Implementierung wird Specification/Plan erstellt.
+
+Zielrichtung:
+- ausreichend frische letzte Position als schnellen initialen Startpunkt evaluieren;
+- frischen High-Accuracy-Fix parallel nachziehen;
+- nur bei relevanter Abweichung gezielt re-anchern/refreschen;
+- stale/ungültige Positionen nicht still verwenden;
+- keine doppelten Refresh-Stürme;
+- bestehende >200-m-Movement-Logik, Alternate-Location, AccessGate und Permission-Verhalten erhalten.
+
+Freshness-/Accuracy-/Re-Anchor-Schwellen sind **noch nicht festgelegt** und dürfen nicht ohne Spec/Test als Magic Numbers implementiert werden.
+
+## Separates Finding: ORS-Key-Probe
+
+F-ORS-001 / B-ORS-001 bleibt unabhängig: Ein falsch hinterlegter ORS-Key wurde real mit HTTP 403 beantwortet, aber gespeichert/akzeptiert. Künftig soll beim Hinterlegen/Ändern eine ORS-Key-Probe erfolgen; 401/403 dürfen den neuen Key nicht übernehmen. Netzwerkfehler/5xx/429 werden nicht als „Key ungültig“ fehlklassifiziert.
 
 ## Lokaler Workspace
 
