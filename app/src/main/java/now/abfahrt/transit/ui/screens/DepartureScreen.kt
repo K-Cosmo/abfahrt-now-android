@@ -1021,6 +1021,8 @@ private fun SearchResultPanel(
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun PermissionOrIdleContent(perm: PermissionState) {
+    if (perm.status.isGranted) return
+
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
