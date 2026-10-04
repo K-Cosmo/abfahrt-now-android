@@ -14,50 +14,51 @@ Build 153 misst den realen Startup- und Main-Thread-Pfad auf Basis des akzeptier
 Eine kleine app-eigene Diagnostik verwendet ausschließlich Android-Plattformmittel:
 - `android.os.Process.getStartUptimeMillis()` als monotone Prozess-Referenz;
 - `SystemClock.uptimeMillis()` für Marker/Dauern;
-- `android.os.Trace` für synchrone Trace-Sections;
+- `android.os.Trace` für kurze synchrone Trace-Sections;
 - Logcat-Tag `AbfahrtStartup` für reproduzierbare Feld-Evidence.
 
 Keine neue Dependency.
 
-## Zu instrumentierende Grenzen
+## Instrumentierungsstufe A — minimal-invasiv
 1. Prozess/Application
    - `Application.onCreate` enter/exit;
    - Dauer `MapLibre.getInstance()`.
 2. Activity/Compose
    - Activity-Create als `cold` beim ersten Activity-Create des Prozesses, danach `warm`;
-   - `onCreate` enter/after-super/exit;
+   - `onCreate`-Phasen;
    - Root-Compose committed;
    - erster Compose-Frame;
-   - `onResume` als zusätzliche Hot-/Resume-Evidence.
+   - `onStart`, `onResume`, `onStop` als Resume-/Hot-Evidence.
 3. Access Gate
    - Erstellung `AccessGateViewModel`;
    - erste reale `UserPreferencesRepository.preferencesFlow`-Emission;
-   - Gate ready / geschützte Navigation komponiert.
-4. Location
-   - Start Location-Updates;
-   - Start/Ende `getBestLocation()` ohne Koordinaten im Diagnostiklog;
-   - Quelle nur als `current`, `last` oder `none`.
-5. Core Departures
-   - tatsächlicher Core-Fetch-Start;
-   - erster progressiver Response;
-   - finaler Response;
-   - Dauer synchroner Response-Vorbereitung;
-   - Wartezeit auf `Dispatchers.Default`-Filter;
-   - Dauer des finalen UI-State-Apply.
-6. ORS/Walking
-   - Dauer des bereits ausgelagerten Enrichment-Blocks;
-   - Dauer Overlay+Filter auf `Dispatchers.Default`;
-   - Dauer des anschließenden UI-State-Apply.
+   - Gate waiting/ready und geschützte Navigation komponiert.
+4. Nicht-kritischer Update-Check
+   - ViewModel-Erstellung;
+   - Start und Ende des GitHub-Release-Checks, ohne Release-Inhalte zu loggen.
+5. Departure-State-Kette
+   - read-only Compose-Observer auf dem bestehenden `DepartureViewModel`;
+   - `Idle`, `Loading`, progressive `Success`-Emissionen, erster finaler Success und Error;
+   - Zeit von `Loading` bis Success;
+   - nur Zähler/Final-Flag/Anzahl gefilterter Einträge/Walking-Metric-Anzahl.
+6. Korrelation mit bestehenden Runtime-Tags
+   - `AbfahrtLocation` für Start/Stop/Movement;
+   - OkHttp-Logs für tatsächliche Core-/GitHub-/Photon-/ORS-Netzwerkgrenzen;
+   - `AbfahrtWalk` für Start/Apply des bereits ausgelagerten ORS-Enrichments;
+   - vorhandene Android-Davey-/Skipped-Frame-Signaturen.
+
+## Instrumentierungsstufe B — nur falls A nicht ausreicht
+Direkte Marker in `DepartureViewModel` für `getBestLocation()`, Core-Response-Verarbeitung oder ORS-Unterphasen werden **erst** ergänzt, wenn Stufe A den Engpass nicht ausreichend eingrenzt. Dadurch bleibt der kritische, große ViewModel-Pfad in der ersten Runde unverändert.
 
 ## Logformat
-Jeder Diagnostikeintrag enthält soweit sinnvoll:
+Jeder `AbfahrtStartup`-Eintrag enthält soweit sinnvoll:
 - `event=<name>`
 - `sinceProcessMs=<ms>`
 - `durationMs=<ms>` bei Spans
 - `session=<n>`
-- `startKind=cold|warm`
+- `startKind=process|cold|warm`
 - `thread=main|background`
-- nur nicht-sensitive Metadaten wie Response-Anzahl/Final-Flag/Retry-Nummer.
+- nur nicht-sensitive Metadaten.
 
 Nicht loggen:
 - API-Keys oder Ciphertext;
@@ -65,8 +66,8 @@ Nicht loggen:
 - Suchtexte, Saved Places oder andere nutzerbezogene Inhalte.
 
 ## Nicht-Ziele
-- keine Lazy-Initialisierung von MapLibre in diesem Build;
-- keine Änderung an Update-Checker-Startzeitpunkt;
+- keine Lazy-Initialisierung von MapLibre in dieser Messrunde;
+- keine Änderung am Update-Checker-Startzeitpunkt;
 - keine DataStore-/Keystore-Architekturänderung;
 - keine Coroutine-/Dispatcher-Umbauten;
 - keine ORS-/Core-Request-Optimierung;
@@ -75,8 +76,8 @@ Nicht loggen:
 
 ## Acceptance für die Instrumentierungsrunde
 1. Android CI vollständig grün einschließlich Unit, Debug und Release/R8.
-2. Realgerät: mindestens drei Cold Starts (`force-stop` → Launcher/Start) mit gefiltertem `AbfahrtStartup`-Log.
+2. Realgerät: mindestens drei Cold Starts (`force-stop` → Start) mit `AbfahrtStartup` plus den korrelierenden bestehenden Tags.
 3. Mindestens ein Warm-Relaunch innerhalb desselben Prozesses, sofern auf dem Testgerät reproduzierbar; zusätzlich Home→App als Resume-Evidence.
-4. Marker zeigen eine konsistente zeitliche Kette von Process/Application bis Preference-Gate, Location und erstem/finalem Core-Response.
+4. Marker zeigen eine konsistente zeitliche Kette von Process/Application über Preference-Gate bis `Loading` und erstem/finalem Departure-Success; Location-/Netzwerk-/ORS-Grenzen lassen sich über bestehende Tags zeitlich zuordnen.
 5. Keine App-FATAL-/ANR-/Navigation-Regression.
-6. Erst nach Auswertung der Messwerte wird entschieden, ob und wo Build 153 einen zweiten, gezielten Optimierungsschritt erhält oder ob die Optimierung in einen Folgebuild wandert.
+6. Erst nach Auswertung der Messwerte wird entschieden, ob Instrumentierungsstufe B nötig ist und ob anschließend eine gezielte Optimierung gerechtfertigt ist.
