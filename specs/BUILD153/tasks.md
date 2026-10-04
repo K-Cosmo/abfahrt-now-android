@@ -19,29 +19,32 @@
 - [x] `DepartureViewModel` in Stufe A bewusst unverändert lassen.
 
 ## Optionale Instrumentierungsstufe B — nur nach Evidence
-- [x] Entscheidung nach Stage-A-Evidence: direkte `getBestLocation()`-Dauer derzeit nicht nötig; Zeitachse + vorhandener Codepfad grenzen den wiederholbaren Gap bereits auf Current-Location-Auflösung ein.
-- [x] Core-Response-Unterphasen derzeit nicht nötig; Core-Hauptantwort liegt in den vollständigen Cold Starts nur bei ca. 162–174 ms.
-- [x] ORS-Unterphasen derzeit nicht nötig; vorhandene `AbfahrtWalk`-/OkHttp-Zeitachse zeigt asynchronen Start nach finalem Core-State und HTTP 200.
+- [x] Entscheidung nach Stage-A-Evidence: direkte `getBestLocation()`-Dauer nicht nötig; drei saubere Cold-Start-Zeitachsen plus vorhandener Codepfad grenzen den wiederholbaren Gap ausreichend auf Current-Location-Auflösung ein.
+- [x] Core-Response-Unterphasen nicht nötig; der initiale Warteblock liegt vor dem ersten Core-Request. Netzwerkantwortzeiten variieren nachgelagert, ändern diese Lokalisierung aber nicht.
+- [x] ORS-Unterphasen nicht nötig; vorhandene `AbfahrtWalk`-/OkHttp-Zeitachse zeigt asynchronen Start nach finalem Core-State und HTTP 200.
 
 ## Automated Verification
-- [x] Static/Governance/Compatibility gates grün — Android CI #91.
-- [x] committed Gradle wrapper gate grün — Android CI #91.
-- [x] Unit tests grün — Android CI #91.
-- [x] Debug build grün — Android CI #91.
-- [x] Release/R8 build grün — Android CI #91.
+- [x] Static/Governance/Compatibility gates grün — final Android CI #94.
+- [x] committed Gradle wrapper gate grün — final Android CI #94.
+- [x] Unit tests grün — final Android CI #94.
+- [x] Debug build grün — final Android CI #94.
+- [x] Release/R8 build grün — final Android CI #94.
 
 ## Runtime Evidence
-- [ ] Drei **vollständig instrumentierte** Cold Starts mit `AbfahrtStartup` plus `AbfahrtLocation`/OkHttp/`AbfahrtWalk` erfassen — aktuell zwei vollständig + ein teilweise erfasster Cold Start.
-- [ ] Warm-Relaunch innerhalb desselben Prozesses erfassen, sofern reproduzierbar.
-- [ ] Home→App/Resume erfassen.
+- [x] Drei **saubere vollständig instrumentierte** Cold Starts mit `AbfahrtStartup` plus `AbfahrtLocation`/OkHttp/`AbfahrtWalk` erfasst.
+- [x] Separater Warm-Activity-Recreate war nicht reproduzierbar; das Gate verlangte ihn nur „sofern reproduzierbar“. Der reale Same-Process-Rückkehrpfad ist über Home→App/Resume abgedeckt.
+- [x] Home→App/Resume im selben Prozess erfasst: `onStop` → später `onStart`/`onResume` ohne neues `onCreate`.
 - [x] Preference-Gate und Departure Idle→Loading→Success/final im Zeitstrahl vorhanden.
-- [x] Location-/Core-/ORS-Grenzen über bestehende Tags zeitlich zuordenbar; dominanter Gap liegt vor erstem Core-Request im Current-Location-Auflösungspfad.
-- [x] Im aktuellen Realgeräte-Log keine App-`FATAL EXCEPTION`-/`AndroidRuntime`-/ANR-/Davey-Signatur; `Skipped`-Treffer gehören nicht zum App-Prozess.
-- [x] Korrigierter ORS-Key real bestätigt: Matrix HTTP 200 und Walking-Enrichment erfolgreich angewendet.
+- [x] Location-/Core-/ORS-Grenzen zeitlich zuordenbar; dominanter Gap liegt vor erstem Core-Request im Current-Location-Auflösungspfad.
+- [x] Finaler sauberer Cold Start: `Loading`→erster Core-Request ca. 3,02 s; bestätigt die zwei vorherigen sauberen Läufe mit ca. 2,72/2,59 s.
+- [x] Korrigierter ORS-Key real bestätigt: beide Matrix-Batches HTTP 200 und Walking-Enrichment erfolgreich angewendet.
+- [x] Keine App-`FATAL EXCEPTION`-/App-Prozess-Crash-/ANR-/Navigation-Regression im Abnahmeumfang.
+- [x] Verunreinigten Doze/Wake-Lauf mit Choreographer-Skips als Nicht-Benchmark klassifiziert; sauberes finales Cold-Start-Segment ohne `Choreographer: Skipped`-Zeile.
 
 ## Convergence
-- [x] Stage-A-Messwerte analysiert: wiederholbarer Cold-Start-Warteblock ca. 2,6–2,7 s zwischen `Loading` und erstem Core-Request; vorhandener Codepfad weist auf `resolveCurrentTargetCoordinates()` → `getBestLocation()`.
-- [x] Instrumentierungsstufe B vorerst nicht nötig; keine zusätzlichen Marker ohne neuen Erkenntnisbedarf.
-- [ ] Optimierungsentscheidung erst nach vollständigem drittem Cold Start + Warm/Resume-Gate treffen.
-- [x] ORS-403-Fehlkonfiguration als separates F-ORS-001/B-ORS-001 erfasst; nicht mit Build 153 vermischen.
-- [x] `/doc` auf aktuellen Build-153-Interim-Evidence-Status konvergiert.
+- [x] Stage-A-Messwerte analysiert: wiederholbarer Cold-Start-Warteblock ca. 2,6–3,0 s zwischen `Loading` und erstem Core-Request; vorhandener Codepfad weist auf `resolveCurrentTargetCoordinates()` → `getBestLocation()`.
+- [x] Instrumentierungsstufe B nicht nötig; keine zusätzlichen Marker ohne neuen Erkenntnisbedarf.
+- [x] Optimierungsentscheidung getroffen: Build 153 bleibt reiner Mess-/Diagnostik-Build; F-153-001 wird isoliert in Build 154 optimiert.
+- [x] ORS-403-Fehlkonfiguration als separates F-ORS-001/B-ORS-001 erfasst; nicht mit Build 153/154 vermischen.
+- [x] `/doc` auf Build-153-Acceptance und Build-154-Nächste-Schritte konvergiert.
+- [x] Build 153 zur Abnahme freigegeben; nach finalem CI der Acceptance-Konvergenz PR #9 aus Draft nehmen und mergen.

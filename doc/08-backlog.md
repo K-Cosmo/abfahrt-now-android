@@ -4,18 +4,13 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
-- **Status:** in progress in Draft-PR #9; Instrumentierungsstufe A implementiert, automatisierte Evidence grün, reale Evidence teilweise vorhanden.
-- `versionCode = 1530`, `versionName = 1.1.0`; Android-/Toolchain-Baseline bleibt unverändert.
-- neue leichte `StartupTrace`-Diagnostik mit Prozess-Uptime, Activity-Session (`cold`/`warm`) und Android-Trace-Sections; keine neue Dependency.
-- Application/MapLibre, Activity/Compose/erster Frame, Access-Gate/erste echte Preference-Emission und der nicht-kritische Update-Check sind markiert.
-- read-only `StartupDiagnosticsObserver` misst die vorhandene Departure-State-Kette (`Idle`/`Loading`/progressive `Success`/finaler `Success`/`Error`) ohne den großen `DepartureViewModel` zu verändern.
-- Realgeräte-Stage-A am 04.10.2026: zwei vollständige Cold-Start-Zeitketten plus ein teilweise erfasster Cold-Start. In den vollständigen Läufen liegt der erste Compose-Frame bei ca. 0,44–0,46 s, Access-Gate ready bei ca. 0,67–0,71 s und Departure-Loading bei ca. 0,73–0,75 s. Der erste abfahrt.now-Request beginnt erst bei ca. 3,34–3,45 s; der wiederholbare Gap von ca. 2,6–2,7 s liegt damit vor dem Core-Netzwerk und im bestehenden Current-Location-Auflösungspfad (`resolveCurrentTargetCoordinates()` → `getBestLocation()`).
-- Core selbst ist in den vollständigen Läufen schnell: erste Hauptantwort ca. 162–174 ms; erster progressiver Success ca. 3,97–4,09 s; finaler Core-Success ca. 5,43–6,04 s. ORS startet erst danach asynchron und antwortet mit gültigem Key HTTP 200; Walking-Enrichment ist ca. 7,25–8,01 s nach Prozessstart vollständig angewendet.
-- keine App-`FATAL EXCEPTION`-, `AndroidRuntime`-, ANR- oder Davey-Signatur im geprüften Lauf; gefundene `Skipped`-Einträge stammen aus anderen System-/Kamera-Prozessen, nicht aus `now.abfahrt.transit`.
-- Stage A grenzt die Ursache ausreichend ein; direkte Stage-B-Marker in `DepartureViewModel` sind **vorerst nicht erforderlich**. Keine Optimierung, bevor das Runtime-Gate vollständig ist.
-- **Noch offen:** ein weiterer vollständig erfasster Cold Start, Warm-Relaunch im selben Prozess sofern reproduzierbar, Home→App/Resume-Evidence und danach finale Optimierungsentscheidung.
-- Baseline für die Messung bleibt der akzeptierte Build 152; Startup-UI-Flicker werden nicht mit Performance-Optimierung vermischt.
+### B-154-001 Current-Location-Startup beschleunigen (F-153-001)
+- **Status:** planned; folgt auf den akzeptierten Build-153-Messstand.
+- Ziel: den in drei sauberen Cold Starts reproduzierten Warteblock vor dem ersten abfahrt.now-Core-Request reduzieren, ohne Standortkorrektheit, Permission-Verhalten oder Refresh-Semantik zu verschlechtern.
+- bevorzugte Richtung für Specification/Plan: ausreichend frische letzte bekannte Position als schneller initialer Startpunkt prüfen und eine frische High-Accuracy-Position parallel nachziehen, statt den ersten Core-Request zwingend auf `getCurrentLocation(PRIORITY_HIGH_ACCURACY)` warten zu lassen.
+- **Noch nicht entschieden:** zulässiges Alter einer gecachten Position, Genauigkeitsanforderung und Schwelle für einen nachfolgenden Re-Anchor/Refresh. Diese Werte werden vor Implementierung explizit spezifiziert und getestet; keine geratenen Magic Numbers.
+- Invarianten: stale/ungültige Position nicht still verwenden; kein Request-Sturm; bestehender >200-m-Movement-Refresh nicht versehentlich duplizieren; Alternate-Location-Modus unverändert; AccessGate-/Permission-Fixes aus Build 152 erhalten; keine neue Main-Thread-Blockade.
+- Testmatrix mindestens: frische letzte Position, stale letzte Position, keine letzte Position, Location deaktiviert/nicht verfügbar, reale Bewegung zwischen Cache und frischem Fix, Cold Start und Same-Process-Resume.
 
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
@@ -25,7 +20,7 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P1 — nächster Hardening-Block
 
 ### B-ORS-001 ORS-Key beim Hinterlegen validieren
-- **Status:** planned aus F-ORS-001; bewusst nicht Teil von Build 153.
+- **Status:** planned aus F-ORS-001; bewusst getrennt von Build 153/154.
 - Beim erstmaligen Hinterlegen und beim Ändern des ORS-Keys vor persistenter Übernahme eine kleine, nicht-sensitive ORS-Probe ausführen.
 - HTTP 401/403: neuen Key nicht akzeptieren; bei Änderung einen bereits gültigen gespeicherten Key nicht überschreiben; klare Fehlermeldung anzeigen.
 - Netzwerkfehler/5xx: als temporär/unprüfbar behandeln, nicht als ungültigen Key klassifizieren. HTTP 429 bedeutet gültiger Zugriffspfad mit Limitproblem und darf den Key nicht als syntaktisch/fachlich ungültig markieren.
@@ -34,25 +29,32 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## Abgeschlossen
 
+### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018) — Build 153
+- **Status:** closed / accepted 04.10.2026.
+- `versionCode = 1530`, `versionName = 1.1.0`; Android-/Toolchain-Baseline unverändert.
+- dependency-freie `StartupTrace`-Diagnostik misst Application/MapLibre, Activity/Compose/ersten Frame, AccessGate/erste echte Preferences, Update-Check und die vorhandene Departure-State-Kette; der große `DepartureViewModel` blieb in Stage A unverändert.
+- Android CI #94 vollständig grün: Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8.
+- drei saubere vollständig instrumentierte Cold Starts liegen vor. Die ersten beiden zeigen `Loading`→erster Core-Request ca. 2,72/2,59 s; der finale saubere Lauf ca. 3,02 s. Damit ist der vor dem Netzwerk liegende Current-Location-Warteblock reproduziert.
+- finaler sauberer Lauf: Application/MapLibre ca. 27 ms, erster Compose-Frame ca. 0,52 s, AccessGate ready ca. 0,77 s, Departure Loading ca. 0,83 s; erster Core-Request erst ca. 3,85 s nach Prozessstart. Die erste Core-Hauptantwort brauchte in diesem Lauf 629 ms; spätere Add-on-Netzwerkantworten variierten stärker, ändern aber die Lokalisierung des initialen Warteblocks nicht.
+- ORS startet nach finalem Core-State asynchron und antwortet mit korrigiertem Key HTTP 200; beide Matrix-Batches werden vollständig geparst.
+- Same-Process-Home→App-Resume ist real erfasst: Activity `onStop`, später `onStart`/`onResume` im selben Prozess ohne neues `onCreate`. Ein separater Warm-Activity-Recreate war nicht reproduzierbar und war laut Gate nur „sofern reproduzierbar“ gefordert.
+- der finale Gesamtlog enthält außerdem einen durch Doze/Wake und frühes Activity-Stop/Resume verunreinigten Lauf mit Choreographer-Skips; dieser wird ausdrücklich nicht als sauberer Cold-Start-Benchmark verwendet. Im sauberen finalen Cold-Start-Segment erscheinen keine `Choreographer: Skipped`-Zeilen.
+- keine App-`FATAL EXCEPTION`-, App-`AndroidRuntime`-/Process-Crash-, ANR- oder Navigation-Regression im Abnahmeumfang. `AndroidRuntime`-Treffer des Gesamtlogs gehören zum Shell-`monkey`-Prozess und enden regulär.
+- Stage A grenzt die Ursache ausreichend ein; zusätzliche Stage-B-Marker sind nicht erforderlich. Die Optimierung selbst wird isoliert in Build 154 umgesetzt.
+
 ### B-152-001 UI/UX-Konvergenz — Build 152
 - **Status:** closed / accepted 04.10.2026.
 - `versionCode = 1520`, `versionName = 1.1.0`, `minSdk 34`, `targetSdk 37` real bestätigt.
-- Erststart/Onboarding: Fließtext linksbündig; kompakte, weiterhin scrollbare Darstellung. Der Follow-up verdichtete Abstände und Karteninnenraum, ohne den Wortlaut unnötig zu ändern.
+- Erststart/Onboarding: Fließtext linksbündig; kompakte, weiterhin scrollbare Darstellung.
 - Startup-Access-Gate: `AccessGateViewModel` wartet auf eine echte Preference-Emission. Der frühere API-Key-/Onboarding-Flicker ist real bestätigt beseitigt (F-152-001 closed).
-- Location-Follow-up: `PermissionOrIdleContent` rendert bei bereits erteilter Berechtigung nicht mehr transient während `Idle`; erneuter Kaltstart bestätigt kein `Standort erlauben`-Flicker (F-152-002 closed).
-- RoutePlanner: gemeinsamer kompakter Start/Ziel-Container mit Trenner und platzsparender Tauschaktion. Nutzerfeedback bestätigt keine sichtbare Regression; Logcat belegt reale Photon-Zielsuche und erfolgreichen `/trips`-Request mit sieben Ergebnissen.
-- Settings-Footer: kumulierter Leerraum entfernt; missverständlicher zusätzlicher Identitätskasten entfernt; Disclaimer satzweise zentriert. Realgeräte-Feedback: Footer passt.
-- historischer ungenutzter `AppFooter`-/Legal-Deadcode inklusive Riles-Tech-Link entfernt; `CommunityFooter` ist die einzige Runtime-Footer-Implementierung.
-- Android CI #81 auf dem finalen Acceptance-/Dokumentations-Head vollständig grün: Static/Governance, Wrapper, Unit Tests, Debug und Release/R8.
-- finaler Logcat enthält keine App-`FATAL EXCEPTION`-/`AndroidRuntime`-/ANR-Signatur.
+- Location-Follow-up: kein `Standort erlauben`-Flicker mehr bei bereits erteilter Berechtigung (F-152-002 closed).
+- RoutePlanner, Settings-Footer und Community-Footer real/automatisiert abgenommen; Android CI #81 vollständig grün.
 
 ### B-COMMUNITY-001 In-App-Community-Abgrenzung — Build 151
 - **Status:** closed Build 151.
 - Settings-Footer zeigt die App als unabhängiges Community-Projekt; abfahrt.now bleibt klar als Daten-/API-Quelle sichtbar.
 - Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`; Privacy/Terms sind als API-Provider-Links beschriftet.
-- alle sechs Community-Texte sind in 22 Locale-Sets vorhanden.
-- Realgeräte-Screenshot positiv; Android CI #42 inklusive Debug-, Unit-Test- und Release/R8-Build grün.
-- Build 152 vereinfacht die sichtbare Formulierung weiter: Der zusätzliche Identitätskasten mit `nicht mit abfahrt.now verbunden` wird nicht mehr gerendert, weil die bereits vorhandene Community-/Datenquellenkennzeichnung ausreicht und die Formulierung missverständlich war.
+- alle sechs Community-Texte sind in 22 Locale-Sets vorhanden; Android CI #42 inklusive Release/R8 grün.
 
 ### B-150-001 GitHub Release Update Checker
 - **Status:** closed Build 150; in `main` integriert.
@@ -61,11 +63,11 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - lokalisierter Hinweis in 22 UI-Sprachen; feste Release-Seite; kein APK-Autodownload/Installer.
 - CI, realer E2E und Release-/R8-Build erfolgreich.
 
-### B-REPO1-001 Public-Repo-Housekeeping / Community-Baseline
+### B-REPO1-001 Public-Repository-/Governance-Baseline
 - **Status:** closed.
 - `/doc` ist einzige normative Quelle; `/docs` und doppelter Root-`CHANGELOG.md` entfernt.
-- README/Service-Policy grenzen die Community-App klar von abfahrt.now ab und dokumentieren EU-first, 22 gebündelte UI-Locale-Sets und benötigte API-Keys.
-- vollständiger Gradle-9.6.0-Wrapper inklusive JAR eingecheckt; lokaler Windows-Gate und GitHub Actions mit direkter Wrapper-Nutzung grün.
+- README/Service-Policy grenzen die Community-App klar von abfahrt.now ab und dokumentieren EU-first, Runtime-Dienste und benötigte API-Keys.
+- vollständiger Gradle-9.6.0-Wrapper inklusive JAR eingecheckt; lokaler Windows-Gate und GitHub Actions grün.
 
 ## Blockiert / abhängig von externem Contract
 
