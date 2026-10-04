@@ -33,6 +33,6 @@ Diese Datei hält **aktuelle bzw. noch entscheidungsrelevante Findings**. Abgesc
 - **REPO1** ist als Repository-/Governance-Baseline abgeschlossen; der eingecheckte Gradle-Wrapper ist der Standard-Buildpfad.
 - **Build 150** ist technisch accepted und in `main` integriert.
 - **Build 151** schließt B-COMMUNITY-001/F-DOC1-015 und bleibt historische akzeptierte Baseline.
-- **Build 152** ist nach CI #72 und Realgeräte-Smoke accepted: Startup-Access-Gate ohne API-Key-/Onboarding-Flash, Location-Follow-up ohne Permission-Flicker, vereinfachter Footer visuell akzeptiert, kompakter RoutePlanner ohne beobachtete Regression; Photon-Zielsuche und `/trips` liefen real erfolgreich. F-152-001 und F-152-002 sind geschlossen.
+- **Build 152** ist nach finalem Android CI #81 und Realgeräte-Smoke accepted: Startup-Access-Gate ohne API-Key-/Onboarding-Flash, Location-Follow-up ohne Permission-Flicker, vereinfachter Footer visuell akzeptiert, kompakter RoutePlanner ohne beobachtete Regression; Photon-Zielsuche und `/trips` liefen real erfolgreich. F-152-001 und F-152-002 sind geschlossen.
 - **Build 153** ist als nächster Runtime-Build für AB-018 Startup/Main-Thread-Instrumentierung vorgesehen; erst messen, dann optimieren.
 - Neue externe Runtime-Dienste werden vor Integration nach [`14-community-and-service-policy.md`](14-community-and-service-policy.md) bewertet.
