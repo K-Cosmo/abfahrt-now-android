@@ -24,11 +24,11 @@
 - [ ] ORS-Unterphasen ergänzen, falls vorhandene `AbfahrtWalk`-Zeitachse nicht ausreicht.
 
 ## Automated Verification
-- [ ] Static/Governance/Compatibility gates grün.
-- [ ] committed Gradle wrapper gate grün.
-- [ ] Unit tests grün.
-- [ ] Debug build grün.
-- [ ] Release/R8 build grün.
+- [x] Static/Governance/Compatibility gates grün — Android CI #91.
+- [x] committed Gradle wrapper gate grün — Android CI #91.
+- [x] Unit tests grün — Android CI #91.
+- [x] Debug build grün — Android CI #91.
+- [x] Release/R8 build grün — Android CI #91.
 
 ## Runtime Evidence
 - [ ] Drei Cold Starts mit `AbfahrtStartup` plus `AbfahrtLocation`/OkHttp/`AbfahrtWalk` erfassen.
