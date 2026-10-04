@@ -243,6 +243,20 @@ enum class AppLanguage(val code: String, val displayName: String) {
     }
 }
 
+/**
+ * User-selectable ordering for the departures screen.
+ * The enum names are persisted in DataStore, so they form a stable preference contract.
+ */
+enum class DepartureSortProfile {
+    NEARBY,
+    SOONEST,
+    LINE_GROUPED;
+
+    companion object {
+        fun fromCode(code: String?): DepartureSortProfile =
+            entries.firstOrNull { it.name.equals(code, ignoreCase = true) } ?: NEARBY
+    }
+}
 
 
 enum class OrsTravelMode(
@@ -276,6 +290,7 @@ data class AppPreferences(
     val windowEndMinutes: Int       = 30,
     val refreshIntervalMinutes: Int = 1,
     val maxPerDirection: Int        = 1,   // max departures per line+direction shown
+    val departureSortProfile: DepartureSortProfile = DepartureSortProfile.NEARBY,
     val selectedModes: Set<TransportMode> = TransportMode.all,
     val quickFilterSlots: List<TransportMode> = listOf(
         TransportMode.SUBWAY,
