@@ -8,6 +8,7 @@ import now.abfahrt.transit.ui.viewmodel.AccessGateViewModel
 import now.abfahrt.transit.ui.viewmodel.DepartureViewModel
 import now.abfahrt.transit.ui.viewmodel.RoutePlannerViewModel
 import now.abfahrt.transit.ui.viewmodel.SavedPlacesViewModel
+import now.abfahrt.transit.util.StartupTrace
 
 /**
  * App-level navigation.
@@ -27,6 +28,12 @@ fun AppNavHost() {
     val accessGateViewModel: AccessGateViewModel = hiltViewModel()
     val accessPrefs by accessGateViewModel.preferences.collectAsState()
 
+    LaunchedEffect(accessPrefs == null) {
+        StartupTrace.mark(
+            if (accessPrefs == null) "access_gate_waiting" else "access_gate_preferences_ready"
+        )
+    }
+
     // null means the real DataStore/Keystore-backed preference snapshot has not
     // arrived yet. Do not instantiate protected feature state or guess onboarding.
     val prefs = accessPrefs ?: return
@@ -36,9 +43,22 @@ fun AppNavHost() {
         apiKey = prefs.apiKey
     )
 
+    LaunchedEffect(hasRequiredAccess) {
+        StartupTrace.mark(
+            event = "access_gate_ready",
+            details = "requiredAccess=$hasRequiredAccess"
+        )
+    }
+
     val viewModel: DepartureViewModel = hiltViewModel()
     val routePlannerViewModel: RoutePlannerViewModel = hiltViewModel()
     val routePlannerState by routePlannerViewModel.uiState.collectAsState()
+
+    StartupDiagnosticsObserver(viewModel)
+
+    LaunchedEffect(Unit) {
+        StartupTrace.mark("protected_navigation_composed")
+    }
 
     NavHost(
         navController    = navController,
