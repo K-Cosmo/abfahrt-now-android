@@ -26,9 +26,10 @@ Auf dem Windows-Entwicklungsrechner:
 1. vorhandenen Keystore außerhalb des Repository-Workspaces lokalisieren;
 2. mit `keytool -list -v -keystore <pfad>` Alias/Certificate-Fingerprint prüfen;
 3. mindestens ein separates Backup des bestehenden Keystores verifizieren;
-4. APK einer bestehenden Release-Installation per `adb shell pm path now.abfahrt.transit` lokalisieren und per `adb pull` sichern;
-5. installierte APK mit `apksigner verify --print-certs` prüfen;
-6. Signer Certificate SHA-256 von Keystore und installierter APK müssen exakt übereinstimmen.
+4. als zweite Referenz entweder eine frühere mit demselben Key signierte APK-Datei oder ein Gerät verwenden, das noch eine solche Release-Installation trägt;
+5. bei Geräte-Referenz APK per `adb shell pm path now.abfahrt.transit` lokalisieren und per `adb pull` sichern;
+6. Referenz-APK mit `apksigner verify --print-certs` prüfen;
+7. Signer Certificate SHA-256 von Keystore und Referenz-APK müssen exakt übereinstimmen.
 
 Bei Abweichung wird gestoppt. Kein neuer Key und keine Deinstallation als Workaround.
 
