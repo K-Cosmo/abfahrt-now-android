@@ -12,40 +12,47 @@ Der GitHub-Release-Update-Checker ist technisch accepted und in `main` integrier
 
 ## Build 151 — abgeschlossen
 
-Die Runtime-UI zeigt die unabhängige/unoffizielle Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
+Die Runtime-UI zeigt die unabhängige Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
 
 Der Android-CI-Gate baut ab Build 151 dauerhaft sowohl Debug als auch Release, damit der Release-/R8-Nachweis nicht mehr manuell nachgeführt werden muss.
 
-## DOC2 — Dokumentationskonvergenz nach Build 151
+## DOC2 — abgeschlossen
 
-DOC2 ändert ausschließlich `/doc` und die zugehörige Prozessdokumentation. `versionCode 1510` / `versionName 1.1.0` und sämtliche Runtime-Dateien bleiben unverändert. Zweck ist, REPO1 sowie die bereits akzeptierten Builds 150/151 konsistent in Changelog, Entscheidungen, Evidence, Compatibility, Localization, Backlog und Handoff nachzuführen.
+DOC2 konvergierte nach REPO1/Build 150/Build 151 ausschließlich die normative Dokumentation. Es war kein Runtime-Build und änderte weder App-Source noch Versionierung.
 
-## Build 152 — UI/UX-Konvergenz — implementation complete / pending evidence
+## Build 152 — UI/UX-Konvergenz — accepted 04.10.2026
 
-Draft-PR #6 enthält den vollständigen Build-152-Scope. Android CI #60 bestätigte die konvergierte Startup-Access-Gate-Architektur; Android CI #62 bestätigte anschließend den kompletten Implementierungsstand inklusive Static-/Governance-/Locale-Gates, Unit-Tests, Debug- und Release/R8-Build. Das ist ein technischer Gate, **keine** Build-152-Abnahme.
+Build 152 ist als neue Runtime-Baseline abgenommen.
 
-Implementierter Scope:
-- `versionCode 1520`, `versionName 1.1.0`;
-- Onboarding-Fließtext linksbündig und verständlich strukturiert;
-- kompakter RoutePlanner-Kopf mit gemeinsamer Start-/Ziel-Fläche und platzsparender Tauschaktion;
-- bestehende Photon-, Saved-Places-, Current-location-, Swap- und `/trips`-Logik bleibt fachlich unverändert;
-- `AccessGateViewModel` ist alleiniger Owner der Startup-Access-Entscheidung und wartet auf eine echte Preference-Repository/DataStore-Emission; geschützte Feature-ViewModels werden erst danach erzeugt;
-- ORS→Community-Footer-Abstand ist strukturell reduziert, ohne negative Padding-/Offset-Hacks;
-- historischer, nicht mehr genutzter `AppFooter`-/Legal-Deadcode ist entfernt; `CommunityFooter` bleibt alleinige Footer-Implementierung.
+Scope:
+- `versionCode 1520`, `versionName 1.1.0`, `minSdk 34`, `targetSdk 37`;
+- linksbündiges und kompakteres Onboarding ohne Änderung der fachlichen Pflicht-/Optional-Logik;
+- kompakter gemeinsamer RoutePlanner-Kopf mit Start/Ziel, Trenner und platzsparender Tauschaktion;
+- bestehende Photon-, Saved-Places-, Current-location-, Swap- und `/trips`-Logik fachlich unverändert;
+- `AccessGateViewModel` wartet auf die erste echte Preference-Emission, bevor geschützte Feature-ViewModels entstehen;
+- `PermissionOrIdleContent` wird bei bereits erteilter Standortberechtigung im `Idle`-Übergang nicht mehr transient angezeigt;
+- Settings-Footer strukturell verdichtet, missverständlicher zusätzlicher Identitätskasten entfernt, Disclaimer satzweise zentriert;
+- historischer ungenutzter `AppFooter`-/Legal-Deadcode entfernt.
 
-Gate-Status:
-1. **erfüllt im Code:** F-152-001 ist architektonisch konvergiert; `closed` erst nach Realgeräte-Kaltstart-Evidence;
-2. **erfüllt:** Locale-/Static-/Governance-Gates grün;
-3. **erfüllt:** Unit-Tests + Debug + Release/R8 in GitHub Actions grün (#62);
-4. **offen:** Realgerät mit eingerichtetem Key startet wiederholt ohne sichtbaren Onboarding/API-Key-Flash;
-5. **offen:** RoutePlanner-Kopf auf schmalem Smartphone kompakt und ohne Funktionsverlust; Start-/Zielsuche, Current location, Home/Work, Swap und `Route finden` prüfen;
-6. **offen:** Onboarding Schritt 1 und 2 bleiben auf kleinen Displays scrollbar und verständlich;
-7. **offen:** ORS→Community-Footer-Abstand visuell akzeptieren;
-8. **offen:** nach realer Evidence finalen Build-152-Status nach `/doc` konvergieren, PR aus Draft nehmen und erst dann mergen.
+Acceptance-Evidence:
+1. Android CI #72 vollständig grün: Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8.
+2. Realgerät: ursprünglicher API-Key-/Onboarding-Flicker nicht mehr sichtbar.
+3. Realgerät nach Follow-up: kein `Standort erlauben`-Flicker mehr bei bereits erteilter Berechtigung; Location-Updates starten direkt.
+4. Footer vom Nutzer visuell akzeptiert; RoutePlanner zeigt keine beobachtete Regression.
+5. Runtime-Logcat: Photon-Zielsuche erfolgreich; `/trips` HTTP 200 mit sieben Ergebnissen.
+6. kein `FATAL EXCEPTION`, kein `AndroidRuntime` und keine App-ANR-Signatur im finalen Runtime-Smoke.
 
-## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018)
+F-152-001 und F-152-002 sind geschlossen.
 
-Nach Build 152 ausschließlich messen/instrumentieren. Keine spekulative Optimierung; konkrete Verschiebung/Lazy-Initialisierung erst anhand reproduzierbarer Messwerte.
+## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018) — next
+
+Build 153 beginnt mit Messinstrumentierung der Kaltstart-/Main-Thread-Schritte auf Basis des akzeptierten Build 152. Keine spekulative Performance-Optimierung. Erst reproduzierbare Messwerte, dann problembezogene Änderung in kleinem Scope.
+
+Mindestziel der ersten Runde:
+- Zeitpunkte für Process/Activity/Compose-/Preference-Gate/Location-/initialen Departure-Fetch nachvollziehbar messen;
+- Main-Thread-Arbeit identifizieren statt vermuten;
+- Cold/Warm-Start getrennt erfassen;
+- keine UX-/Routing-/Provider-Semantik gleichzeitig ändern.
 
 ## Release-Grundsatz
 
