@@ -5,6 +5,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
+import now.abfahrt.transit.util.StartupTrace
 import org.maplibre.android.MapLibre
 
 /**
@@ -14,9 +15,23 @@ import org.maplibre.android.MapLibre
 @HiltAndroidApp
 class AbfahrtApplication : Application() {
     override fun onCreate() {
+        val applicationStarted = StartupTrace.nowUptimeMs()
+        StartupTrace.mark("application_onCreate_enter")
+
+        val superStarted = StartupTrace.nowUptimeMs()
         super.onCreate()
+        StartupTrace.duration("application_super_onCreate", superStarted)
+
         logMemoryPageSize()
-        MapLibre.getInstance(this)
+
+        val mapLibreStarted = StartupTrace.nowUptimeMs()
+        StartupTrace.section("Abfahrt.MapLibre.init") {
+            MapLibre.getInstance(this)
+        }
+        StartupTrace.duration("maplibre_init", mapLibreStarted)
+
+        StartupTrace.duration("application_onCreate_total", applicationStarted)
+        StartupTrace.mark("application_onCreate_exit")
     }
 
     private fun logMemoryPageSize() {
