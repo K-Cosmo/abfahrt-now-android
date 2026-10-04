@@ -31,9 +31,9 @@
 - [ ] tatsächlichen bestehenden Alias per `keytool -list -v` bestimmen.
 - [ ] Signer Certificate SHA-256 des Keystore-Alias erfassen.
 - [ ] separates Backup des **bestehenden** Keystores verifizieren.
-- [ ] auf einem bereits Release-signierten Gerät APK-Pfad mit `adb shell pm path now.abfahrt.transit` ermitteln.
-- [ ] installierte APK per `adb pull` lokal sichern.
-- [ ] Signer Certificate SHA-256 der installierten APK mit `apksigner verify --print-certs` erfassen.
+- [ ] als Signer-Referenz entweder ein noch Release-signiertes Gerät oder eine frühere mit diesem Key signierte APK verwenden.
+- [ ] bei Geräte-Referenz APK-Pfad mit `adb shell pm path now.abfahrt.transit` ermitteln und Base-APK per `adb pull` lokal sichern.
+- [ ] Signer Certificate SHA-256 der Referenz-APK mit `apksigner verify --print-certs` erfassen.
 - [ ] Fingerprints müssen exakt übereinstimmen; bei Abweichung RELEASE1 stoppen.
 - [ ] keine Passwörter im Terminalverlauf/Repo/Evidence hinterlassen.
 
