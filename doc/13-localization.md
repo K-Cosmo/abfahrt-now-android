@@ -2,7 +2,7 @@
 
 ## Unterstützte UI-Sprachressourcen
 
-Build 151 enthält den deutschen Basissatz plus:
+Build 152 enthält den deutschen Basissatz plus:
 
 `en, nl, da, nb, sv, fi, it, es, pt, fr, pl, cs, hu, ro, sk, hr, sl, et, lv, lt, tlh`
 
@@ -40,8 +40,8 @@ Die Nutzertexte des GitHub-Release-Update-Hinweises liegen in allen 22 gebündel
 
 ## Build 151 Community-Identität
 
-Die sechs Community-/Provider-Texte des neuen `CommunityFooter` liegen in allen 22 gebündelten Resource-Sets vor. Damit wird die unabhängige/unoffizielle App-Identität nicht nur im deutschen Basissatz, sondern in jeder ausgelieferten UI-Sprache sichtbar.
+Die sechs Community-/Provider-Texte des neuen `CommunityFooter` liegen in allen 22 gebündelten Resource-Sets vor. Damit wird die unabhängige App-Identität nicht nur im deutschen Basissatz, sondern in jeder ausgelieferten UI-Sprache sichtbar.
 
-## Build 152 — in Arbeit
+## Build 152 — accepted
 
-Teil A ändert bislang nur Layout/Typografie bestehender Onboarding-Texte und fügt keine neuen Locale-Keys hinzu. Für Teil B gilt unverändert: neue oder geänderte Nutzertexte müssen im selben Build in allen 22 Resource-Sets gepflegt werden; `scripts/check_locale_keys.py` bleibt Acceptance-Gate.
+Build 152 ändert Layout, Struktur und Darstellung bestehender Texte, führt aber keine neuen Locale-Keys ein. Der Follow-up entfernt lediglich einen redundanten sichtbaren Identity-Block aus der Runtime-Darstellung und rendert den vorhandenen Disclaimer satzweise; die Ressourcenparität bleibt unverändert. Android CI #72 bestätigt den Locale-/Static-Gate auf dem finalen Head.
