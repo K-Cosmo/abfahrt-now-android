@@ -5,6 +5,61 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+// RELEASE1: Release signing values are intentionally external to the repository.
+// Each value may come from a Gradle property (for local user-level gradle.properties)
+// or an environment variable (for ephemeral local shells / future CI secrets).
+fun releaseSigningValue(name: String): String? =
+    providers.gradleProperty(name)
+        .orElse(providers.environmentVariable(name))
+        .orNull
+        ?.trim()
+        ?.takeIf { it.isNotEmpty() }
+
+val releaseStoreFilePath = releaseSigningValue("ABFAHRT_RELEASE_STORE_FILE")
+val releaseStorePassword = releaseSigningValue("ABFAHRT_RELEASE_STORE_PASSWORD")
+val releaseKeyAlias = releaseSigningValue("ABFAHRT_RELEASE_KEY_ALIAS")
+val releaseKeyPassword = releaseSigningValue("ABFAHRT_RELEASE_KEY_PASSWORD")
+
+val releaseSigningValues = listOf(
+    releaseStoreFilePath,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword
+)
+val releaseSigningConfigured = releaseSigningValues.all { it != null }
+val releaseSigningPartiallyConfigured = releaseSigningValues.any { it != null } && !releaseSigningConfigured
+
+val releaseSigningRequired = when (
+    val raw = providers.gradleProperty("releaseSigningRequired").orNull?.trim()?.lowercase()
+) {
+    null, "", "false" -> false
+    "true" -> true
+    else -> throw org.gradle.api.GradleException(
+        "releaseSigningRequired must be either true or false"
+    )
+}
+
+if (releaseSigningPartiallyConfigured) {
+    throw org.gradle.api.GradleException(
+        "Incomplete release signing configuration: set all ABFAHRT_RELEASE_STORE_FILE, " +
+            "ABFAHRT_RELEASE_STORE_PASSWORD, ABFAHRT_RELEASE_KEY_ALIAS and " +
+            "ABFAHRT_RELEASE_KEY_PASSWORD values together"
+    )
+}
+
+if (releaseSigningRequired && !releaseSigningConfigured) {
+    throw org.gradle.api.GradleException(
+        "Release signing is required but ABFAHRT_RELEASE_* values are not fully configured"
+    )
+}
+
+val releaseStoreFileRef = releaseStoreFilePath?.let(::file)
+if (releaseSigningConfigured && releaseStoreFileRef?.isFile != true) {
+    throw org.gradle.api.GradleException(
+        "Configured release keystore file does not exist"
+    )
+}
+
 // Build 130/131: androidx.graphics:graphics-path:1.1.0 ships a native binary whose GNU_RELRO
 // failed the real 16-KB artifact gate on both arm64-v8a and x86_64. Because this app's
 // minSdk is 34, an app-local API-compatible implementation uses the platform PathIterator
@@ -26,10 +81,24 @@ android {
         versionName     = "1.1.0"
     }
 
+    signingConfigs {
+        if (releaseSigningConfigured) {
+            create("release") {
+                storeFile = requireNotNull(releaseStoreFileRef)
+                storePassword = requireNotNull(releaseStorePassword)
+                keyAlias = requireNotNull(releaseKeyAlias)
+                keyPassword = requireNotNull(releaseKeyPassword)
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (releaseSigningConfigured) {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
     }
 
