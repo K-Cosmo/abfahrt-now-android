@@ -24,9 +24,9 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - Startup-Access-Gate: `AccessGateViewModel` wartet auf eine echte Preference-Emission. Der frühere API-Key-/Onboarding-Flicker ist real bestätigt beseitigt (F-152-001 closed).
 - Location-Follow-up: `PermissionOrIdleContent` rendert bei bereits erteilter Berechtigung nicht mehr transient während `Idle`; erneuter Kaltstart bestätigt kein `Standort erlauben`-Flicker (F-152-002 closed).
 - RoutePlanner: gemeinsamer kompakter Start/Ziel-Container mit Trenner und platzsparender Tauschaktion. Nutzerfeedback bestätigt keine sichtbare Regression; Logcat belegt reale Photon-Zielsuche und erfolgreichen `/trips`-Request mit sieben Ergebnissen.
-- Settings-Footer: kumulierter Leerraum entfernt; missverständlicher zusätzliche Identitätskasten entfernt; Disclaimer satzweise zentriert. Realgeräte-Feedback: Footer passt.
+- Settings-Footer: kumulierter Leerraum entfernt; missverständlicher zusätzlicher Identitätskasten entfernt; Disclaimer satzweise zentriert. Realgeräte-Feedback: Footer passt.
 - historischer ungenutzter `AppFooter`-/Legal-Deadcode inklusive Riles-Tech-Link entfernt; `CommunityFooter` ist die einzige Runtime-Footer-Implementierung.
-- Android CI #72 auf dem finalen Follow-up-/Dokumentations-Head vollständig grün: Static/Governance, Wrapper, Unit Tests, Debug und Release/R8.
+- Android CI #81 auf dem finalen Acceptance-/Dokumentations-Head vollständig grün: Static/Governance, Wrapper, Unit Tests, Debug und Release/R8.
 - finaler Logcat enthält keine App-`FATAL EXCEPTION`-/`AndroidRuntime`-/ANR-Signatur.
 
 ### B-COMMUNITY-001 In-App-Community-Abgrenzung — Build 151
