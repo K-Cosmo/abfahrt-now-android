@@ -49,19 +49,31 @@ Acceptance-Evidence:
 
 Ergebnis: AB-018 ist hinsichtlich **Messung/Lokalisierung** für Build 153 erfüllt. Der Performance-Befund selbst bleibt als F-153-001 offen und wird nicht durch den Messbuild kaschiert.
 
-## Build 154 — gezielte Current-Location-Startup-Optimierung — geplant
+## Build 154 — Current-Location First-Paint Fast Path — spezifiziert / Implementierung offen
 
-Build 154 behandelt ausschließlich F-153-001. Ziel ist ein schnellerer erster Core-Request ohne Genauigkeits-/Lifecycle-Regression.
+Build 154 behandelt ausschließlich F-153-001. `specs/BUILD154/` enthält Specification, Plan und Tasks. Die erneute Prüfung des Projektverlaufs korrigiert dabei die vorläufige Build-153-Planung: Die Re-Anchor-Schwelle muss **nicht neu festgelegt** werden; sie existiert bereits als 200-m-Movement-Regel.
 
-Planungsrichtung:
-- prüfen, ob eine ausreichend frische letzte bekannte Position den initialen Request bedienen kann;
-- frischen High-Accuracy-Fix parallel nachziehen;
-- nur bei fachlich relevanter Abweichung gezielt re-anchern/refreschen;
-- stale/ungültige Positionen nicht still verwenden;
-- Alternate-Location, Permission-/AccessGate-Verhalten und bestehende Movement-Refresh-Semantik erhalten;
-- exakte Freshness-, Accuracy- und Re-Anchor-Schwellen erst in Specification/Plan festlegen und mit Tests belegen.
+Verbindliche bestehende Grenzen für die Umsetzung:
+- `MOVEMENT_THRESHOLD_M = 200f`: `< 200 m` Same-Origin, `>= 200 m` Hard Reset;
+- bei laufendem Load wird ein relevanter Standortwechsel über den vorhandenen Pending-Refresh-Pfad nachgezogen, nicht parallel gestartet;
+- der deduplizierte API-Response bleibt ausschließlich First-Paint-Booster für den leeren Kaltstartscreen;
+- Direct-stop/Add-ons, app-eigene Filter/Dedup/Sortierung, ORS-asynchron und Same-Origin-Stable-Merge bleiben unverändert;
+- Cross-Origin-Hard-Reset hält alte sichtbare Daten bis zum Ersatzresultat, übernimmt sie danach aber nicht per Stable-Merge in den neuen Standortkontext.
 
-Vor Implementierung wird B-154-001 als eigener Spec-Kit-Durchlauf geführt. Keine Magic Numbers aus Vermutung.
+Audit-Ergebnis zu `lastLocation`:
+- Es existiert **keine** separate normative Alters- oder Accuracy-Schwelle für den System-`lastLocation`-Cache.
+- Der heutige Code akzeptiert `lastLocation` bereits ungeprüft als Fallback, aber erst nachdem `getCurrentLocation(PRIORITY_HIGH_ACCURACY)` keinen Wert geliefert hat.
+- Build 154 führt deshalb keine neue 30-s/60-s/5-min- oder Meter-Accuracy-Regel ein und vermischt die vorhandene API-Daten-Freshness (`refreshIntervalMinutes`/60-s-Snapshot-Throttle) nicht mit Location-Freshness.
+
+Spezifizierter Fast Path:
+1. Bei leerem Current-Location-Kaltstart darf eine vorhandene `lastLocation` als **provisorischer First-Paint-Origin** den ersten Core-Request starten.
+2. Der frische High-Accuracy-Fix läuft parallel weiter.
+3. Fresh-Fix-Abweichung `< 200 m`: kein zweiter Core-Request, kein zusätzlicher ORS-Zyklus allein wegen dieser Korrektur.
+4. Fresh-Fix-Abweichung `>= 200 m`: genau der bestehende Hard-Reset-/Pending-Refresh-Pfad; maximal ein Ersatz-Core-Zyklus.
+5. Fehlt `lastLocation`, bleibt der bisherige High-Accuracy-Startpfad unverändert.
+6. Kein persistenter Standortcache, keine neue Dependency und keine zweite Location-/Loading-Architektur.
+
+Acceptance ist bewusst kausal statt mit neuer Performance-Magic-Number formuliert: Bei vorhandener `lastLocation` muss der erste Core-Request real **vor Abschluss des High-Accuracy-Fixes** beginnen. Die tatsächliche Verbesserung wird gegen die Build-153-Baseline `Loading`→Core ca. 2,59–3,02 s gemessen. Erzeugt der Fast Path sichtbare Standort-/Refresh-Unruhe oder keinen klaren realen Gewinn, wird er verworfen statt weiter verkompliziert.
 
 ## Separater Hardening-Block — ORS-Key-Probe
 
