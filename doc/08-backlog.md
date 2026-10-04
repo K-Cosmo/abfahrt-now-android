@@ -5,12 +5,15 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-154-001 Current-Location-Startup beschleunigen (F-153-001)
-- **Status:** planned; folgt auf den akzeptierten Build-153-Messstand.
-- Ziel: den in drei sauberen Cold Starts reproduzierten Warteblock vor dem ersten abfahrt.now-Core-Request reduzieren, ohne Standortkorrektheit, Permission-Verhalten oder Refresh-Semantik zu verschlechtern.
-- bevorzugte Richtung für Specification/Plan: ausreichend frische letzte bekannte Position als schneller initialer Startpunkt prüfen und eine frische High-Accuracy-Position parallel nachziehen, statt den ersten Core-Request zwingend auf `getCurrentLocation(PRIORITY_HIGH_ACCURACY)` warten zu lassen.
-- **Noch nicht entschieden:** zulässiges Alter einer gecachten Position, Genauigkeitsanforderung und Schwelle für einen nachfolgenden Re-Anchor/Refresh. Diese Werte werden vor Implementierung explizit spezifiziert und getestet; keine geratenen Magic Numbers.
-- Invarianten: stale/ungültige Position nicht still verwenden; kein Request-Sturm; bestehender >200-m-Movement-Refresh nicht versehentlich duplizieren; Alternate-Location-Modus unverändert; AccessGate-/Permission-Fixes aus Build 152 erhalten; keine neue Main-Thread-Blockade.
-- Testmatrix mindestens: frische letzte Position, stale letzte Position, keine letzte Position, Location deaktiviert/nicht verfügbar, reale Bewegung zwischen Cache und frischem Fix, Cold Start und Same-Process-Resume.
+- **Status:** specified in `specs/BUILD154/`; Implementierung noch nicht begonnen.
+- Ziel: den in drei sauberen Cold Starts reproduzierten Warteblock vor dem ersten abfahrt.now-Core-Request reduzieren, ohne die bereits bewusste progressive First-Paint-/Add-on-/ORS-/Stable-Merge-Semantik zu verändern.
+- erneuter Audit von `/doc`, Code und Projektverlauf: Die relevante Re-Anchor-Schwelle ist **bereits** definiert. `MOVEMENT_THRESHOLD_M = 200f`; `< 200 m` bleibt Same-Origin, `>= 200 m` nutzt den bestehenden Hard-Reset-/Pending-Refresh-Pfad.
+- für `FusedLocationProviderClient.lastLocation` existiert dagegen keine separate normative Alters- oder Accuracy-Schwelle. Der aktuelle Code akzeptiert `lastLocation` bereits ohne solche Prüfung als Fallback, wartet davor aber auf `getCurrentLocation(PRIORITY_HIGH_ACCURACY)`. Build 154 darf deshalb keine 30-s/60-s/5-min- oder Accuracy-Magic-Number erfinden.
+- spezifizierte Fast-Path-Richtung: vorhandene `lastLocation` auf leerem Current-Location-Kaltstart nur als **provisorischen First-Paint-Origin** verwenden und den frischen High-Accuracy-Fix parallel nachziehen. Fehlt `lastLocation`, bleibt der heutige High-Accuracy-Pfad unverändert.
+- spätere High-Accuracy-Korrektur `< 200 m`: kein zweiter Core-Request und kein zusätzlicher ORS-Zyklus allein wegen der Korrektur. `>= 200 m`: genau ein bestehender Hard-Reset-Re-Anchor; bei laufendem Load über `pendingLocationRefresh`/`pendingHardResetRefresh` nachziehen, kein paralleler Request-Sturm.
+- der nachgelagerte Datenfluss bleibt unverändert: API-Dedup-Booster nur auf leerem Kaltstart, Direct-stop/Add-ons `dedup=off`, app-eigene Filter/Dedup/Sortierung, ORS asynchron, Same-Origin-Refresh als Stable-Merge, Cross-Origin-Hard-Reset ohne Loading-Blackout.
+- kein persistenter Standortcache, keine neue Dependency, keine Vermischung von API-Daten-Freshness (`refreshIntervalMinutes`/60-s-Throttle) mit Location-Freshness.
+- Acceptance: erster Core-Request muss bei vorhandener `lastLocation` real vor Abschluss des High-Accuracy-Fixes beginnen; realen Gewinn gegen Build-153-Baseline `Loading`→Core ca. 2,59–3,02 s messen. Bei störender Standort-/Refresh-Unruhe Fast Path verwerfen statt weiter zu verkomplizieren.
 
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
@@ -60,7 +63,7 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - **Status:** closed Build 150; in `main` integriert.
 - anonymer, credential-isolierter `releases/latest`-Check; kein GitHub-Token und keine API-Key-Weitergabe.
 - striktes `v<versionName>-b<build>`-Schema und monotone Buildnummer.
-- lokalisierter Hinweis in 22 UI-Sprachen; feste Release-Seite; kein APK-Autodownload/Installer.
+- lokalisierter Update-Hinweis in 22 UI-Sprachen; feste Release-Seite; kein APK-Autodownload/Installer.
 - CI, realer E2E und Release-/R8-Build erfolgreich.
 
 ### B-REPO1-001 Public-Repository-/Governance-Baseline
