@@ -60,19 +60,32 @@ resolveCurrentTargetCoordinates()
 
 Stage A plus realer Zeitstrahl grenzen den Befund ausreichend auf diese Location-Auflösung ein. Direkte Stage-B-Marker sind daher nicht erforderlich. Build 153 löst den Befund absichtlich **nicht**; F-153-001 bleibt offen.
 
-## Nächster Build: 154 — Current-Location-Startup-Optimierung
+## Nächster Build: 154 — Current-Location First-Paint Fast Path
 
-B-154-001 ist der nächste P0-Arbeitspunkt. Vor Implementierung wird Specification/Plan erstellt.
+B-154-001 ist in `specs/BUILD154/` spezifiziert; Runtime-Code ist noch nicht geändert.
 
-Zielrichtung:
-- ausreichend frische letzte Position als schnellen initialen Startpunkt evaluieren;
-- frischen High-Accuracy-Fix parallel nachziehen;
-- nur bei relevanter Abweichung gezielt re-anchern/refreschen;
-- stale/ungültige Positionen nicht still verwenden;
-- keine doppelten Refresh-Stürme;
-- bestehende >200-m-Movement-Logik, Alternate-Location, AccessGate und Permission-Verhalten erhalten.
+Der erneute Audit von `/doc`, aktuellem Code und Projektverlauf ergibt zwei wichtige Korrekturen zur vorläufigen Build-153-Handoff-Formulierung:
 
-Freshness-/Accuracy-/Re-Anchor-Schwellen sind **noch nicht festgelegt** und dürfen nicht ohne Spec/Test als Magic Numbers implementiert werden.
+1. **Die Re-Anchor-Schwelle ist bereits definiert.** `MOVEMENT_THRESHOLD_M = 200f`; `< 200 m` bleibt Same-Origin, `>= 200 m` nutzt den bestehenden Hard-Reset-/Pending-Refresh-Pfad. Eine zweite Schwelle ist nicht zulässig.
+2. Für `FusedLocationProviderClient.lastLocation` gibt es **keine** separate normative Zeit-/Accuracy-Freshness-Regel. Der heutige Code akzeptiert diese Quelle bereits ohne solche Prüfung als Fallback, wartet davor aber auf High Accuracy. 60-s-Request-Throttle und `refreshIntervalMinutes` betreffen Departure-Daten und werden nicht als Location-Freshness umgedeutet.
+
+Spezifizierter kleinstmöglicher Eingriff:
+
+```text
+leerer Current-Location-Kaltstart
+  -> lastLocation vorhanden?
+     -> ja: als provisorischen First-Paint-Origin Core sofort starten
+            + High-Accuracy-Fix parallel weiter anfordern
+     -> nein: bisherigen High-Accuracy-Pfad beibehalten
+
+High-Accuracy-Korrektur
+  -> Abweichung < 200 m: kein zweiter Core, kein Extra-ORS nur wegen der Korrektur
+  -> Abweichung >= 200 m: vorhandener Hard-Reset-/Pending-Refresh-Pfad genau einmal
+```
+
+Der provisorische Origin wird bewusst **nicht** als „frisch/final“ deklariert. Dadurch ist keine neue Alters-/Accuracy-Magic-Number nötig. Die bestehende progressive Pipeline bleibt vollständig erhalten: API-Dedup-Booster nur auf leerem Kaltstart, Direct-stop/Add-ons, app-eigene Filter/Dedup/Sortierung, ORS asynchron, Same-Origin-Stable-Merge und Cross-Origin-Hard-Reset ohne Loading-Blackout.
+
+Kein persistenter Standortcache, keine neue Dependency und keine neue Location-/State-Architektur. Acceptance verlangt reale Evidence, dass der erste Core bei vorhandener `lastLocation` vor Abschluss des High-Accuracy-Fixes startet und die Anzeige dabei nicht unruhiger wird. Vergleichsbasis bleibt Build 153 mit `Loading`→Core ca. 2,59–3,02 s. Falls kein klarer Gewinn entsteht oder sichtbare Falschstand-/Refresh-Sprünge auftreten, wird der Fast Path verworfen statt weiter zu verkomplizieren.
 
 ## Separates Finding: ORS-Key-Probe
 
