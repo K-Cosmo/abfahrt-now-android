@@ -19,7 +19,7 @@
 
 ## Phase C — bestehenden Release-Key verifizieren
 
-Es wird **kein neuer Keystore erzeugt**. Die App ist bereits auf drei realen Geräten mit dem vorhandenen Release-Key installiert.
+Es wird **kein neuer Keystore erzeugt**. Die App ist bereits auf drei realen Geräten mit dem vorhandenen Release-Key installiert. Die Identität dieses bestehenden Keypairs ist ab RELEASE1 ein Release-Invariant.
 
 Auf dem Windows-Entwicklungsrechner:
 
