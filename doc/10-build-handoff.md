@@ -18,15 +18,15 @@ Build 152 ist am 04.10.2026 nach vollständigem CI-Gate und Realgeräte-Smoke ak
 
 ### Automatisierte Evidence
 
-Der finale Follow-up-/Dokumentations-Head wurde mit Android CI #72 vollständig geprüft:
+Android CI #72 bestätigte den Follow-up-Code plus den damaligen Pending-Evidence-Dokumentationsstand. Der **finale Acceptance-/Dokumentations-Head** wurde anschließend mit Android CI #81 vollständig geprüft:
 
 ```text
 ./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon
 ```
 
-Ergebnis: Static-/Governance-Gates, committed Wrapper, Unit Tests, Debug und Release/R8 vollständig grün.
+Ergebnis: Static-/Governance-Gates, committed Wrapper, Unit Tests, Debug und Release/R8 vollständig grün. Für den akzeptierten Stand ist CI #81 maßgeblich.
 
-Frühere Build-152-Gates #60, #62 und #64 bleiben historische Zwischen-Evidence; maßgeblich für den finalen Head ist #72.
+Frühere Build-152-Gates #60, #62 und #64 bleiben historische Zwischen-Evidence.
 
 ### Realgeräte-Evidence 04.10.2026
 
