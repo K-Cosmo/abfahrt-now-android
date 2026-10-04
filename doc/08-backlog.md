@@ -5,19 +5,32 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018)
-- **Status:** in progress in Draft-PR #9; Instrumentierungsstufe A implementiert, automatisierte und reale Evidence pending.
+- **Status:** in progress in Draft-PR #9; Instrumentierungsstufe A implementiert, automatisierte Evidence grün, reale Evidence teilweise vorhanden.
 - `versionCode = 1530`, `versionName = 1.1.0`; Android-/Toolchain-Baseline bleibt unverändert.
 - neue leichte `StartupTrace`-Diagnostik mit Prozess-Uptime, Activity-Session (`cold`/`warm`) und Android-Trace-Sections; keine neue Dependency.
 - Application/MapLibre, Activity/Compose/erster Frame, Access-Gate/erste echte Preference-Emission und der nicht-kritische Update-Check sind markiert.
 - read-only `StartupDiagnosticsObserver` misst die vorhandene Departure-State-Kette (`Idle`/`Loading`/progressive `Success`/finaler `Success`/`Error`) ohne den großen `DepartureViewModel` zu verändern.
-- bestehende `AbfahrtLocation`-, OkHttp- und `AbfahrtWalk`-Logs werden für Location/Core/ORS zunächst zeitlich korreliert; direkte Marker im `DepartureViewModel` folgen nur, falls diese erste Runde die Ursache nicht ausreichend eingrenzt.
-- **Noch offen:** vollständiges CI-Gate, drei Cold Starts, Warm-/Resume-Evidence, Abgleich mit Davey-/Skipped-Frame-Signaturen, Analyse und Entscheidung über etwaige Instrumentierungsstufe B bzw. Optimierung.
+- Realgeräte-Stage-A am 04.10.2026: zwei vollständige Cold-Start-Zeitketten plus ein teilweise erfasster Cold-Start. In den vollständigen Läufen liegt der erste Compose-Frame bei ca. 0,44–0,46 s, Access-Gate ready bei ca. 0,67–0,71 s und Departure-Loading bei ca. 0,73–0,75 s. Der erste abfahrt.now-Request beginnt erst bei ca. 3,34–3,45 s; der wiederholbare Gap von ca. 2,6–2,7 s liegt damit vor dem Core-Netzwerk und im bestehenden Current-Location-Auflösungspfad (`resolveCurrentTargetCoordinates()` → `getBestLocation()`).
+- Core selbst ist in den vollständigen Läufen schnell: erste Hauptantwort ca. 162–174 ms; erster progressiver Success ca. 3,97–4,09 s; finaler Core-Success ca. 5,43–6,04 s. ORS startet erst danach asynchron und antwortet mit gültigem Key HTTP 200; Walking-Enrichment ist ca. 7,25–8,01 s nach Prozessstart vollständig angewendet.
+- keine App-`FATAL EXCEPTION`-, `AndroidRuntime`-, ANR- oder Davey-Signatur im geprüften Lauf; gefundene `Skipped`-Einträge stammen aus anderen System-/Kamera-Prozessen, nicht aus `now.abfahrt.transit`.
+- Stage A grenzt die Ursache ausreichend ein; direkte Stage-B-Marker in `DepartureViewModel` sind **vorerst nicht erforderlich**. Keine Optimierung, bevor das Runtime-Gate vollständig ist.
+- **Noch offen:** ein weiterer vollständig erfasster Cold Start, Warm-Relaunch im selben Prozess sofern reproduzierbar, Home→App/Resume-Evidence und danach finale Optimierungsentscheidung.
 - Baseline für die Messung bleibt der akzeptierte Build 152; Startup-UI-Flicker werden nicht mit Performance-Optimierung vermischt.
 
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
 - Nicht-HERE-RoutePreview bleibt unverändert.
+
+## P1 — nächster Hardening-Block
+
+### B-ORS-001 ORS-Key beim Hinterlegen validieren
+- **Status:** planned aus F-ORS-001; bewusst nicht Teil von Build 153.
+- Beim erstmaligen Hinterlegen und beim Ändern des ORS-Keys vor persistenter Übernahme eine kleine, nicht-sensitive ORS-Probe ausführen.
+- HTTP 401/403: neuen Key nicht akzeptieren; bei Änderung einen bereits gültigen gespeicherten Key nicht überschreiben; klare Fehlermeldung anzeigen.
+- Netzwerkfehler/5xx: als temporär/unprüfbar behandeln, nicht als ungültigen Key klassifizieren. HTTP 429 bedeutet gültiger Zugriffspfad mit Limitproblem und darf den Key nicht als syntaktisch/fachlich ungültig markieren.
+- Keine Keys, Authorization-Header oder Secret-Inhalte loggen.
+- Separat prüfen, ob bei einem späteren 401/403 im normalen ORS-Enrichment weitere Fallback-Requests mit demselben Key früh beendet werden sollen.
 
 ## Abgeschlossen
 

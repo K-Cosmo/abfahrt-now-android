@@ -19,9 +19,9 @@
 - [x] `DepartureViewModel` in Stufe A bewusst unverändert lassen.
 
 ## Optionale Instrumentierungsstufe B — nur nach Evidence
-- [ ] direkte `getBestLocation()`-Dauer ergänzen, falls Location-Phase unklar bleibt.
-- [ ] Core-Response Main/Default/UI-Unterphasen ergänzen, falls Response-Verarbeitung als Verdächtiger übrig bleibt.
-- [ ] ORS-Unterphasen ergänzen, falls vorhandene `AbfahrtWalk`-Zeitachse nicht ausreicht.
+- [x] Entscheidung nach Stage-A-Evidence: direkte `getBestLocation()`-Dauer derzeit nicht nötig; Zeitachse + vorhandener Codepfad grenzen den wiederholbaren Gap bereits auf Current-Location-Auflösung ein.
+- [x] Core-Response-Unterphasen derzeit nicht nötig; Core-Hauptantwort liegt in den vollständigen Cold Starts nur bei ca. 162–174 ms.
+- [x] ORS-Unterphasen derzeit nicht nötig; vorhandene `AbfahrtWalk`-/OkHttp-Zeitachse zeigt asynchronen Start nach finalem Core-State und HTTP 200.
 
 ## Automated Verification
 - [x] Static/Governance/Compatibility gates grün — Android CI #91.
@@ -31,15 +31,17 @@
 - [x] Release/R8 build grün — Android CI #91.
 
 ## Runtime Evidence
-- [ ] Drei Cold Starts mit `AbfahrtStartup` plus `AbfahrtLocation`/OkHttp/`AbfahrtWalk` erfassen.
+- [ ] Drei **vollständig instrumentierte** Cold Starts mit `AbfahrtStartup` plus `AbfahrtLocation`/OkHttp/`AbfahrtWalk` erfassen — aktuell zwei vollständig + ein teilweise erfasster Cold Start.
 - [ ] Warm-Relaunch innerhalb desselben Prozesses erfassen, sofern reproduzierbar.
 - [ ] Home→App/Resume erfassen.
-- [ ] Preference-Gate und Departure Idle→Loading→Success/final im Zeitstrahl vorhanden.
-- [ ] Location-/Core-/ORS-Grenzen über bestehende Tags zeitlich zuordenbar.
-- [ ] Keine App-FATAL-/ANR-/Navigation-Regression.
+- [x] Preference-Gate und Departure Idle→Loading→Success/final im Zeitstrahl vorhanden.
+- [x] Location-/Core-/ORS-Grenzen über bestehende Tags zeitlich zuordenbar; dominanter Gap liegt vor erstem Core-Request im Current-Location-Auflösungspfad.
+- [x] Im aktuellen Realgeräte-Log keine App-`FATAL EXCEPTION`-/`AndroidRuntime`-/ANR-/Davey-Signatur; `Skipped`-Treffer gehören nicht zum App-Prozess.
+- [x] Korrigierter ORS-Key real bestätigt: Matrix HTTP 200 und Walking-Enrichment erfolgreich angewendet.
 
 ## Convergence
-- [ ] Messwerte analysieren und echten Engpass benennen oder ausdrücklich festhalten, dass keiner belegt ist.
-- [ ] Entscheiden, ob Instrumentierungsstufe B nötig ist.
-- [ ] Erst danach Optimierungsentscheidung treffen.
-- [ ] `/doc` auf Build-153-Evidence/Status konvergieren.
+- [x] Stage-A-Messwerte analysiert: wiederholbarer Cold-Start-Warteblock ca. 2,6–2,7 s zwischen `Loading` und erstem Core-Request; vorhandener Codepfad weist auf `resolveCurrentTargetCoordinates()` → `getBestLocation()`.
+- [x] Instrumentierungsstufe B vorerst nicht nötig; keine zusätzlichen Marker ohne neuen Erkenntnisbedarf.
+- [ ] Optimierungsentscheidung erst nach vollständigem drittem Cold Start + Warm/Resume-Gate treffen.
+- [x] ORS-403-Fehlkonfiguration als separates F-ORS-001/B-ORS-001 erfasst; nicht mit Build 153 vermischen.
+- [x] `/doc` auf aktuellen Build-153-Interim-Evidence-Status konvergiert.

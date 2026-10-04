@@ -44,7 +44,7 @@ F-152-001 und F-152-002 sind geschlossen. B-152-001 ist abgeschlossen.
 
 ## Build 153 — AB-018 Startup/Main-Thread-Instrumentierung — in progress
 
-Draft-PR #9 / Branch `feature/build153-startup-instrumentation` enthält Instrumentierungsstufe A. Build 152 bleibt bis zur realen Build-153-Evidence die akzeptierte Runtime-Baseline.
+Draft-PR #9 / Branch `feature/build153-startup-instrumentation` enthält Instrumentierungsstufe A. Build 152 bleibt bis zur vollständigen realen Build-153-Evidence die akzeptierte Runtime-Baseline.
 
 ### Implementierter Stand
 
@@ -55,45 +55,51 @@ Draft-PR #9 / Branch `feature/build153-startup-instrumentation` enthält Instrum
 5. `AccessGateViewModel` markiert seine Erstellung und die erste echte DataStore-/Repository-Preference-Emission. `AppNavHost` markiert Waiting/Ready und den Zeitpunkt, zu dem geschützte Navigation/Feature-ViewModels komponiert werden.
 6. `UpdateViewModel` misst den ohnehin vorhandenen, nicht-kritischen GitHub-Release-Check, ohne Release-Inhalte oder Credentials zu loggen.
 7. `StartupDiagnosticsObserver` beobachtet **read-only** das bestehende `DepartureViewModel.uiState`: Idle, Loading, progressive Success-Emissionen, erster finaler Success und Error. Geloggt werden nur Status/Zähler, keine Standort- oder Suchwerte.
-8. Der 94-kB-`DepartureViewModel` bleibt in Instrumentierungsstufe A bewusst unverändert. Location-/Netzwerk-/ORS-Phasen werden zunächst über vorhandene `AbfahrtLocation`, OkHttp und `AbfahrtWalk` zeitlich mit `AbfahrtStartup` korreliert.
+8. Der 94-kB-`DepartureViewModel` bleibt in Instrumentierungsstufe A bewusst unverändert. Location-/Netzwerk-/ORS-Phasen werden über vorhandene `AbfahrtLocation`, OkHttp und `AbfahrtWalk` zeitlich mit `AbfahrtStartup` korreliert.
 
-### Bewusst nicht implementiert
+### Interim-Realgeräte-Evidence 04.10.2026
+
+Zwei Cold Starts sind vollständig instrumentiert; ein zusätzlicher Cold Start ist nur teilweise erfasst.
+
+Vollständige Läufe:
+- Compose erster Frame: ca. 436 ms / 455 ms;
+- Access-Gate ready: ca. 671 ms / 705 ms;
+- Departure `Loading`: ca. 733 ms / 753 ms;
+- erster abfahrt.now-Request: ca. 3,45 s / 3,34 s nach Prozessstart;
+- wiederholbarer Abstand `Loading` → erster Core-Request: ca. 2,72 s / 2,59 s;
+- erste Core-Hauptantwort: 174 ms / 162 ms;
+- erster progressiver Success: ca. 4,09 s / 3,97 s;
+- finaler Core-Success: ca. 6,04 s / 5,43 s;
+- ORS-Matrix danach HTTP 200; Walking-Enrichment vollständig bei ca. 8,01 s / 7,25 s.
+
+Einordnung:
+- Application/MapLibre, Compose und Preference-Gate sind nicht der dominante Engpass.
+- Das Core-Netzwerk ist in den vollständigen Läufen schnell und beginnt erst nach dem großen Warteblock.
+- Im vorhandenen Current-Location-Code liegt vor dem Netzwerk `resolveCurrentTargetCoordinates()` → `getBestLocation()`. `getBestLocation()` wartet zuerst auf `FusedLocationProviderClient.getCurrentLocation(PRIORITY_HIGH_ACCURACY)` und greift erst bei `null` auf `lastLocation` zurück. Die vorhandene Stage-A-Evidence reicht deshalb aus, den dominanten Cold-Start-Warteblock auf die Location-Auflösung einzugrenzen; zusätzliche Stage-B-Marker sind aktuell nicht nötig.
+- ORS blockiert den initialen Abfahrtsaufbau nicht und funktioniert im korrigierten Lauf wieder regulär mit HTTP 200.
+- keine App-`FATAL EXCEPTION`-, `AndroidRuntime`-, ANR- oder Davey-Signatur; `Skipped`-Treffer im Log gehören zu anderen Prozessen.
+
+### Bewusst weiterhin nicht implementiert
 
 - keine Performance-Optimierung;
 - keine MapLibre-Lazy-Initialisierung;
 - keine neue Dependency, JankStats-/Benchmark-Library oder globale Looper-Instrumentierung;
 - keine Dispatcher-/Coroutine-, DataStore-/Keystore-, Netzwerk- oder ORS-Änderung;
 - keine UI-, Routing-, Provider-, Filter- oder Sortieränderung;
-- keine direkten `DepartureViewModel`-Marker, solange Stufe A nicht belegt, dass sie benötigt werden.
+- keine direkten `DepartureViewModel`-Marker, solange die vorhandene Evidence den Engpass ausreichend eingrenzt.
 
 ### Noch erforderliche Evidence
 
-1. finaler Branch-Head: Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8 grün;
-2. eingerichtetes Realgerät, Standortberechtigung bereits erteilt: drei Cold Starts (`force-stop` → Start), ohne App-Daten zu löschen;
-3. Warm-Relaunch innerhalb desselben Prozesses, sofern reproduzierbar; zusätzlich Home → App als Resume-Fall;
-4. Logcat muss `AbfahrtStartup` zusammen mit `AbfahrtLocation`, OkHttp und `AbfahrtWalk` enthalten; Davey-/Skipped-Frame-Signaturen werden zeitlich dagegen gelegt;
-5. keine neue App-FATAL-/ANR-/Navigation-Regression;
-6. Messwerte analysieren. Erst danach Entscheidung über optionale Instrumentierungsstufe B (`getBestLocation`, Core-Response-Unterphasen, ORS-Unterphasen) bzw. konkrete Optimierung.
+1. finaler Branch-Head bleibt Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8 grün;
+2. ein weiterer vollständig erfasster Cold Start (`force-stop` → Start), ohne App-Daten zu löschen;
+3. Warm-Relaunch innerhalb desselben Prozesses, sofern reproduzierbar;
+4. Home → App als Resume-Fall;
+5. keine neue App-FATAL-/ANR-/Navigation-Regression in diesen letzten Läufen;
+6. danach finale Entscheidung über eine gezielte Location-Startup-Optimierung. Build 153 selbst bleibt Mess-/Evidence-Build und führt die Optimierung nicht vorweg.
 
-### Erwartete Marker der ersten Runde
+### Separates Finding
 
-```text
-application_onCreate_enter
-maplibre_init
-activity_onCreate_enter
-compose_root_committed
-compose_first_frame
-access_gate_vm_created
-preferences_first_real_emission
-access_gate_ready
-protected_navigation_composed
-departure_state_idle
-departure_state_loading
-departure_state_success
-departure_first_final_success
-```
-
-Zusätzlich können `update_check_start/update_check_complete` sowie Activity-Resume-/Stop-Marker erscheinen.
+F-ORS-001 / B-ORS-001: Ein falsch hinterlegter ORS-Key wurde real mit HTTP 403 beantwortet, aber aktuell gespeichert/akzeptiert. Künftig soll beim Hinterlegen/Ändern eine ORS-Key-Probe erfolgen; 401/403 dürfen den neuen Key nicht übernehmen. Dieses Hardening bleibt separat von Build 153.
 
 ## Lokaler Workspace
 

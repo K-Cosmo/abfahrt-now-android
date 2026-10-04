@@ -57,20 +57,31 @@ Instrumentierungsstufe A:
 - read-only Beobachtung der bestehenden Departure-State-Kette (`Idle` → `Loading` → progressive/finale `Success` oder `Error`);
 - bestehende `AbfahrtLocation`-, OkHttp-, `AbfahrtWalk`- und Android-Davey-/Skipped-Frame-Logs dienen der zeitlichen Korrelation.
 
+Interim-Evidence 04.10.2026:
+- zwei vollständig instrumentierte Cold Starts plus ein teilweise erfasster Cold Start liegen vor;
+- vollständige Läufe: erster Compose-Frame ca. 436/455 ms, Access-Gate ready ca. 671/705 ms, Departure-Loading ca. 733/753 ms;
+- erster abfahrt.now-Core-Request erst ca. 3,45/3,34 s nach Prozessstart. Damit liegt ein reproduzierbarer Block von ca. 2,72/2,59 s zwischen `Loading` und erstem Netzwerkrequest;
+- der bestehende Codepfad löst bei Current Location vor dem Netzwerk synchron-suspendierend `resolveCurrentTargetCoordinates()` → `getBestLocation()` aus; `getBestLocation()` fordert zuerst `PRIORITY_HIGH_ACCURACY` über `getCurrentLocation()` an und nutzt `lastLocation` nur, wenn kein frischer Wert geliefert wird. Die Stage-A-Zeitachse grenzt den dominanten Cold-Start-Warteblock daher ausreichend auf die Location-Auflösung ein;
+- Core-Netzwerk selbst ist nicht der dominante Engpass: erste Hauptantwort ca. 162–174 ms; erster progressiver Success ca. 3,97–4,09 s; finaler Core-Success ca. 5,43–6,04 s;
+- ORS ist nicht Teil des initialen Blocks: Matrix startet erst nach finalem Core-State und antwortet mit gültigem Key HTTP 200; vollständiges Walking-Enrichment ca. 7,25–8,01 s;
+- keine App-`FATAL EXCEPTION`-, `AndroidRuntime`-, ANR- oder Davey-Signatur; gefundene `Skipped`-Meldungen gehören nicht zum App-Prozess.
+
 Bewusst **nicht** in Stufe A:
 - kein Umbau des großen `DepartureViewModel`;
 - keine neue Dependency oder Benchmark-/Jank-Library;
 - keine Lazy-Initialisierung, Dispatcher-, DataStore-, Keystore-, Netzwerk-, ORS- oder UI-Optimierung;
 - keine Änderung an Routing, Filtern, Sortierung oder Provider-Semantik.
 
+Entscheidung nach der ersten Evidence: Instrumentierungsstufe B ist derzeit **nicht erforderlich**. Stage A plus vorhandener Codepfad grenzen den Cold-Start-Warteblock ausreichend ein. Eine Optimierung wird dennoch nicht begonnen, bevor das vereinbarte Runtime-Gate vollständig ist.
+
 Gate vor jeder Optimierungsentscheidung:
 1. vollständiges Android-CI-Gate auf dem finalen Instrumentierungs-Head;
-2. mindestens drei Cold Starts auf eingerichtetem Realgerät;
+2. mindestens drei vollständig erfasste Cold Starts auf eingerichtetem Realgerät — aktuell fehlen noch ein vollständiger Lauf, weil einer der drei vorhandenen Starts nur teilweise instrumentiert vorliegt;
 3. Warm-Relaunch im selben Prozess, sofern reproduzierbar, plus Home→App-Resume;
-4. `AbfahrtStartup` zeitlich mit Location, Core-Netzwerk, ORS und ggf. Davey-/Skipped-Frame-Signaturen abgleichen;
-5. erst wenn diese Evidence eine Phase belastbar eingrenzt, wird Instrumentierungsstufe B oder eine gezielte Optimierung beschlossen.
+4. `AbfahrtStartup` zeitlich mit Location, Core-Netzwerk, ORS und ggf. Davey-/Skipped-Frame-Signaturen abgleichen — für die vorhandenen vollständigen Cold Starts erfüllt;
+5. erst nach Abschluss des Gates gezielte Optimierung beschließen oder verwerfen.
 
-Instrumentierungsstufe B ist daher optional und nicht automatisch Teil von Build 153: direkte Marker in `getBestLocation()`, Core-Response-Unterphasen oder ORS-Unterphasen werden nur ergänzt, wenn Stufe A die Ursache nicht ausreichend auflöst.
+F-ORS-001/B-ORS-001 (ORS-Key-Probe beim Hinterlegen) ist separat erfasst und wird nicht in Build 153 hineingemischt.
 
 ## Release-Grundsatz
 
