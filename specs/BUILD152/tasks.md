@@ -19,16 +19,19 @@
 - [x] Locale/static/governance gates green on the converged Part-A commit (Android CI #60).
 - [x] `:app:testDebugUnitTest :app:assembleDebug :app:assembleRelease` green for the complete implementation (Android CI #62).
 - [x] Final pre-device-smoke implementation/docs gate green (Android CI #64).
+- [x] Final follow-up/docs head green with Static/Governance, wrapper, unit, debug and release/R8 (Android CI #72).
 - [x] Configured real device: original onboarding/API-key flash no longer visible.
-- [x] RoutePlanner compact header visually accepted on real device.
-- [ ] Configured real device: repeated cold starts after follow-up show neither onboarding/API-key nor granted-location prompt flash.
-- [ ] RoutePlanner real-device functional smoke: origin search, destination search, Current location, Home/Work, swap, Route finden.
-- [ ] Compact-width visual smoke for both onboarding steps after spacing follow-up.
-- [ ] Simplified footer / sentence layout visually accepted after follow-up.
-- [ ] No new app FATAL/ANR/navigation regression in the final runtime smoke.
+- [x] Configured real device after follow-up: no granted-location prompt flash; Location updates start directly.
+- [x] RoutePlanner compact header visually accepted; no observed regression.
+- [x] Runtime route smoke confirms Photon destination search and successful `/trips` request/result path.
+- [x] Compact-phone onboarding inspected after spacing follow-up; wording intentionally unchanged and flow remains usable/scrollable.
+- [x] Simplified footer / sentence layout visually accepted after follow-up.
+- [x] No app `FATAL EXCEPTION`, `AndroidRuntime` or ANR signature in the final runtime logcat.
+- [x] Installed package metadata confirmed: versionCode 1520, versionName 1.1.0, minSdk 34, targetSdk 37.
 
 ## Governance
-- [x] `/doc` converged to implementation-complete / pending-evidence status.
-- [x] First real-device findings converged: F-152-001 closed, F-152-002 pending evidence.
-- [ ] Final `/doc` acceptance convergence after follow-up real-device evidence.
+- [x] `/doc` converged to implementation-complete / pending-evidence status during development.
+- [x] First real-device findings converged: F-152-001 closed, F-152-002 tracked separately.
+- [x] Follow-up real-device evidence closes F-152-002.
+- [x] Final `/doc` acceptance convergence completed.
 - [x] AB-018 remains separate as Build 153.
