@@ -47,33 +47,34 @@ fun OnboardingScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 28.dp, vertical = 24.dp),
+                .padding(horizontal = 28.dp, vertical = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(24.dp))
-            Text(text = "🚌", fontSize = 56.sp)
             Spacer(Modifier.height(12.dp))
+            Text(text = "🚌", fontSize = 56.sp)
+            Spacer(Modifier.height(10.dp))
             Text(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.ExtraBold,
                 color = MaterialTheme.colorScheme.primary
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = if (step == 1) stringResource(R.string.onboarding_welcome_title)
                 else stringResource(R.string.onboarding_ors_title),
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
             )
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
                 text = stringResource(R.string.onboarding_step_counter, step, 2),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(20.dp))
 
             ElevatedCard(
                 shape = RoundedCornerShape(20.dp),
@@ -81,8 +82,8 @@ fun OnboardingScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     if (step == 1) {
                         Text(
@@ -90,7 +91,7 @@ fun OnboardingScreen(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start,
-                            lineHeight = 26.sp,
+                            lineHeight = 22.sp,
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -133,8 +134,6 @@ fun OnboardingScreen(
                             Text(stringResource(R.string.api_key_request))
                         }
 
-                        Spacer(Modifier.height(8.dp))
-
                         Button(
                             onClick = { step = 2 },
                             enabled = apiKey.isNotBlank(),
@@ -149,7 +148,7 @@ fun OnboardingScreen(
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Start,
-                            lineHeight = 26.sp,
+                            lineHeight = 22.sp,
                             modifier = Modifier.fillMaxWidth()
                         )
 
@@ -189,8 +188,6 @@ fun OnboardingScreen(
                             }
                         }
 
-                        Spacer(Modifier.height(8.dp))
-
                         Button(
                             onClick = { onContinue(apiKey, orsApiKey) },
                             modifier = Modifier.fillMaxWidth(),
@@ -208,7 +205,7 @@ fun OnboardingScreen(
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
