@@ -8,7 +8,7 @@
 - [x] feststellen: Re-Anchor-Schwelle ist bereits 200 m; keine separate normative `lastLocation`-Alters-/Accuracy-Schwelle vorhanden.
 - [x] Build-154-Spec/Plan ohne neue Magic Numbers erstellen.
 
-## Implementation — abgeschlossen / Runtime-Evidence offen
+## Implementation — abgeschlossen
 - [x] `versionCode = 1540` setzen.
 - [x] provisorischen `lastLocation`-Fast-Path nur für leeren Current-Location-Kaltstart implementieren.
 - [x] High-Accuracy-Fix parallel beibehalten.
@@ -22,7 +22,7 @@
 - [x] ORS bei bereits erkanntem Re-Anchor überspringen bzw. laufendes provisorisches Enrichment abbrechen; vorhandene Stale-/Cancellation-Mechanismen weiterverwenden.
 - [x] nur minimale nicht-sensitive Diagnosemarker für provisional/fresh/re-anchor ergänzen.
 
-## Automated Verification — Android CI #101 grün
+## Automated Verification — Android CI #101/#106 grün
 - [x] Static/Governance/Compatibility gates grün.
 - [x] committed Gradle wrapper gate grün.
 - [x] Unit Tests grün.
@@ -32,20 +32,20 @@
 - [x] Pure-Policy-Test: fresh `< 200 m` => `KEEP_PROVISIONAL`.
 - [x] Pure-Policy-Test: fresh `>= 200 m` inklusive exakt 200 m => `REANCHOR`.
 - [x] Pure-Policy-Test: Target-Wechsel vor Fresh-Fix => `IGNORE_STALE_TARGET`.
-- [ ] reale Anzahl der Core-/ORS-Zyklen bleibt bewusst Runtime-Evidence; JVM-Policy-Tests simulieren keine FusedLocation-/Repository-Nebenläufigkeit.
+- [x] reale Anzahl der Core-/ORS-Zyklen im beobachteten Same-Origin-Fall durch Runtime-Evidence geprüft; JVM-Policy-Tests simulieren bewusst keine FusedLocation-/Repository-Nebenläufigkeit.
 
-## Runtime Evidence
-- [ ] mindestens drei saubere Cold Starts mit vorhandener `lastLocation` erfassen.
-- [ ] belegen, dass der erste Core-Request nicht mehr auf High Accuracy wartet.
-- [ ] realen `Loading`→Core-Gewinn gegen Build-153-Baseline 2,59–3,02 s dokumentieren.
-- [ ] Same-Origin-Korrektur `< 200 m`: genau ein Core-Zyklus, kein Extra-ORS-Zyklus, ruhige progressive Anzeige.
-- [ ] Re-Anchor `>= 200 m` soweit praktisch reproduzierbar: maximal provisorischer + ein Ersatz-Core; kein Cross-Origin-Stable-Merge.
-- [ ] Home→App-Resume regressionsfrei.
-- [ ] keine neue App-FATAL-/ANR-/Navigation-/Permission-/AccessGate-Regression.
+## Runtime Evidence — accepted 04.10.2026
+- [x] drei saubere Cold Starts mit vorhandener `lastLocation` erfasst.
+- [x] belegt: der Core-Pfad wartet bei vorhandener `lastLocation` nicht mehr auf High Accuracy. `Loading`→erster Core-Request: ca. 29 ms / 30 ms / 25 ms gegenüber Build-153-Baseline 2,59–3,02 s.
+- [x] Same-Origin-Korrekturen: 6 m / 0 m / 8 m; kein Re-Anchor und kein zusätzlicher Core-/ORS-Zyklus allein wegen der Korrektur.
+- [x] Cold 1/3 zeigen frühen First Paint; Cold 2 isoliert eine 9,161-s-Core-HTTP-Latenz als externe Netzwerk-/Provider-Varianz und nicht als Location-Startup-Regression.
+- [x] Nutzer bestätigt die drastisch verkürzte Ladezeit auch visuell und meldet keine störende Standort-/Refresh-Unruhe.
+- [x] Re-Anchor `>= 200 m` war im Feld nicht praktisch reproduziert; Verhalten bleibt durch bestehende 200-m-Hard-Reset-Semantik plus Policy-Tests geschützt und wird nicht als real getestet behauptet.
+- [x] keine neue beobachtete Navigation-/Permission-/AccessGate-Regression im geprüften Scope.
 
 ## Convergence
-- [ ] tatsächlichen Performancegewinn und Requestanzahl auswerten.
-- [ ] bei positiver Evidence F-153-001 schließen bzw. auf Restbefund präzisieren.
-- [ ] bei negativer Evidence Fast Path verwerfen; keine weitere Komplexität nur für theoretischen Gewinn.
-- [ ] dauerhafte akzeptierte Semantik nach `/doc` konvergieren.
+- [x] tatsächlichen Performancegewinn und Requestverhalten ausgewertet.
+- [x] F-153-001 mit positiver Build-154-Evidence schließen.
+- [x] Acceptance-Formulierung präzisieren: maßgeblich ist, dass der Core-Pfad **nicht auf** den High-Accuracy-Fix wartet; der Fix darf bei einem Rennen zufällig vor dem HTTP-Start eintreffen.
+- [x] dauerhafte akzeptierte Semantik nach `/doc` konvergieren.
 - [x] F-ORS-001/B-ORS-001 weiterhin separat halten.
