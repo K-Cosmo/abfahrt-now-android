@@ -41,7 +41,7 @@ Acceptance-Evidence:
 1. Android CI #94 auf dem letzten Runtime-Finding-Head vollständig grün: Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8.
 2. Drei **saubere vollständig instrumentierte Cold Starts** auf eingerichtetem Realgerät. Die zwei früheren sauberen Läufe zeigen `Loading`→erster Core-Request ca. 2,72/2,59 s; der finale saubere Lauf ca. 3,02 s.
 3. Finaler sauberer Lauf: Application/MapLibre ca. 27 ms; erster Compose-Frame ca. 0,52 s; AccessGate ready ca. 0,77 s; Departure `Loading` ca. 0,83 s; erster Core-Request erst ca. 3,85 s nach Prozessstart. Die erste Core-Hauptantwort brauchte 629 ms. Damit liegt der dominante initiale Block erneut **vor** dem Core-Netzwerk.
-4. Der vorhandene Current-Location-Code führt vor dem Netzwerk `resolveCurrentTargetCoordinates()` → `getBestLocation()` aus. `getBestLocation()` fordert zuerst `PRIORITY_HIGH_ACCURACY` über `getCurrentLocation()` an und nutzt `lastLocation` nur bei `null`. Stage A plus Codepfad grenzen den wiederholbaren Block ausreichend auf die Location-Auflösung ein; Stage B ist nicht erforderlich.
+4. Der vorhandene Current-Location-Code führte vor dem Netzwerk `resolveCurrentTargetCoordinates()` → `getBestLocation()` aus. `getBestLocation()` forderte zuerst `PRIORITY_HIGH_ACCURACY` über `getCurrentLocation()` an und nutzte `lastLocation` nur bei `null`. Stage A plus Codepfad grenzten den wiederholbaren Block ausreichend auf die Location-Auflösung ein; Stage B war nicht erforderlich.
 5. ORS startet erst nach finalem Core-State asynchron. Mit korrigiertem Key antworten beide Matrix-Batches HTTP 200 und werden vollständig geparst.
 6. Same-Process-Home→App-Resume ist erfasst: `onStop`, später `onStart`/`onResume` im selben Prozess ohne neues `onCreate`. Ein separater Warm-Activity-Recreate war nicht reproduzierbar und war gemäß Gate nur „sofern reproduzierbar“ erforderlich.
 7. Ein zusätzlicher Lauf im Gesamtlog wurde durch Doze/Wake und frühen Activity-Stop/Resume verunreinigt und zeigt Choreographer-Skips. Er wird bewusst **nicht** als Cold-Start-Benchmark gewertet. Im sauberen finalen Cold-Start-Segment gibt es keine `Choreographer: Skipped`-Zeilen.
@@ -49,31 +49,36 @@ Acceptance-Evidence:
 
 Ergebnis: AB-018 ist hinsichtlich **Messung/Lokalisierung** für Build 153 erfüllt. Der Performance-Befund selbst bleibt als F-153-001 offen und wird nicht durch den Messbuild kaschiert.
 
-## Build 154 — Current-Location First-Paint Fast Path — spezifiziert / Implementierung offen
+## Build 154 — Current-Location First-Paint Fast Path — implementiert / Runtime-Evidence offen
 
-Build 154 behandelt ausschließlich F-153-001. `specs/BUILD154/` enthält Specification, Plan und Tasks. Die erneute Prüfung des Projektverlaufs korrigiert dabei die vorläufige Build-153-Planung: Die Re-Anchor-Schwelle muss **nicht neu festgelegt** werden; sie existiert bereits als 200-m-Movement-Regel.
+Build 154 (`versionCode = 1540`, `versionName = 1.1.0`) behandelt ausschließlich F-153-001. `specs/BUILD154/` enthält Specification, Plan und Tasks. Android CI #101 ist auf dem Runtime-Implementierungsstand vollständig grün: Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8.
 
-Verbindliche bestehende Grenzen für die Umsetzung:
-- `MOVEMENT_THRESHOLD_M = 200f`: `< 200 m` Same-Origin, `>= 200 m` Hard Reset;
-- bei laufendem Load wird ein relevanter Standortwechsel über den vorhandenen Pending-Refresh-Pfad nachgezogen, nicht parallel gestartet;
+Der erneute Audit des Projektverlaufs hat die vorläufige Build-153-Planung präzisiert: Die Re-Anchor-Schwelle musste **nicht neu festgelegt** werden; die bestehende 200-m-Movement-Regel ist jetzt in `CurrentLocationStartupPolicy` zentralisiert.
+
+Verbindliche Grenzen:
+- `< 200 m` Same-Origin, `>= 200 m` Re-Anchor über den bestehenden Hard-Reset-/Pending-Refresh-Pfad;
+- bei laufendem provisorischem Load wird ein relevanter Standortwechsel nachgezogen, nicht parallel als zweiter konkurrierender Load gestartet;
 - der deduplizierte API-Response bleibt ausschließlich First-Paint-Booster für den leeren Kaltstartscreen;
-- Direct-stop/Add-ons, app-eigene Filter/Dedup/Sortierung, ORS-asynchron und Same-Origin-Stable-Merge bleiben unverändert;
+- Direct-stop/Add-ons, app-eigene Filter/Dedup/Sortierung, ORS-asynchron und Same-Origin-Stable-Merge bleiben fachlich unverändert;
 - Cross-Origin-Hard-Reset hält alte sichtbare Daten bis zum Ersatzresultat, übernimmt sie danach aber nicht per Stable-Merge in den neuen Standortkontext.
 
 Audit-Ergebnis zu `lastLocation`:
 - Es existiert **keine** separate normative Alters- oder Accuracy-Schwelle für den System-`lastLocation`-Cache.
-- Der heutige Code akzeptiert `lastLocation` bereits ungeprüft als Fallback, aber erst nachdem `getCurrentLocation(PRIORITY_HIGH_ACCURACY)` keinen Wert geliefert hat.
+- Der Build-153-Code akzeptierte `lastLocation` bereits ungeprüft als Fallback, aber erst nachdem `getCurrentLocation(PRIORITY_HIGH_ACCURACY)` keinen Wert geliefert hatte.
 - Build 154 führt deshalb keine neue 30-s/60-s/5-min- oder Meter-Accuracy-Regel ein und vermischt die vorhandene API-Daten-Freshness (`refreshIntervalMinutes`/60-s-Snapshot-Throttle) nicht mit Location-Freshness.
 
-Spezifizierter Fast Path:
-1. Bei leerem Current-Location-Kaltstart darf eine vorhandene `lastLocation` als **provisorischer First-Paint-Origin** den ersten Core-Request starten.
+Implementierter Fast Path:
+1. Bei leerem Current-Location-Kaltstart darf eine vorhandene, nicht `0/0`-`lastLocation` als **provisorischer First-Paint-Origin** den bestehenden Core-Pfad starten.
 2. Der frische High-Accuracy-Fix läuft parallel weiter.
-3. Fresh-Fix-Abweichung `< 200 m`: kein zweiter Core-Request, kein zusätzlicher ORS-Zyklus allein wegen dieser Korrektur.
-4. Fresh-Fix-Abweichung `>= 200 m`: genau der bestehende Hard-Reset-/Pending-Refresh-Pfad; maximal ein Ersatz-Core-Zyklus.
-5. Fehlt `lastLocation`, bleibt der bisherige High-Accuracy-Startpfad unverändert.
+3. Fresh-Fix-Abweichung `< 200 m`: Policy behält den provisorischen Core-Kontext bei; aus der Korrektur wird kein zweiter Core-Request geplant.
+4. Fresh-Fix-Abweichung `>= 200 m`: der bestehende Hard-Reset-/Pending-Refresh-Pfad wird verwendet. Ein bereits erkannter Re-Anchor unterdrückt ORS für den verworfenen provisorischen Origin bzw. bricht laufendes provisorisches ORS ab.
+5. Fehlt eine nutzbare `lastLocation`, bleibt der High-Accuracy-first-Startpfad erhalten.
 6. Kein persistenter Standortcache, keine neue Dependency und keine zweite Location-/Loading-Architektur.
+7. `CurrentLocationStartupPolicyTest` schützt Eligibility, `< 200 m`, exakt/über 200 m und stale Target. Die reale Anzahl konkurrierender Core-/ORS-Zyklen bleibt bewusst Teil der Feld-Evidence statt einer künstlichen JVM-Nebenläufigkeitssimulation.
 
-Acceptance ist bewusst kausal statt mit neuer Performance-Magic-Number formuliert: Bei vorhandener `lastLocation` muss der erste Core-Request real **vor Abschluss des High-Accuracy-Fixes** beginnen. Die tatsächliche Verbesserung wird gegen die Build-153-Baseline `Loading`→Core ca. 2,59–3,02 s gemessen. Erzeugt der Fast Path sichtbare Standort-/Refresh-Unruhe oder keinen klaren realen Gewinn, wird er verworfen statt weiter verkompliziert.
+Acceptance ist weiterhin bewusst kausal statt mit neuer Performance-Magic-Number formuliert: Bei vorhandener `lastLocation` muss der erste Core-Request real **vor Abschluss des High-Accuracy-Fixes** beginnen. Die tatsächliche Verbesserung wird gegen die Build-153-Baseline `Loading`→Core ca. 2,59–3,02 s gemessen. Zusätzlich muss der Same-Origin-Fall genau einen Core-Zyklus behalten; ein praktisch reproduzierbarer Re-Anchor darf höchstens den provisorischen plus einen Ersatz-Core erzeugen. Erzeugt der Fast Path sichtbare Standort-/Refresh-Unruhe oder keinen klaren realen Gewinn, wird er verworfen statt weiter verkompliziert.
+
+PR #10 bleibt deshalb Draft bis zur Realgeräte-Evidence.
 
 ## Separater Hardening-Block — ORS-Key-Probe
 
