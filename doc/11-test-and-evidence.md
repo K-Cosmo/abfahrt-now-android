@@ -1,3 +1,23 @@
+## Build 152 Acceptance — accepted 04.10.2026
+
+Build 152 (`versionCode 1520`, `versionName 1.1.0`) ist nach automatisierter und realer Evidence akzeptiert.
+
+Automatisierte Evidence:
+1. Android CI #72 auf dem finalen Follow-up-/Dokumentations-Head vollständig grün: Static/Governance, committed-wrapper verification, Unit Tests, Debug und Release/R8.
+2. Frühere Build-152-Zwischengates #60, #62 und #64 waren ebenfalls grün; für die Abnahme maßgeblich ist der finale #72-Head.
+3. Normaler kombinierter Gate bleibt `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon`.
+
+Realgeräte-/Runtime-Evidence:
+1. installierter Stand bestätigt: `versionCode=1520`, `versionName=1.1.0`, `minSdk=34`, `targetSdk=37`.
+2. der frühere Onboarding/API-Key-Kaltstart-Flash ist nicht mehr sichtbar; F-152-001 ist geschlossen.
+3. der im ersten Build-152-Smoke zusätzlich beobachtete kurze `Standort erlauben`-Flash trotz bereits erteilter Permission ist nach kausalem Minimalfix nicht mehr sichtbar; beim eingerichteten Folgestart beginnen Location-Updates direkt. F-152-002 ist geschlossen.
+4. der vereinfachte Community-Footer ist visuell akzeptiert.
+5. der kompakte RoutePlanner zeigt keine beobachtete Regression; Photon-Zielsuche ist real erfolgreich und `/trips` antwortet HTTP 200, `AbfahrtTrips` meldet sieben Verbindungen.
+6. im finalen Logcat kein `FATAL EXCEPTION`, kein `AndroidRuntime` und keine App-ANR-Signatur.
+7. der Onboarding-Wortlaut wurde im Follow-up bewusst nicht geändert; die Änderung betrifft Layout/Spacing und die weiterhin kompakt-display-taugliche Scrollbarkeit.
+
+B-152-001 ist geschlossen. Build 152 ersetzt Build 151 als aktuelle akzeptierte Runtime-Baseline. AB-018 Startup/Main-Thread-Instrumentierung folgt separat als Build 153.
+
 ## DOC2 — documentation convergence gate
 
 DOC2 is documentation/governance-only. It does **not** change app source, Android resources, dependencies, build configuration, `versionCode` or `versionName`.
@@ -11,24 +31,6 @@ Acceptance for DOC2 requires:
 
 No additional Android runtime smoke is required for DOC2 itself because runtime code is unchanged.
 
-## Build 152 — implementation complete / pending runtime evidence
-
-Draft-PR #6 / `feature/build152-ui-ux` contains the complete Build-152 implementation. This is **not** Build-152 acceptance.
-
-Automated technical evidence:
-1. Android CI #60 validated the converged startup access-gate path: static governance/compatibility gates, committed-wrapper verification, unit tests, debug build and release/R8 build are green.
-2. Android CI #62 validated the complete implementation including the compact RoutePlanner header and Settings-footer cleanup with the same full gate.
-3. The normal combined Gradle gate remains `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon`.
-4. F-152-001 is therefore `fixed in code / pending evidence`: `AccessGateViewModel` alone owns the startup access decision and protected feature ViewModels are not created until a real preference snapshot exists.
-
-Still required before acceptance:
-1. configured real-device repeated cold starts without visible onboarding/API-key flash;
-2. RoutePlanner runtime smoke covering origin search, destination search, Current location, Home/Work, swap and `Route finden`;
-3. compact-width visual smoke for the shared RoutePlanner endpoint surface and both onboarding steps;
-4. Settings footer spacing visual acceptance after the ORS section;
-5. no new app FATAL/ANR/navigation failure in the tested runtime path;
-6. final `/doc` acceptance convergence, then remove Draft status and merge PR #6.
-
 ## Build 151 Acceptance — accepted 03.10.2026
 
 Evidence:
@@ -38,7 +40,7 @@ Evidence:
 4. combined Gradle gate: `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon` → `BUILD SUCCESSFUL in 3m 47s`, 106 actionable tasks executed;
 5. no transit, routing, credential, update-check or MapLibre semantic change was part of Build 151.
 
-F-DOC1-015 / B-COMMUNITY-001 are closed. Build 151 is the latest accepted runtime baseline.
+F-DOC1-015 / B-COMMUNITY-001 are closed. Build 151 is the latest accepted runtime baseline at that historical acceptance point.
 
 ## Build 150 Acceptance — accepted 03.10.2026
 
