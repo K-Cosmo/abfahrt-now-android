@@ -92,48 +92,80 @@ internal fun RoutePlannerScreen(
         ) {
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    RouteEndpointField(
-                        label = stringResource(R.string.route_from),
-                        endpoint = state.origin,
-                        searchState = state.originSearch,
-                        currentLocationLabel = currentLocationLabel,
-                        useCurrentLocationLabel = stringResource(R.string.use_current_location),
-                        homePlace = state.homePlace,
-                        workPlace = state.workPlace,
-                        prompt = stringResource(R.string.route_search_prompt),
-                        onQueryChange = viewModel::updateOriginQuery,
-                        onSelectResult = viewModel::selectOrigin,
-                        onUseCurrentLocation = viewModel::useCurrentLocationAsOrigin,
-                        onUseHome = viewModel::useSavedPlaceAsOrigin,
-                        onUseWork = viewModel::useSavedPlaceAsOrigin,
-                        onDismissSearch = viewModel::clearOriginSearch
-                    )
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(20.dp),
+                        color = MaterialTheme.colorScheme.surfaceContainerLow,
+                        border = BorderStroke(
+                            1.dp,
+                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.9f)
+                        )
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                RouteEndpointField(
+                                    label = stringResource(R.string.route_from),
+                                    endpoint = state.origin,
+                                    searchState = state.originSearch,
+                                    currentLocationLabel = currentLocationLabel,
+                                    useCurrentLocationLabel = stringResource(R.string.use_current_location),
+                                    homePlace = state.homePlace,
+                                    workPlace = state.workPlace,
+                                    prompt = stringResource(R.string.route_search_prompt),
+                                    onQueryChange = viewModel::updateOriginQuery,
+                                    onSelectResult = viewModel::selectOrigin,
+                                    onUseCurrentLocation = viewModel::useCurrentLocationAsOrigin,
+                                    onUseHome = viewModel::useSavedPlaceAsOrigin,
+                                    onUseWork = viewModel::useSavedPlaceAsOrigin,
+                                    onDismissSearch = viewModel::clearOriginSearch,
+                                    embedded = true
+                                )
 
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        FilledTonalIconButton(onClick = viewModel::swapEndpoints) {
-                            Icon(
-                                Icons.Default.SwapVert,
-                                contentDescription = stringResource(R.string.route_swap)
-                            )
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(horizontal = 12.dp),
+                                    color = MaterialTheme.colorScheme.outlineVariant
+                                )
+
+                                RouteEndpointField(
+                                    label = stringResource(R.string.route_to),
+                                    endpoint = state.destination,
+                                    searchState = state.destinationSearch,
+                                    currentLocationLabel = currentLocationLabel,
+                                    useCurrentLocationLabel = stringResource(R.string.use_current_location),
+                                    homePlace = state.homePlace,
+                                    workPlace = state.workPlace,
+                                    prompt = stringResource(R.string.route_search_prompt),
+                                    onQueryChange = viewModel::updateDestinationQuery,
+                                    onSelectResult = viewModel::selectDestination,
+                                    onUseCurrentLocation = viewModel::useCurrentLocationAsDestination,
+                                    onUseHome = viewModel::useSavedPlaceAsDestination,
+                                    onUseWork = viewModel::useSavedPlaceAsDestination,
+                                    onDismissSearch = viewModel::clearDestinationSearch,
+                                    embedded = true
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .width(52.dp)
+                                    .padding(top = 39.dp),
+                                contentAlignment = Alignment.TopCenter
+                            ) {
+                                FilledTonalIconButton(
+                                    onClick = viewModel::swapEndpoints,
+                                    modifier = Modifier.size(40.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.SwapVert,
+                                        contentDescription = stringResource(R.string.route_swap)
+                                    )
+                                }
+                            }
                         }
                     }
-
-                    RouteEndpointField(
-                        label = stringResource(R.string.route_to),
-                        endpoint = state.destination,
-                        searchState = state.destinationSearch,
-                        currentLocationLabel = currentLocationLabel,
-                        useCurrentLocationLabel = stringResource(R.string.use_current_location),
-                        homePlace = state.homePlace,
-                        workPlace = state.workPlace,
-                        prompt = stringResource(R.string.route_search_prompt),
-                        onQueryChange = viewModel::updateDestinationQuery,
-                        onSelectResult = viewModel::selectDestination,
-                        onUseCurrentLocation = viewModel::useCurrentLocationAsDestination,
-                        onUseHome = viewModel::useSavedPlaceAsDestination,
-                        onUseWork = viewModel::useSavedPlaceAsDestination,
-                        onDismissSearch = viewModel::clearDestinationSearch
-                    )
 
                     Button(
                         onClick = viewModel::findRoutes,
@@ -282,14 +314,15 @@ private fun RouteEndpointField(
     onUseCurrentLocation: () -> Unit,
     onUseHome: (SavedPlace) -> Unit,
     onUseWork: (SavedPlace) -> Unit,
-    onDismissSearch: () -> Unit
+    onDismissSearch: () -> Unit,
+    embedded: Boolean = false
 ) {
     val focusManager = LocalFocusManager.current
     val selectedLabel = routeEndpointLabel(endpoint, currentLocationLabel)
     var fieldValue by remember(endpoint) { mutableStateOf(selectedLabel) }
     var focused by remember { mutableStateOf(false) }
 
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(if (embedded) 2.dp else 6.dp)) {
         OutlinedTextField(
             value = fieldValue,
             onValueChange = {
@@ -330,12 +363,23 @@ private fun RouteEndpointField(
                     }
                 }
             },
-            shape = RoundedCornerShape(18.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = TransitBlue,
-                focusedLabelColor = TransitBlue,
-                cursorColor = TransitBlue
-            )
+            shape = if (embedded) RoundedCornerShape(0.dp) else RoundedCornerShape(18.dp),
+            colors = if (embedded) {
+                OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedLabelColor = TransitBlue,
+                    cursorColor = TransitBlue
+                )
+            } else {
+                OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = TransitBlue,
+                    focusedLabelColor = TransitBlue,
+                    cursorColor = TransitBlue
+                )
+            }
         )
 
         if (focused) {

@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,6 +38,10 @@ internal fun CommunityFooter() {
             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         }
     }
+    val disclaimerSentences = stringResource(R.string.community_disclaimer)
+        .split(Regex("(?<=[.!?])\\s+"))
+        .map(String::trim)
+        .filter(String::isNotBlank)
 
     Column(
         modifier = Modifier
@@ -67,21 +70,7 @@ internal fun CommunityFooter() {
             textAlign = TextAlign.Center
         )
 
-        Spacer(Modifier.height(10.dp))
-        Surface(
-            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.55f),
-            shape = MaterialTheme.shapes.small
-        ) {
-            Text(
-                text = stringResource(R.string.community_identity),
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(6.dp))
         TextButton(
             onClick = { openUrl(COMMUNITY_REPOSITORY_URL) },
             contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
@@ -111,12 +100,20 @@ internal fun CommunityFooter() {
         Spacer(Modifier.height(8.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
         Spacer(Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.community_disclaimer),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline,
-            textAlign = TextAlign.Center
-        )
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            disclaimerSentences.forEach { sentence ->
+                Text(
+                    text = sentence,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
         Spacer(Modifier.height(4.dp))
         Text(
             text = context.getString(R.string.version_label, AppVersionInfo.displayVersion),

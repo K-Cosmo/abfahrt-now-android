@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.unit.dp
-import now.abfahrt.transit.util.AppVersionInfo
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
 import now.abfahrt.transit.data.model.AppPreferences
@@ -152,7 +151,6 @@ fun SettingsSheet(
                     )
                 }
                 Spacer(Modifier.height(4.dp))
-                // Info card explaining API limitation
                 Surface(
                     color = MaterialTheme.colorScheme.secondaryContainer,
                     shape = MaterialTheme.shapes.small
@@ -358,7 +356,6 @@ fun SettingsSheet(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(Modifier.height(8.dp))
-                // 4-column grid, same emoji-above-label design as main screen
                 androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
                     columns = androidx.compose.foundation.lazy.grid.GridCells.Fixed(4),
                     modifier = Modifier.fillMaxWidth().heightIn(max = 200.dp),
@@ -392,7 +389,6 @@ fun SettingsSheet(
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.outline)
 
-                // ── API feedback ──────────────────────────────────────────────
                 Spacer(Modifier.height(12.dp))
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 Spacer(Modifier.height(12.dp))
@@ -481,13 +477,15 @@ fun SettingsSheet(
                     color = MaterialTheme.colorScheme.outline
                 )
             }
-            Spacer(Modifier.height(8.dp))
 
-            // ── Footer / Legal ────────────────────────────────────────────────
-            HorizontalDivider()
-            Spacer(Modifier.height(16.dp))
-            CommunityFooter()
-            Spacer(Modifier.height(8.dp))
+            // Keep the footer as one child of the 24dp-spaced settings column.
+            // This removes the previous stacked Spacer + arrangement gaps while
+            // preserving the normal section rhythm above the divider.
+            Column(modifier = Modifier.fillMaxWidth()) {
+                HorizontalDivider()
+                Spacer(Modifier.height(8.dp))
+                CommunityFooter()
+            }
         }
     }
 
@@ -574,7 +572,6 @@ private fun SettingsSection(
         content()
     }
 }
-
 
 @Composable
 private fun KeyStatusRow(
@@ -828,106 +825,6 @@ private fun SliderRow(
     }
 }
 
-@Composable
-private fun AppFooter() {
-    val context = androidx.compose.ui.platform.LocalContext.current
-    val openUrl: (String) -> Unit = { url ->
-        runCatching {
-            context.startActivity(
-                android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
-            )
-        }
-    }
-    Column(
-        modifier            = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("🚌", fontSize = 28.sp)
-        Text(
-            text      = stringResource(R.string.app_name),
-            style     = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.ExtraBold,
-            color     = MaterialTheme.colorScheme.primary
-        )
-        Text(
-            text  = stringResource(R.string.app_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
-        Text(
-            text  = stringResource(R.string.powered_by),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
-
-        Spacer(Modifier.height(8.dp))
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-        Spacer(Modifier.height(8.dp))
-
-        TextButton(
-            onClick = { openUrl("https://www.linkedin.com/company/riles-tech/") },
-            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
-        ) {
-            Text(
-                text       = stringResource(R.string.built_by),
-                style      = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
-                color      = MaterialTheme.colorScheme.primary
-            )
-        }
-
-        Spacer(Modifier.height(4.dp))
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(0.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            LegalLink(stringResource(R.string.impressum))   { openUrl("https://www.abfahrt.now/terms") }
-            LegalDivider()
-            LegalLink(stringResource(R.string.datenschutz)) { openUrl("https://www.abfahrt.now/privacy") }
-            LegalDivider()
-            LegalLink(stringResource(R.string.agb))         { openUrl("https://www.abfahrt.now/terms") }
-        }
-
-        Spacer(Modifier.height(6.dp))
-
-        Text(
-            text      = stringResource(R.string.disclaimer),
-            style     = MaterialTheme.typography.labelSmall,
-            color     = MaterialTheme.colorScheme.outline,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
-        Spacer(Modifier.height(4.dp))
-        Text(
-            text  = context.getString(R.string.version_label, AppVersionInfo.displayVersion),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline
-        )
-    }
-}
-
-@Composable
-private fun LegalLink(label: String, onClick: () -> Unit) {
-    TextButton(
-        onClick        = onClick,
-        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp)
-    ) {
-        Text(label, style = MaterialTheme.typography.labelSmall,
-             color = MaterialTheme.colorScheme.primary)
-    }
-}
-
-@Composable
-private fun LegalDivider() {
-    Text(" · ", style = MaterialTheme.typography.labelSmall,
-         color = MaterialTheme.colorScheme.outline)
-}
-
 // ── Quick slot picker ─────────────────────────────────────────────────────────
 
 @Composable
@@ -963,7 +860,6 @@ private fun QuickSlotPicker(
                 }
             }
         }
-        // Empty placeholder slots
         repeat((4 - pending.size).coerceAtLeast(0)) {
             Surface(
                 color    = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.4f),
@@ -1082,7 +978,6 @@ private fun LanguagePicker(
 
     LaunchedEffect(expanded) {
         if (expanded) {
-            // Wait until the popup is attached before requesting focus.
             delay(120)
             focusRequester.requestFocus()
             keyboard?.show()
@@ -1194,7 +1089,6 @@ private fun LanguagePicker(
         color = MaterialTheme.colorScheme.outline
     )
 }
-
 
 @Composable
 private fun OrsTravelModeToggle(

@@ -12,40 +12,47 @@ Der GitHub-Release-Update-Checker ist technisch accepted und in `main` integrier
 
 ## Build 151 — abgeschlossen
 
-Die Runtime-UI zeigt die unabhängige/unoffizielle Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
+Die Runtime-UI zeigt die unabhängige Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
 
 Der Android-CI-Gate baut ab Build 151 dauerhaft sowohl Debug als auch Release, damit der Release-/R8-Nachweis nicht mehr manuell nachgeführt werden muss.
 
-## DOC2 — Dokumentationskonvergenz nach Build 151
+## DOC2 — abgeschlossen
 
-DOC2 ändert ausschließlich `/doc` und die zugehörige Prozessdokumentation. `versionCode 1510` / `versionName 1.1.0` und sämtliche Runtime-Dateien bleiben unverändert. Zweck ist, REPO1 sowie die bereits akzeptierten Builds 150/151 konsistent in Changelog, Entscheidungen, Evidence, Compatibility, Localization, Backlog und Handoff nachzuführen.
+DOC2 konvergierte nach REPO1/Build 150/Build 151 ausschließlich die normative Dokumentation. Es war kein Runtime-Build und änderte weder App-Source noch Versionierung.
 
-## Build 152 — UI/UX-Konvergenz — in Arbeit
+## Build 152 — UI/UX-Konvergenz — accepted 04.10.2026
 
-PR #6 enthält Teil A; Android CI #52 ist mit Governance-/Static-/Locale-Gates, Unit-Tests, Debug- und Release/R8-Build grün. Das ist ein automatisierter technischer Gate, **keine** Build-152-Abnahme. F-152-001 zur Access-Gate-State-Konvergenz ist vor der Runtime-Abnahme zu klären.
+Build 152 ist als neue Runtime-Baseline abgenommen.
 
 Scope:
-- `versionCode 1520`, `versionName 1.1.0`;
-- Onboarding-Fließtext linksbündig und in verständliche Absätze gegliedert;
-- kompakter RoutePlanner-Kopf mit gemeinsamer Start-/Ziel-Fläche statt zwei großen separaten Feldern und großem Zwischenraum;
-- vorhandene Photon-, Saved-Places-, Swap- und `/trips`-Logik bleibt fachlich unverändert;
-- API-Key-Onboarding darf bei bereits eingerichtetem Nutzer nicht kurz beim App-Start erscheinen;
-- Access-Readiness wird erst nach einer echten Preference-Repository/DataStore-Emission geöffnet, nicht durch den künstlichen `stateIn`-Initialwert;
-- historischer, nicht mehr genutzter `AppFooter`-Deadcode wird entfernt.
+- `versionCode 1520`, `versionName 1.1.0`, `minSdk 34`, `targetSdk 37`;
+- linksbündiges und kompakteres Onboarding ohne Änderung der fachlichen Pflicht-/Optional-Logik;
+- kompakter gemeinsamer RoutePlanner-Kopf mit Start/Ziel, Trenner und platzsparender Tauschaktion;
+- bestehende Photon-, Saved-Places-, Current-location-, Swap- und `/trips`-Logik fachlich unverändert;
+- `AccessGateViewModel` wartet auf die erste echte Preference-Emission, bevor geschützte Feature-ViewModels entstehen;
+- `PermissionOrIdleContent` wird bei bereits erteilter Standortberechtigung im `Idle`-Übergang nicht mehr transient angezeigt;
+- Settings-Footer strukturell verdichtet, missverständlicher zusätzlicher Identitätskasten entfernt, Disclaimer satzweise zentriert;
+- historischer ungenutzter `AppFooter`-/Legal-Deadcode entfernt.
 
-Gate:
-1. F-152-001 geklärt; kein unbeabsichtigter paralleler Preference-State-Pfad bleibt zurück;
-2. Locale-/Static-/Governance-Gates grün;
-3. Unit-Tests + Debug + Release/R8 in GitHub Actions grün;
-4. Realgerät: eingerichtete App startet ohne sichtbaren Onboarding/API-Key-Flash;
-5. RoutePlanner-Kopf auf schmalem Smartphone kompakt und ohne Funktionsverlust;
-6. Onboarding Schritt 1 und 2 bleiben auf kleinen Displays scrollbar und verständlich;
-7. ORS→Community-Footer-Abstand visuell akzeptiert und Legacy-Footer entfernt;
-8. abschließende `/doc`-Konvergenz auf den tatsächlich abgenommenen Build-152-Stand.
+Acceptance-Evidence:
+1. Android CI #72 vollständig grün: Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8.
+2. Realgerät: ursprünglicher API-Key-/Onboarding-Flicker nicht mehr sichtbar.
+3. Realgerät nach Follow-up: kein `Standort erlauben`-Flicker mehr bei bereits erteilter Berechtigung; Location-Updates starten direkt.
+4. Footer vom Nutzer visuell akzeptiert; RoutePlanner zeigt keine beobachtete Regression.
+5. Runtime-Logcat: Photon-Zielsuche erfolgreich; `/trips` HTTP 200 mit sieben Ergebnissen.
+6. kein `FATAL EXCEPTION`, kein `AndroidRuntime` und keine App-ANR-Signatur im finalen Runtime-Smoke.
 
-## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018)
+F-152-001 und F-152-002 sind geschlossen.
 
-Nach Build 152 ausschließlich messen/instrumentieren. Keine spekulative Optimierung; konkrete Verschiebung/Lazy-Initialisierung erst anhand reproduzierbarer Messwerte.
+## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018) — next
+
+Build 153 beginnt mit Messinstrumentierung der Kaltstart-/Main-Thread-Schritte auf Basis des akzeptierten Build 152. Keine spekulative Performance-Optimierung. Erst reproduzierbare Messwerte, dann problembezogene Änderung in kleinem Scope.
+
+Mindestziel der ersten Runde:
+- Zeitpunkte für Process/Activity/Compose-/Preference-Gate/Location-/initialen Departure-Fetch nachvollziehbar messen;
+- Main-Thread-Arbeit identifizieren statt vermuten;
+- Cold/Warm-Start getrennt erfassen;
+- keine UX-/Routing-/Provider-Semantik gleichzeitig ändern.
 
 ## Release-Grundsatz
 
