@@ -44,4 +44,4 @@ Die sechs Community-/Provider-Texte des neuen `CommunityFooter` liegen in allen 
 
 ## Build 152 — accepted
 
-Build 152 ändert Layout, Struktur und Darstellung bestehender Texte, führt aber keine neuen Locale-Keys ein. Der Follow-up entfernt lediglich einen redundanten sichtbaren Identity-Block aus der Runtime-Darstellung und rendert den vorhandenen Disclaimer satzweise; die Ressourcenparität bleibt unverändert. Android CI #72 bestätigt den Locale-/Static-Gate auf dem finalen Head.
+Build 152 ändert Layout, Struktur und Darstellung bestehender Texte, führt aber keine neuen Locale-Keys ein. Der Follow-up entfernt lediglich einen redundanten sichtbaren Identity-Block aus der Runtime-Darstellung und rendert den vorhandenen Disclaimer satzweise; die Ressourcenparität bleibt unverändert. Android CI #81 bestätigt den Locale-/Static-Gate auf dem finalen Acceptance-Head.
