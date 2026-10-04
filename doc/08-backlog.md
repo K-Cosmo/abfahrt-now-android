@@ -4,23 +4,9 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-155-001 Wählbare Sortierprofile für die Abfahrtsseite (F-SORT-001)
-- **Status:** planned; Build 155 wird nach Build-154-Merge spezifiziert/implementiert.
-- Ausgangspunkt: `DepartureDisplayOrdering` ist bereits die Single Source of Truth und sortiert aktuell HERE → effektive Entfernung → Linie → Abfahrtszeit → Richtung.
-- Produktziel: unterschiedliche Alltagssichten ermöglichen, ohne die Hauptseite mit einem permanenten Sortier-Control zu überladen.
-- KIS-Vorgabe: wenige verständliche, persistente Profile statt frei konfigurierbarer 3-/4-stufiger Sortiermatrix.
-- geplante Profile:
-  1. **Nähe zuerst** — Entfernung → Abfahrtszeit → Richtung → Linie; vorgesehener neuer Default.
-  2. **Nächste Abfahrt** — Abfahrtszeit → Entfernung → Richtung → Linie.
-  3. **Linien bündeln** — Entfernung → Linie → Abfahrtszeit → Richtung; bildet das bisherige Verhalten ab.
-- Platzierung: Settings direkt nach „Abfahrten pro Richtung“ und vor Quick-Filtern. Bevorzugt als gut lokalisierbare Auswahlzeilen/Radio-Optionen, nicht als enge Segment-Buttons.
-- persistente Speicherung in bestehendem DataStore/`AppPreferences`; keine neue Dependency.
-- `DepartureDisplayOrdering` bleibt einzige Comparator-Quelle; API-, Dedup-, Merge-, ORS- und First-Paint-Pipeline bleiben unverändert.
-- Build-155-Spec muss die HERE-Semantik je Profil ausdrücklich festlegen. Insbesondere darf ein Profil „Abfahrtszeit zuerst“ nicht heimlich durch einen globalen HERE-Vorrang wieder zu „Nähe zuerst“ werden.
-
 ### B-REL-001 Erstes signiertes GitHub-APK-Release vorbereiten (F-REL-001)
-- **Status:** planned / Release Engineering.
-- Zielkandidat: erster echter öffentlicher APK-Release nach positiver Build-155-Abnahme, voraussichtlich Tag `v1.1.0-b155`.
+- **Status:** next / Release Engineering.
+- Zielkandidat: erster echter öffentlicher APK-Release auf Basis des akzeptierten Build 155, Tag `v1.1.0-b155`.
 - dauerhaftes Android-Release-Keypair/Keystore erzeugen und **außerhalb des Repos** sicher verwahren; Backup/Recovery dokumentieren.
 - Release-Signing-Konfiguration darf Secrets nur über lokale/private Properties bzw. CI-Environment beziehen; kein Keystore und kein Passwort im Repository.
 - final signierte APK mit `apksigner verify --verbose --print-certs` prüfen, SHA-256 veröffentlichen und finalen 16-KB-/Release-Smoke auf genau diesem Artefakt durchführen.
@@ -45,6 +31,20 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## Abgeschlossen
 
+### B-155-001 Wählbare Sortierprofile für die Abfahrtsseite (F-SORT-001) — Build 155
+- **Status:** closed / accepted 04.10.2026.
+- `versionCode = 1550`, `versionName = 1.1.0`; Android CI #125 auf Runtime-Head vollständig grün inklusive Governance/Compatibility, Wrapper, Unit Tests, Debug und Release/R8.
+- persistente Profile in bestehendem DataStore/`AppPreferences`:
+  1. **Nähe zuerst / `NEARBY`** — Entfernung → Abfahrtszeit → Richtung → Linie; neuer Default.
+  2. **Nächste Abfahrt / `SOONEST`** — Abfahrtszeit → Entfernung → Richtung → Linie.
+  3. **Linien bündeln / `LINE_GROUPED`** — Entfernung → Linie → Abfahrtszeit → Richtung; Legacy-Sicht.
+- Settings-Platzierung direkt nach „Abfahrten pro Richtung“ und vor Quick-Filtern; Radio-Auswahl auf Realgerät positiv bestätigt.
+- `DepartureDisplayOrdering` bleibt einzige Comparator-Quelle; kein Sortieren in Composables.
+- Profilwechsel triggert ausschließlich lokales `refilter()` über den vorhandenen Response-State; im Realgeräte-Log kein `departure_state_loading` und kein unmittelbar gekoppelter `/departures`-/ORS-Zyklus.
+- Nutzer bestätigt, dass die Hauptseite bei allen drei Profilen entsprechend sortiert und die gewählte Einstellung nach `force-stop`/Neustart erhalten bleibt.
+- keine neue API-, Dedup-, Merge-, ORS-, Location- oder First-Paint-Semantik.
+- Build 155 ist Release-Kandidat für RELEASE1 / `v1.1.0-b155`.
+
 ### B-154-001 Current-Location-Startup beschleunigen (F-153-001) — Build 154
 - **Status:** closed / accepted 04.10.2026.
 - `versionCode = 1540`, `versionName = 1.1.0`; Android CI #101/#106 grün inklusive Release/R8.
@@ -52,9 +52,7 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - bestehender 200-m-Vertrag bleibt unverändert: `< 200 m` Same-Origin, `>= 200 m` bestehender Hard-Reset-/Pending-Refresh-Pfad.
 - drei reale Cold Starts: `Loading`→erster Core-Request ca. **29 / 30 / 25 ms** gegenüber Build-153-Baseline **2,59–3,02 s**.
 - High-Accuracy-Korrekturen 6 / 0 / 8 m; kein Korrektur-bedingter Ersatz-Core und keine zusätzliche ORS-Runde beobachtet.
-- Cold 2 hatte unabhängig davon ca. 9,16 s HTTP-Latenz der ersten Core-Antwort; der Request selbst startete nach ca. 30 ms und bestätigt damit die Trennung von App-Startup und Provider-/Netzwerk-Latenz.
 - Nutzer bestätigt die drastisch verkürzte sichtbare Ladezeit ohne störende Standort-/Refresh-Unruhe.
-- >=200-m-Re-Anchor nicht real reproduziert; nicht als Feldtest behauptet. Policy-Tests plus bestehende Hard-Reset-Semantik schützen den Pfad.
 - bereinigte Evidence: `/evidence/public/build-154/2026-10-04_acceptance.md`.
 
 ### B-153-001 Startup/Main-Thread-Instrumentierung (AB-018) — Build 153
