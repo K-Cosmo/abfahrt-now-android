@@ -274,6 +274,7 @@ class DepartureViewModel @Inject constructor(
         var prevStartMinutes = -1
         var prevModes: Set<TransportMode>? = null
         var prevMaxPerDir = -1
+        var prevDepartureSortProfile: DepartureSortProfile? = null
         var prevOrsTravelMode: OrsTravelMode? = null
         var prevHideUnreachable: Boolean? = null
 
@@ -283,6 +284,8 @@ class DepartureViewModel @Inject constructor(
                 val minutesChanged = prevMaxMinutes != prefs.windowEndMinutes ||
                     prevStartMinutes != prefs.windowStartMinutes
                 val maxDirChanged = prevMaxPerDir != prefs.maxPerDirection
+                val departureSortChanged = prevDepartureSortProfile != null &&
+                    prevDepartureSortProfile != prefs.departureSortProfile
                 val prevM = prevModes
                 val modesAdded = prevM != null && prefs.selectedModes.any { it !in prevM }
                 val modesChanged = prevM != null && prevM != prefs.selectedModes
@@ -290,13 +293,14 @@ class DepartureViewModel @Inject constructor(
                 val hideUnreachableChanged = prevHideUnreachable != null && prevHideUnreachable != prefs.hideUnreachableDepartures
                 if (modesAdded && shouldFetchForModeExpansion(prefs.selectedModes)) {
                     refresh(force = false)
-                } else if (minutesChanged || modesChanged || maxDirChanged || hideUnreachableChanged) {
+                } else if (minutesChanged || modesChanged || maxDirChanged || departureSortChanged || hideUnreachableChanged) {
                     refilter()
                 }
                 prevMaxMinutes = prefs.windowEndMinutes
                 prevStartMinutes = prefs.windowStartMinutes
                 prevModes = prefs.selectedModes
                 prevMaxPerDir = prefs.maxPerDirection
+                prevDepartureSortProfile = prefs.departureSortProfile
                 prevOrsTravelMode = prefs.orsTravelMode
                 prevHideUnreachable = prefs.hideUnreachableDepartures
                 restartAutoRefresh(prefs.refreshIntervalMinutes)
@@ -1302,12 +1306,12 @@ class DepartureViewModel @Inject constructor(
                 }
             }
 
-        val result = limited.sortedWith(departureDisplayComparator())
+        val result = limited.sortedWith(departureDisplayComparator(prefs.departureSortProfile))
 
         if (BuildConfig.DEBUG) {
             Log.d(
                 "AbfahrtFilter",
-                "raw=${departures.size} → radiusOk=${radiusOk.size} → candidate=${candidateDepartures.size} → modeOk=${modeOk.size} → timeOk=${timeOk.size} → reachableOk=${reachableOk.size} → targetStopOk=${targetToNearerStopFiltered.size} → atNearest=${atNearest.size} → unique=${unique.size} → limited=${limited.size} | requestRadius=$effectiveRadius window=[+${prefs.windowStartMinutes}..+${prefs.windowEndMinutes}min] maxPerDir=${prefs.maxPerDirection} hideUnreachable=${prefs.hideUnreachableDepartures && isUsingCurrentLocation}"
+                "raw=${departures.size} → radiusOk=${radiusOk.size} → candidate=${candidateDepartures.size} → modeOk=${modeOk.size} → timeOk=${timeOk.size} → reachableOk=${reachableOk.size} → targetStopOk=${targetToNearerStopFiltered.size} → atNearest=${atNearest.size} → unique=${unique.size} → limited=${limited.size} | requestRadius=$effectiveRadius window=[+${prefs.windowStartMinutes}..+${prefs.windowEndMinutes}min] maxPerDir=${prefs.maxPerDirection} sort=${prefs.departureSortProfile} hideUnreachable=${prefs.hideUnreachableDepartures && isUsingCurrentLocation}"
             )
         }
         return result
@@ -1486,8 +1490,10 @@ class DepartureViewModel @Inject constructor(
     private fun effectiveDistanceForSort(departure: Departure): Int =
         DepartureDisplayOrdering.effectiveDistanceForSort(departure)
 
-    private fun departureDisplayComparator(): Comparator<Departure> =
-        DepartureDisplayOrdering.comparator()
+    private fun departureDisplayComparator(
+        profile: DepartureSortProfile = DepartureSortProfile.NEARBY
+    ): Comparator<Departure> =
+        DepartureDisplayOrdering.comparator(profile)
 
     private fun effectiveDistanceOrNull(departure: Departure): Int? =
         DepartureDisplayOrdering.effectiveDistanceOrNull(departure)
@@ -2225,6 +2231,10 @@ class DepartureViewModel @Inject constructor(
         prefsRepo.updateHideUnreachableDepartures(enabled)
     }
     fun saveMaxPerDirection(n: Int) = viewModelScope.launch { prefsRepo.updateMaxPerDirection(n) }
+
+    fun saveDepartureSortProfile(profile: DepartureSortProfile) = viewModelScope.launch {
+        prefsRepo.updateDepartureSortProfile(profile)
+    }
 
     fun saveLanguage(lang: AppLanguage) {
         viewModelScope.launch {

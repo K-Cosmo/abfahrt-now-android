@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlin.math.roundToInt
 import now.abfahrt.transit.data.model.AppPreferences
+import now.abfahrt.transit.data.model.DepartureSortProfile
 import now.abfahrt.transit.data.model.TransportMode
 import now.abfahrt.transit.data.model.OrsTravelMode
 
@@ -55,6 +56,7 @@ fun SettingsSheet(
     onWindowChange:    (startMin: Int, endMin: Int) -> Unit,
     onRefreshChange:      (Int) -> Unit,
     onMaxPerDirChange:    (Int) -> Unit,
+    onDepartureSortChange: (DepartureSortProfile) -> Unit,
     onLanguageChange:     (now.abfahrt.transit.data.model.AppLanguage) -> Unit,
     onModeToggle:      (TransportMode) -> Unit,
     onQuickSlotsChange:(List<TransportMode>) -> Unit,
@@ -325,6 +327,47 @@ fun SettingsSheet(
                 }
                 Text(
                     stringResource(R.string.per_direction_api_note),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+            }
+
+            HorizontalDivider()
+
+            // ── Departure sorting ─────────────────────────────────────────────
+            SettingsSection("↕️  ${stringResource(R.string.quickfilter_current_order)}") {
+                val distance = stringResource(R.string.detail_distance)
+                val departure = stringResource(R.string.detail_departure)
+                val direction = stringResource(R.string.detail_direction)
+                val line = stringResource(R.string.detail_line)
+                val profiles = listOf(
+                    DepartureSortProfile.NEARBY to "$distance → $departure → $direction → $line",
+                    DepartureSortProfile.SOONEST to "$departure → $distance → $direction → $line",
+                    DepartureSortProfile.LINE_GROUPED to "$distance → $line → $departure → $direction"
+                )
+                profiles.forEach { (profile, label) ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onDepartureSortChange(profile) }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(
+                            selected = prefs.departureSortProfile == profile,
+                            onClick = { onDepartureSortChange(profile) }
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = label,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    stringResource(R.string.quickfilter_order_note),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.outline
                 )

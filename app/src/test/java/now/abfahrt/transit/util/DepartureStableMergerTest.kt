@@ -218,7 +218,7 @@ class DepartureStableMergerTest {
             nowMillis = baseNow
         )
 
-        assertEquals(listOf("Closer Earlier", "Closer Later", "Far"), merged.departures.map { it.stop })
+        assertEquals(listOf("Closer Later", "Closer Earlier", "Far"), merged.departures.map { it.stop })
     }
 
     private fun dep(

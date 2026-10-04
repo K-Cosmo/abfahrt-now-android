@@ -502,6 +502,7 @@ internal fun DepartureScreen(
             onWindowChange = { s, e -> viewModel.saveWindowRange(s, e) },
             onRefreshChange = viewModel::saveRefreshInterval,
             onMaxPerDirChange = viewModel::saveMaxPerDirection,
+            onDepartureSortChange = viewModel::saveDepartureSortProfile,
             onLanguageChange = viewModel::saveLanguage,
             onModeToggle = viewModel::toggleMode,
             onQuickSlotsChange = viewModel::saveQuickSlots,

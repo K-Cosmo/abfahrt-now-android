@@ -1,29 +1,53 @@
 package now.abfahrt.transit.util
 
 import now.abfahrt.transit.data.model.Departure
+import now.abfahrt.transit.data.model.DepartureSortProfile
 import now.abfahrt.transit.data.model.displayDistanceMeters
-import now.abfahrt.transit.data.model.isHereOverride
 
 /**
  * Single source of truth for displayed departure ordering and effective distance.
  *
- * Product order:
- * 1. "Here" departures first (station distance <= HERE_DISTANCE_THRESHOLD_METERS)
- * 2. effective distance (walk/bike distance if available, otherwise station distance)
- * 3. line
- * 4. departure time
+ * Profiles:
+ * - NEARBY: effective distance -> departure time -> direction -> line
+ * - SOONEST: departure time -> effective distance -> direction -> line
+ * - LINE_GROUPED: effective distance -> line -> departure time -> direction
+ *
+ * HERE departures already have effective distance 0 via displayDistanceMeters(). There is no
+ * hidden global HERE priority ahead of SOONEST, because that would violate a time-first profile.
  */
 object DepartureDisplayOrdering {
-    fun comparator(): Comparator<Departure> = compareBy<Departure>(
-        { if (it.isHereOverride()) 0 else 1 },
-        { effectiveDistanceForSort(it) },
-        { it.line.trim().lowercase() },
-        { it.timestamp },
-        { it.direction.trim().lowercase() },
-        { it.stop.trim().lowercase() },
-        { it.platform.orEmpty().trim().lowercase() },
-        { it.mode.orEmpty().trim().lowercase() }
-    )
+    fun comparator(profile: DepartureSortProfile = DepartureSortProfile.NEARBY): Comparator<Departure> =
+        when (profile) {
+            DepartureSortProfile.NEARBY -> compareBy<Departure>(
+                { effectiveDistanceForSort(it) },
+                { it.timestamp },
+                { normalizedDirection(it) },
+                { normalizedLine(it) },
+                { normalizedStop(it) },
+                { normalizedPlatform(it) },
+                { normalizedMode(it) }
+            )
+
+            DepartureSortProfile.SOONEST -> compareBy<Departure>(
+                { it.timestamp },
+                { effectiveDistanceForSort(it) },
+                { normalizedDirection(it) },
+                { normalizedLine(it) },
+                { normalizedStop(it) },
+                { normalizedPlatform(it) },
+                { normalizedMode(it) }
+            )
+
+            DepartureSortProfile.LINE_GROUPED -> compareBy<Departure>(
+                { effectiveDistanceForSort(it) },
+                { normalizedLine(it) },
+                { it.timestamp },
+                { normalizedDirection(it) },
+                { normalizedStop(it) },
+                { normalizedPlatform(it) },
+                { normalizedMode(it) }
+            )
+        }
 
     fun effectiveDistanceForSort(departure: Departure): Int =
         effectiveDistanceOrNull(departure) ?: Int.MAX_VALUE
@@ -33,4 +57,19 @@ object DepartureDisplayOrdering {
 
     fun normalizedDistance(distance: Int?): Int? =
         distance?.takeIf { it > 0 }
+
+    private fun normalizedDirection(departure: Departure): String =
+        departure.direction.trim().lowercase()
+
+    private fun normalizedLine(departure: Departure): String =
+        departure.line.trim().lowercase()
+
+    private fun normalizedStop(departure: Departure): String =
+        departure.stop.trim().lowercase()
+
+    private fun normalizedPlatform(departure: Departure): String =
+        departure.platform.orEmpty().trim().lowercase()
+
+    private fun normalizedMode(departure: Departure): String =
+        departure.mode.orEmpty().trim().lowercase()
 }

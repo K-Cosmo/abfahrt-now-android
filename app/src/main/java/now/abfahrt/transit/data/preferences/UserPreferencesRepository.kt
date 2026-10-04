@@ -19,6 +19,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import now.abfahrt.transit.data.model.AppLanguage
 import now.abfahrt.transit.data.model.AppPreferences
+import now.abfahrt.transit.data.model.DepartureSortProfile
 import now.abfahrt.transit.data.model.OrsTravelMode
 import now.abfahrt.transit.data.model.SavedPlace
 import now.abfahrt.transit.data.model.SavedPlaceType
@@ -51,6 +52,7 @@ class UserPreferencesRepository @Inject constructor(
         val QUICK_SLOTS      = stringPreferencesKey("quick_slots")
         val LANGUAGE         = stringPreferencesKey("language")
         val MAX_PER_DIR      = intPreferencesKey("max_per_direction")
+        val DEPARTURE_SORT   = stringPreferencesKey("departure_sort_profile")
         val ORS_TRAVEL_MODE  = stringPreferencesKey("ors_travel_mode")
         val HIDE_UNREACHABLE = booleanPreferencesKey("hide_unreachable_departures")
         val HOME_TITLE       = stringPreferencesKey("saved_home_title")
@@ -94,6 +96,7 @@ class UserPreferencesRepository @Inject constructor(
                             .toSet()
                             .ifEmpty { TransportMode.entries.toSet() },
                         maxPerDirection        = prefs[Keys.MAX_PER_DIR] ?: 1,
+                        departureSortProfile   = DepartureSortProfile.fromCode(prefs[Keys.DEPARTURE_SORT]),
                         language               = AppLanguage.fromCode(prefs[Keys.LANGUAGE] ?: "system"),
                         orsTravelMode          = OrsTravelMode.fromCode(prefs[Keys.ORS_TRAVEL_MODE]),
                         hideUnreachableDepartures = prefs[Keys.HIDE_UNREACHABLE] ?: false,
@@ -152,6 +155,10 @@ class UserPreferencesRepository @Inject constructor(
 
     suspend fun updateMaxPerDirection(n: Int) {
         context.dataStore.edit { it[Keys.MAX_PER_DIR] = n.coerceIn(1, 3) }
+    }
+
+    suspend fun updateDepartureSortProfile(profile: DepartureSortProfile) {
+        context.dataStore.edit { it[Keys.DEPARTURE_SORT] = profile.name }
     }
 
     suspend fun updateQuickSlots(slots: List<TransportMode>) {
