@@ -14,56 +14,63 @@
 
 1. vorhandene `.gitignore`-Regeln für `*.jks`, `*.keystore`, `*.p12` beibehalten.
 2. keine Beispieldatei mit echten Passwörtern anlegen.
-3. optional kurze öffentliche Release-Signing-Anleitung nur mit Variablennamen und sicheren Eingabemustern; niemals echte Werte.
+3. öffentliche Release-Signing-Anleitung nur mit Variablennamen und sicheren Eingabemustern; niemals echte Werte.
 4. normale Android-CI muss weiterhin erfolgreich sein.
 
-## Phase C — Key-Erzeugung lokal
+## Phase C — bestehenden Release-Key verifizieren
+
+Es wird **kein neuer Keystore erzeugt**. Die App ist bereits auf drei realen Geräten mit dem vorhandenen Release-Key installiert.
 
 Auf dem Windows-Entwicklungsrechner:
 
-1. Secrets-Verzeichnis außerhalb `D:\Android\abfahrt-now-android` anlegen, z. B. `%USERPROFILE%\AbfahrtNow-Secrets`.
-2. `keytool -genkeypair` mit RSA-4096, Alias `abfahrt-now-release`, JKS und langer Gültigkeit ausführen.
-3. Passwörter interaktiv eingeben, nicht als Klartext in der Kommandozeile.
-4. Keystore auf ein zweites, getrenntes Medium/Backup-Ziel kopieren.
-5. Backup vor Release real lesbar/verfügbar bestätigen.
+1. vorhandenen Keystore außerhalb des Repository-Workspaces lokalisieren;
+2. mit `keytool -list -v -keystore <pfad>` Alias/Certificate-Fingerprint prüfen;
+3. mindestens ein separates Backup des bestehenden Keystores verifizieren;
+4. APK einer bestehenden Release-Installation per `adb shell pm path now.abfahrt.transit` lokalisieren und per `adb pull` sichern;
+5. installierte APK mit `apksigner verify --print-certs` prüfen;
+6. Signer Certificate SHA-256 von Keystore und installierter APK müssen exakt übereinstimmen.
+
+Bei Abweichung wird gestoppt. Kein neuer Key und keine Deinstallation als Workaround.
 
 ## Phase D — lokale sichere Übergabe an Gradle
 
 Für RELEASE1 bevorzugt PowerShell-Session-Variablen:
 
-- Pfad und Alias dürfen direkt als Environment gesetzt werden.
+- Pfad und tatsächlicher bestehender Alias dürfen direkt als Environment gesetzt werden.
 - Store-/Key-Passwort werden mit `Read-Host -AsSecureString` abgefragt und nur für den laufenden Prozess in Klartext konvertiert.
 - keine Passwörter in PowerShell-History, Repo-Dateien oder öffentlichen Logs.
 
 ## Phase E — signierter Build
 
-1. Branch/Commit des akzeptierten Build-155-Release-Kandidaten verwenden.
+1. Branch/Commit des akzeptierten Build-155-Release-Kandidaten plus RELEASE1-Signing-Mechanik verwenden.
 2. `releaseSigningRequired=true` setzen.
 3. Unit Tests + Release/R8 bauen.
-4. Ergebnis muss eine signierte `app-release.apk` sein.
+4. Ergebnis muss eine mit dem bestehenden Release-Key signierte `app-release.apk` sein.
 5. Build darf bei fehlender/inkonsistenter Signing-Konfiguration nicht still auf unsigned zurückfallen.
 
 ## Phase F — kryptografische und Artefakt-Verifikation
 
 1. `apksigner verify --verbose --print-certs app-release.apk`.
-2. Signer Certificate SHA-256 sichern.
+2. Signer Certificate SHA-256 muss mit dem in Phase C bestätigten bestehenden Signer übereinstimmen.
 3. Datei-SHA-256 mit PowerShell `Get-FileHash -Algorithm SHA256` berechnen.
 4. 16-KB-Alignment mit `zipalign -c -P 16 -v 4` auf derselben APK prüfen.
 5. Keine Secret-Inhalte in Evidence übernehmen.
 
 ## Phase G — Realgeräte-Release-Smoke
 
-1. API-Keys griffbereit halten; Debug-App deinstallieren.
-2. Release-APK frisch installieren.
+1. Auf mindestens einem der drei bestehenden Release-Geräte **keine Deinstallation** durchführen.
+2. Signierte Release-APK mit `adb install -r` als echtes In-place-Update installieren.
 3. Paketversion prüfen: `versionCode=1550`, `versionName=1.1.0`.
-4. `adb shell getconf PAGE_SIZE` => `16384`.
-5. App starten und `AbfahrtCompat memoryPageSizeBytes=16384` bestätigen.
-6. AccessGate/API-Key-Eingabe neu durchlaufen.
+4. Vorhandene Preferences/API-Keys müssen erhalten bleiben.
+5. `adb shell getconf PAGE_SIZE` => `16384` auf dem 16-KB-Testgerät.
+6. App starten und `AbfahrtCompat memoryPageSizeBytes=16384` bestätigen.
 7. Current Location / erster Departure-State.
-8. Sortierprofil setzen und Persistenz nach Neustart prüfen.
+8. Sortierprofil und Persistenz prüfen.
 9. ORS mit gültigem Nutzer-Key mindestens einmal erfolgreich.
 10. RoutePlanner-Grundpfad prüfen.
 11. kein FATAL/ANR.
+
+Geräte mit reiner Debug-Signatur können getrennt behandelt werden; der bestehende Release-Updatepfad darf dadurch nicht verwässert werden.
 
 ## Phase H — GitHub Release
 
@@ -72,9 +79,10 @@ Erst nach positivem Gate:
 1. finale verifizierte APK sprechend kopieren/benennen, z. B. `abfahrt-now-v1.1.0-b155.apk`;
 2. Tag/Release `v1.1.0-b155` erstellen;
 3. exakt dieses APK als Asset anhängen;
-4. Release Notes mit Build 155 Highlights, APK-SHA-256, Signing-Fingerprint und Installationshinweis für frühere Debug-Tester;
-5. Update-Checker gegen das echte Release testen.
+4. Release Notes mit Build-155-Highlights, APK-SHA-256 und Signing-Fingerprint;
+5. vermerken, dass derselbe bereits bestehende Release-Key weiterverwendet wird;
+6. Update-Checker gegen das echte Release testen.
 
 ## Folgeschritt, nicht RELEASE1-Gate
 
-Nach erfolgreichem ersten lokalen Release kann ein separater manueller/Tag-basierter GitHub-Actions-Release-Workflow mit Repository-Secrets entworfen werden. Das wird erst getan, nachdem der lokale Signing-/Verify-Pfad bewiesen ist.
+Nach erfolgreichem ersten öffentlichen Release kann ein separater manueller/Tag-basierter GitHub-Actions-Release-Workflow mit Repository-Secrets entworfen werden. Das wird erst getan, nachdem der lokale Signing-/Verify-/In-place-Update-Pfad bewiesen ist.
