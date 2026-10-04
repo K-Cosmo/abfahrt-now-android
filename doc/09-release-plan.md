@@ -12,7 +12,7 @@ Der GitHub-Release-Update-Checker ist technisch accepted und in `main` integrier
 
 ## Build 151 — abgeschlossen
 
-Die Runtime-UI zeigt die unabhängige Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
+Die Runtime-UI zeigt die unabhängige/unoffizielle Community-Identität. abfahrt.now bleibt als Daten-/API-Quelle sichtbar, Projektlink und API-Provider-Rechtslinks sind eindeutig beschriftet. Der Realgeräte-Screenshot ist positiv; Android CI #42 ist inklusive Locale-/Static-/Governance-Gates, Unit-Tests, Debug- und Release/R8-Build grün. F-DOC1-015 ist geschlossen.
 
 Der Android-CI-Gate baut ab Build 151 dauerhaft sowohl Debug als auch Release, damit der Release-/R8-Nachweis nicht mehr manuell nachgeführt werden muss.
 
@@ -35,7 +35,7 @@ Scope:
 - historischer ungenutzter `AppFooter`-/Legal-Deadcode entfernt.
 
 Acceptance-Evidence:
-1. Android CI #72 vollständig grün: Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8.
+1. Android CI #81 vollständig grün: Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8.
 2. Realgerät: ursprünglicher API-Key-/Onboarding-Flicker nicht mehr sichtbar.
 3. Realgerät nach Follow-up: kein `Standort erlauben`-Flicker mehr bei bereits erteilter Berechtigung; Location-Updates starten direkt.
 4. Footer vom Nutzer visuell akzeptiert; RoutePlanner zeigt keine beobachtete Regression.
