@@ -2,7 +2,7 @@
 
 ## Aktuell akzeptiert: v1.1.0 Build 153 (`versionCode 1530`) — Startup/Main-Thread-Instrumentierung accepted
 
-Build 153 ist am 04.10.2026 nach vollständigem Android-CI-Gate und realer Stage-A-Evidence als Mess-/Diagnostik-Build akzeptiert. Build 152 bleibt die vorherige akzeptierte UI/UX-Baseline; REPO1 bleibt die abgeschlossene Repository-/Governance-Basis.
+Build 153 ist am 04.10.2026 nach vollständigem Android-CI-Gate und realer Stage-A-Evidence als Mess-/Diagnostik-Build akzeptiert. **Build 154 (`versionCode 1540`) ist implementiert und CI-grün, aber bis zur Realgeräte-Evidence noch nicht accepted.**
 
 ### Build-153-Scope
 
@@ -16,9 +16,9 @@ Build 153 ist am 04.10.2026 nach vollständigem Android-CI-Gate und realer Stage
 8. Der große `DepartureViewModel` wurde in Stage A nicht umgebaut. Location/Core/ORS wurden über vorhandene Logs korreliert.
 9. Keine Produkt-, Routing-, Provider-, Filter-, Sortier-, Credential- oder UI-Semantik wurde durch Build 153 verändert.
 
-### Automatisierte Evidence
+### Automatisierte Evidence Build 153
 
-Android CI #94 ist auf dem letzten Runtime-Finding-Head vollständig grün:
+Android CI #94 ist auf dem letzten Build-153-Runtime-Finding-Head vollständig grün:
 
 ```text
 ./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon
@@ -26,7 +26,7 @@ Android CI #94 ist auf dem letzten Runtime-Finding-Head vollständig grün:
 
 Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8 sind erfolgreich. Frühere Build-153-Gates #91 und #93 bleiben historische Zwischen-Evidence.
 
-### Realgeräte-Evidence 04.10.2026
+### Realgeräte-Evidence Build 153 — 04.10.2026
 
 Drei **saubere vollständig instrumentierte Cold Starts** bilden die Acceptance-Basis:
 
@@ -49,7 +49,7 @@ Keine App-`FATAL EXCEPTION`, kein App-Prozess-Crash/`AndroidRuntime`, keine App-
 
 Der dominante wiederholbare Cold-Start-Warteblock liegt **vor dem ersten abfahrt.now-Core-Netzwerkrequest**. Application/MapLibre, Compose, Preference-Gate und der erste Core-HTTP-Call sind dafür nicht dominant.
 
-Im Current-Location-Pfad wird vor dem Netzwerk ausgeführt:
+Der Build-153-Current-Location-Pfad führte vor dem Netzwerk aus:
 
 ```text
 resolveCurrentTargetCoordinates()
@@ -58,34 +58,58 @@ resolveCurrentTargetCoordinates()
      -> lastLocation nur bei null
 ```
 
-Stage A plus realer Zeitstrahl grenzen den Befund ausreichend auf diese Location-Auflösung ein. Direkte Stage-B-Marker sind daher nicht erforderlich. Build 153 löst den Befund absichtlich **nicht**; F-153-001 bleibt offen.
+Stage A plus realer Zeitstrahl grenzten den Befund ausreichend auf diese Location-Auflösung ein. Build 153 löste den Befund absichtlich nicht; F-153-001 wurde nach Build 154 getragen.
 
-## Nächster Build: 154 — Current-Location First-Paint Fast Path
+## Build 154 — Current-Location First-Paint Fast Path — implementiert / Realgeräte-Evidence offen
 
-B-154-001 ist in `specs/BUILD154/` spezifiziert; Runtime-Code ist noch nicht geändert.
+Branch: `feature/build154-location-startup`  
+Draft-PR: #10  
+Runtime: `versionCode = 1540`, `versionName = 1.1.0`.
 
-Der erneute Audit von `/doc`, aktuellem Code und Projektverlauf ergibt zwei wichtige Korrekturen zur vorläufigen Build-153-Handoff-Formulierung:
+Android CI #101 ist auf dem Runtime-Implementierungsstand vollständig grün: Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8.
 
-1. **Die Re-Anchor-Schwelle ist bereits definiert.** `MOVEMENT_THRESHOLD_M = 200f`; `< 200 m` bleibt Same-Origin, `>= 200 m` nutzt den bestehenden Hard-Reset-/Pending-Refresh-Pfad. Eine zweite Schwelle ist nicht zulässig.
-2. Für `FusedLocationProviderClient.lastLocation` gibt es **keine** separate normative Zeit-/Accuracy-Freshness-Regel. Der heutige Code akzeptiert diese Quelle bereits ohne solche Prüfung als Fallback, wartet davor aber auf High Accuracy. 60-s-Request-Throttle und `refreshIntervalMinutes` betreffen Departure-Daten und werden nicht als Location-Freshness umgedeutet.
+### Implementierter Eingriff
 
-Spezifizierter kleinstmöglicher Eingriff:
+Der erneute Audit von `/doc`, Code und Projektverlauf bestätigte zwei Grenzen:
+
+1. **Die Re-Anchor-Schwelle ist bereits definiert.** Der 200-m-Vertrag ist jetzt in `CurrentLocationStartupPolicy.MOVEMENT_THRESHOLD_METERS` zentralisiert; `< 200 m` bleibt Same-Origin, `>= 200 m` nutzt den bestehenden Hard-Reset-/Pending-Refresh-Pfad.
+2. Für `FusedLocationProviderClient.lastLocation` gibt es **keine** separate normative Zeit-/Accuracy-Freshness-Regel. Der Build-153-Code akzeptierte diese Quelle bereits ohne solche Prüfung als Fallback. 60-s-Request-Throttle und `refreshIntervalMinutes` betreffen Departure-Daten und werden nicht als Location-Freshness umgedeutet.
+
+Der Build-154-Pfad lautet:
 
 ```text
 leerer Current-Location-Kaltstart
-  -> lastLocation vorhanden?
-     -> ja: als provisorischen First-Paint-Origin Core sofort starten
+  -> lastLocation vorhanden und != 0/0?
+     -> ja: als provisorischen First-Paint-Origin bestehenden Core-Pfad starten
             + High-Accuracy-Fix parallel weiter anfordern
-     -> nein: bisherigen High-Accuracy-Pfad beibehalten
+     -> nein: bisherigen High-Accuracy-first-Pfad beibehalten
 
 High-Accuracy-Korrektur
-  -> Abweichung < 200 m: kein zweiter Core, kein Extra-ORS nur wegen der Korrektur
-  -> Abweichung >= 200 m: vorhandener Hard-Reset-/Pending-Refresh-Pfad genau einmal
+  -> Abweichung < 200 m: KEEP_PROVISIONAL, kein Reload aus dieser Korrektur
+  -> Abweichung >= 200 m: REANCHOR über vorhandenen Hard-Reset-/Pending-Refresh-Pfad
+  -> Target inzwischen gewechselt: Korrektur verwerfen
 ```
 
-Der provisorische Origin wird bewusst **nicht** als „frisch/final“ deklariert. Dadurch ist keine neue Alters-/Accuracy-Magic-Number nötig. Die bestehende progressive Pipeline bleibt vollständig erhalten: API-Dedup-Booster nur auf leerem Kaltstart, Direct-stop/Add-ons, app-eigene Filter/Dedup/Sortierung, ORS asynchron, Same-Origin-Stable-Merge und Cross-Origin-Hard-Reset ohne Loading-Blackout.
+Zusätzliche Schutzmaßnahmen:
+- wenn ein Re-Anchor bereits feststeht, bevor der provisorische Core final wird, startet für den verworfenen Origin kein neues ORS-Enrichment;
+- ein bereits laufendes provisorisches ORS-Enrichment wird beim Re-Anchor abgebrochen;
+- Target-/Generation-Guards bleiben erhalten;
+- kein persistenter Standortcache, keine neue Dependency und keine zweite Location-/Loading-Architektur;
+- API-Dedup-Booster, Direct-stop/Add-ons, app-eigene Filter/Dedup/Sortierung, Stable-Merge und Hard-Reset-Darstellung bleiben fachlich unverändert.
 
-Kein persistenter Standortcache, keine neue Dependency und keine neue Location-/State-Architektur. Acceptance verlangt reale Evidence, dass der erste Core bei vorhandener `lastLocation` vor Abschluss des High-Accuracy-Fixes startet und die Anzeige dabei nicht unruhiger wird. Vergleichsbasis bleibt Build 153 mit `Loading`→Core ca. 2,59–3,02 s. Falls kein klarer Gewinn entsteht oder sichtbare Falschstand-/Refresh-Sprünge auftreten, wird der Fast Path verworfen statt weiter zu verkomplizieren.
+`CurrentLocationStartupPolicyTest` schützt die reine Policy für vorhandene/fehlende provisorische Position, `< 200 m`, exakt/über 200 m und stale Target. Die reale Anzahl der Core-/ORS-Zyklen wird **nicht** durch eine künstliche JVM-Nebenläufigkeitssimulation behauptet, sondern ist Teil der nun ausstehenden Feld-Evidence.
+
+### Jetzt erforderliche Realgeräte-Evidence
+
+1. Mindestens drei saubere Cold Starts mit vorhandener `lastLocation`.
+2. Im Log muss `⚡ provisional lastLocation available` **vor** dem ersten abfahrt.now-Core-Request erscheinen; der Core darf nicht mehr auf den Abschluss des High-Accuracy-Fixes warten.
+3. `Loading`→Core gegen Build-153-Baseline ca. 2,59–3,02 s vergleichen.
+4. Same-Origin-Fall `< 200 m`: genau ein Core-Zyklus, kein Extra-ORS nur wegen der Korrektur, ruhige progressive Liste.
+5. Re-Anchor `>= 200 m` soweit praktisch reproduzierbar: höchstens provisorischer Core + ein Ersatz-Core, kein dritter Core und kein Cross-Origin-Stable-Merge.
+6. Home→App-Resume regressionsfrei.
+7. Keine App-FATAL-/ANR-/Navigation-/Permission-/AccessGate-Regression.
+
+Build 154 bleibt bis dahin **pending evidence** und PR #10 bleibt Draft. Wenn der reale Gewinn gering ist oder der Fast Path störende falsche Standort-/Refresh-Sprünge erzeugt, wird die Änderung verworfen statt weiter verkompliziert.
 
 ## Separates Finding: ORS-Key-Probe
 
