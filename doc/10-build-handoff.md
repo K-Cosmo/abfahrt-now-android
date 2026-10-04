@@ -10,7 +10,7 @@ Build 151 schließt die sichtbare Lücke zwischen öffentlicher Community-Identi
 
 - `versionCode = 1510`, `versionName = 1.1.0`.
 - Settings verwendet einen separaten `CommunityFooter`.
-- sichtbarer Hinweis: unabhängige/unoffizielle Community-App; keine Zugehörigkeit zu abfahrt.now.
+- sichtbarer Hinweis: unabhängiges Community-Projekt; keine offizielle abfahrt.now-App.
 - abfahrt.now bleibt als Transitdaten-/API-Quelle sichtbar.
 - Community-Projektlink öffnet `https://github.com/K-Cosmo/abfahrt-now-android`.
 - Privacy/Terms-Links bleiben externe abfahrt.now-Links, sind aber ausdrücklich als **API**-Privacy/Terms beschriftet.
@@ -51,31 +51,40 @@ DOC2 ist **kein Runtime-Build**:
 - keine neue Runtime-Abnahme nötig;
 - normale Doku-/Governance-Gates bleiben erforderlich.
 
-## Build 152 UI/UX-Paket — implementation complete / pending real evidence
+## Build 152 UI/UX-Paket — implementation complete / follow-up pending real evidence
 
-Draft-PR #6 (`feature/build152-ui-ux`) enthält inzwischen den vollständigen Build-152-Scope. Build 152 ist **noch nicht accepted** und wird vor der Realgeräte-/UX-Abnahme nicht gemergt.
+Draft-PR #6 (`feature/build152-ui-ux`) enthält den Build-152-Scope plus den Follow-up aus dem ersten Realgeräte-Smoke. Build 152 ist **noch nicht accepted** und wird vor der erneuten Realgeräte-/UX-Abnahme nicht gemergt.
 
 Implementiert:
 1. `versionCode = 1520`, `versionName = 1.1.0`.
-2. Onboarding-Fließtext ist linksbündig statt im Blocksatz; Pflicht-Key und optionaler ORS-Hinweis bleiben einfach lesbar.
-3. `AccessGateViewModel` ist alleiniger Owner der Startup-Access-Entscheidung. Der nullable Preference-State bleibt geschlossen, bis eine echte Repository/DataStore-Emission vorliegt; erst danach werden `DepartureViewModel` und `RoutePlannerViewModel` erzeugt. Der bestehende `DepartureViewModel.preferences`-State ist damit Feature-/Settings-State und wählt kein Startziel.
-4. RoutePlanner-Start/Ziel liegen in einer gemeinsamen kompakten Surface mit Trenner und kleiner Tauschaktion rechts. Die vorhandenen `RouteEndpointField`-/`RouteSearchPanel`-Pfade, Photon, Current location, Home/Work, Swap und `/trips` werden weiterverwendet.
-5. Der Settings-Footer ist als ein zusammenhängender Block in den 24-dp-Settings-Rhythmus integriert; die vorherige Kombination aus Root-Spacern + `Arrangement.spacedBy(24.dp)` erzeugt keinen kumulierten Leerraum mehr.
-6. Der ungenutzte historische `AppFooter` inklusive alter Riles-Tech-/Legal-Hilfsfunktionen ist entfernt. `CommunityFooter` ist die einzige Runtime-Footer-Implementierung.
+2. Onboarding-Fließtext ist linksbündig; nach dem Realgeräte-Screenshot wurden Außenabstände, Kartenpadding, Zeilenhöhe und Zwischenräume weiter verdichtet. Pflicht-Key und optionaler ORS-Hinweis bleiben klar getrennt, ohne große Leerzonen.
+3. `AccessGateViewModel` ist alleiniger Owner der Startup-Access-Entscheidung. Der nullable Preference-State bleibt geschlossen, bis eine echte Repository/DataStore-Emission vorliegt; erst danach werden `DepartureViewModel` und `RoutePlannerViewModel` erzeugt. Der ursprüngliche API-Key-/Onboarding-Flicker ist auf dem eingerichteten Realgerät bestätigt beseitigt (F-152-001 closed).
+4. Der erste Build-152-Kaltstart-Smoke zeigte danach kurz `Standort erlauben`, obwohl die Standortberechtigung bereits erteilt war. Ursache war nicht der Access-Gate, sondern `PermissionOrIdleContent`: Der `Idle`-Zweig renderte den Prompt vor dem unmittelbar folgenden Fetch. Der Follow-up-Fix rendert den Permission-Prompt bei `perm.status.isGranted` nicht mehr (F-152-002 pending evidence).
+5. RoutePlanner-Start/Ziel liegen in einer gemeinsamen kompakten Surface mit Trenner und kleiner Tauschaktion rechts. Die vorhandenen `RouteEndpointField`-/`RouteSearchPanel`-Pfade, Photon, Current location, Home/Work, Swap und `/trips` werden weiterverwendet. Der Nutzer bewertet den aktuellen Kopf positiv; ein optionales weiteres Verkleinern wurde nach KIS nicht umgesetzt.
+6. Der Settings-Footer ist als ein zusammenhängender Block in den 24-dp-Settings-Rhythmus integriert. Im Follow-up wurde zusätzlich der missverständliche sichtbare Identitätskasten mit `nicht mit abfahrt.now verbunden` entfernt. Der verbleibende Schluss-Disclaimer wird satzweise in zentrierten Einzelzeilen dargestellt.
+7. Der ungenutzte historische `AppFooter` inklusive alter Riles-Tech-/Legal-Hilfsfunktionen ist entfernt. `CommunityFooter` ist die einzige Runtime-Footer-Implementierung.
 
 ### Automatisierte Evidence
 
 - Android CI #60: Access-Gate-Konvergenz vollständig grün — Static/Governance, committed Wrapper, Unit Tests, Debug und Release/R8.
 - Android CI #62: vollständiger Implementierungsstand einschließlich RoutePlanner-/Footer-Teil vollständig grün — dieselben Gates inklusive Release/R8.
+- Android CI #64: finaler Implementierungs-/Dokumentationsstand vor dem ersten Realgeräte-Smoke vollständig grün.
+- Der Follow-up-Head wird erneut mit demselben vollständigen CI-Gate geprüft; Runtime-Akzeptanz folgt erst nach dem erneuten Gerätetest.
 
-F-152-001 ist damit **fixed in code / pending evidence**, nicht mehr als offener Architekturkonflikt zu behandeln.
+### Realgerätebefund 04.10.2026
+
+- Build 152 ist real installiert und am kompakten RoutePlanner-Kopf sichtbar.
+- Der frühere API-Key-/Onboarding-Flicker ist nicht mehr sichtbar.
+- Der kompakte RoutePlanner-Kopf wird visuell positiv bewertet und bleibt unverändert.
+- Neu beobachtet: kurzer `Standort erlauben`-Flash trotz erteilter Permission; kausaler Minimalfix ist implementiert, Re-Test fehlt.
+- Footer und Onboarding erhielten auf Basis der Screenshots einen kleinen Follow-up.
 
 ### Vor Abnahme noch erforderlich
 
-1. Eingerichtetes Realgerät mehrfach kalt starten: kein sichtbarer Onboarding-/API-Key-Flash.
-2. RoutePlanner: Startsuche, Zielsuche, Current location, Home/Work, Swap und `Route finden` praktisch prüfen.
-3. Compact-Width-Smoke: gemeinsamer RoutePlanner-Kopf sowie beide Onboarding-Schritte; keine abgeschnittenen oder unbedienbaren Elemente.
-4. Settings bis ORS/Community-Footer scrollen und neuen Abstand visuell akzeptieren.
+1. Eingerichtetes Realgerät mit bereits erteilter Standortberechtigung mehrfach kalt starten: weder Onboarding/API-Key noch `Standort erlauben` dürfen transient sichtbar werden.
+2. RoutePlanner-Funktionssmoke: Startsuche, Zielsuche, Current location, Home/Work, Swap und `Route finden` praktisch prüfen.
+3. Compact-Width-Smoke für beide Onboarding-Schritte; keine abgeschnittenen oder unbedienbaren Elemente.
+4. Settings bis ORS/Community-Footer scrollen und vereinfachten Footer sowie Satzzeilen visuell akzeptieren.
 5. keine neue App-FATAL-/ANR-/Navigation-Signatur im getesteten Lauf.
 6. Danach erst Build 152 abschließend als accepted nach `/doc` konvergieren, PR aus Draft nehmen und mergen.
 
