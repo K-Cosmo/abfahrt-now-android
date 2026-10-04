@@ -13,6 +13,7 @@ import now.abfahrt.transit.BuildConfig
 import now.abfahrt.transit.data.api.GitHubReleaseApi
 import now.abfahrt.transit.util.AppVersionInfo
 import now.abfahrt.transit.util.AvailableUpdate
+import now.abfahrt.transit.util.StartupTrace
 import now.abfahrt.transit.util.UpdateReleasePolicy
 import javax.inject.Inject
 
@@ -25,20 +26,33 @@ class UpdateViewModel @Inject constructor(
     val availableUpdate: StateFlow<AvailableUpdate?> = _availableUpdate.asStateFlow()
 
     init {
+        StartupTrace.mark("update_vm_created")
         checkLatestRelease()
     }
 
     private fun checkLatestRelease() {
         viewModelScope.launch {
+            val started = StartupTrace.nowUptimeMs()
+            StartupTrace.mark("update_check_start")
             try {
                 val release = githubReleaseApi.latestRelease()
                 _availableUpdate.value = UpdateReleasePolicy.newerThanCurrent(
                     tagName = release.tagName,
                     currentVersionCode = AppVersionInfo.versionCode
                 )
+                StartupTrace.duration(
+                    event = "update_check_complete",
+                    startedUptimeMs = started,
+                    details = "result=success"
+                )
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (error: Exception) {
+                StartupTrace.duration(
+                    event = "update_check_complete",
+                    startedUptimeMs = started,
+                    details = "result=unavailable type=${error::class.java.simpleName}"
+                )
                 // Update availability is non-critical. Network/GitHub failures must never
                 // block startup or replace normal app error handling.
                 if (BuildConfig.DEBUG) {
