@@ -21,13 +21,14 @@ RELEASE1 ist **Release Engineering**, kein neuer Produktbuild. Es ändert keine 
 ## Signing-Grundsätze
 
 1. Der bereits vorhandene Release-Key wird unverändert weiterverwendet; ein neuer Key ist für RELEASE1 ausdrücklich ausgeschlossen.
-2. Keystore und Passwörter dürfen **niemals** in Git, GitHub Actions Logs, `/doc`, `/evidence/public` oder anderen öffentlichen Artefakten landen.
-3. Der vorhandene Keystore liegt außerhalb des Repository-Workspaces und muss mindestens ein separates, lesbares Backup haben.
-4. Vor Verwendung muss der Signer Certificate SHA-256 des Keystore-Alias mit dem Zertifikat einer bereits signierten Release-APK übereinstimmen. Als Referenz dient entweder eine frühere signierte APK-Datei oder eine Base-APK, die von einem noch Release-signierten Gerät gezogen wurde.
-5. Der öffentliche Repository-Code darf nur die **Mechanik** der Signing-Konfiguration enthalten, niemals Werte/Secrets.
-6. Die bestehende normale Android-CI bleibt credential-frei und muss `assembleRelease` weiterhin ohne Signing-Secrets ausführen können.
-7. Wenn eine Release-Signierung ausdrücklich angefordert wird, muss eine unvollständige Signing-Konfiguration hart fehlschlagen; ein versehentlich als Release-Kandidat behandeltes unsigniertes APK ist nicht zulässig.
-8. Signing-Werte dürfen lokal über Gradle-Properties **oder** Environment-Variablen `ABFAHRT_RELEASE_*` bereitgestellt werden. Für den ersten lokalen Release wird die Eingabe der Passwörter als nicht persistente PowerShell-Environment-Variable bevorzugt.
+2. Die Identität dieses Keypairs ist ab RELEASE1 ein dauerhafter Release-Invariant für direkte APK-Updates.
+3. Keystore und Passwörter dürfen **niemals** in Git, GitHub Actions Logs, `/doc`, `/evidence/public` oder anderen öffentlichen Artefakten landen.
+4. Der vorhandene Keystore liegt außerhalb des Repository-Workspaces und muss mindestens ein separates, lesbares Backup haben.
+5. Vor Verwendung muss der Signer Certificate SHA-256 des Keystore-Alias mit dem Zertifikat einer bereits signierten Release-APK übereinstimmen. Als Referenz dient entweder eine frühere signierte APK-Datei oder eine Base-APK, die von einem noch Release-signierten Gerät gezogen wurde.
+6. Der öffentliche Repository-Code darf nur die **Mechanik** der Signing-Konfiguration enthalten, niemals Werte/Secrets.
+7. Die bestehende normale Android-CI bleibt credential-frei und muss `assembleRelease` weiterhin ohne Signing-Secrets ausführen können.
+8. Wenn eine Release-Signierung ausdrücklich angefordert wird, muss eine unvollständige Signing-Konfiguration hart fehlschlagen; ein versehentlich als Release-Kandidat behandeltes unsigniertes APK ist nicht zulässig.
+9. Signing-Werte dürfen lokal über Gradle-Properties **oder** Environment-Variablen `ABFAHRT_RELEASE_*` bereitgestellt werden. Für den ersten lokalen Release wird die Eingabe der Passwörter als nicht persistente PowerShell-Environment-Variable bevorzugt.
 
 ## Konfigurationsvertrag
 
