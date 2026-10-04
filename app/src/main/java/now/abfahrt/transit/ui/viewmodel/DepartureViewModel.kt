@@ -50,6 +50,8 @@ import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 import javax.inject.Inject
 import kotlin.coroutines.resume
+import now.abfahrt.transit.util.CurrentLocationStartupPolicy
+import now.abfahrt.transit.util.StartupLocationCorrectionDecision
 import now.abfahrt.transit.util.DepartureDisplayOrdering
 import now.abfahrt.transit.util.DepartureStableMerger
 import now.abfahrt.transit.util.DepartureServiceIdentity
@@ -89,6 +91,12 @@ class DepartureViewModel @Inject constructor(
         val windowStartMinutes: Int,
         val windowEndMinutes: Int,
         val loadedAt: Long
+    )
+
+    private data class ResolvedTargetCoordinates(
+        val lat: Double,
+        val lon: Double,
+        val provisional: Boolean = false
     )
 
 
@@ -201,7 +209,6 @@ class DepartureViewModel @Inject constructor(
     private var walkingAnchorLat: Double? = cachedWalkingAnchorLat
     private var walkingAnchorLon: Double? = cachedWalkingAnchorLon
 
-    private val MOVEMENT_THRESHOLD_M = 200f
     private val MANUAL_STATION_RADIUS_M = 80
     private val SEARCH_STATION_RADIUS_M = 200
     private val WALKING_REQUEST_DELAY_MS = 650L
@@ -227,14 +234,14 @@ class DepartureViewModel @Inject constructor(
                 longitude = lastLon!!
             }.distanceTo(loc)
 
-            if (prev >= MOVEMENT_THRESHOLD_M) {
+            if (prev >= CurrentLocationStartupPolicy.MOVEMENT_THRESHOLD_METERS) {
                 Log.d("AbfahrtLocation", "📍 Moved ${prev.toInt()}m")
                 lastLat = loc.latitude
                 lastLon = loc.longitude
                 cachedLastLat = loc.latitude
                 cachedLastLon = loc.longitude
                 pendingHardResetRefresh = true
-                if (isLoadInProgress) {
+                if (isLoadInProgress || provisionalStartupLoadActive) {
                     pendingLocationRefresh = true
                     Log.d("AbfahrtRefresh", "⏳ Deferred hard-reset location refresh while load is active")
                     return
@@ -249,8 +256,10 @@ class DepartureViewModel @Inject constructor(
     private var activeLoadSignature: String? = null
     private var walkingEnrichmentJob: Job? = null
     private var refilterJob: Job? = null
+    private var startupLocationCorrectionJob: Job? = null
     private var lastWalkingResponseSignature: String? = null
     private var isLoadInProgress: Boolean = false
+    private var provisionalStartupLoadActive: Boolean = false
     private var pendingLocationRefresh: Boolean = false
     private var pendingHardResetRefresh: Boolean = false
     private var pendingTravelModeRefresh: Boolean = false
@@ -437,13 +446,16 @@ class DepartureViewModel @Inject constructor(
             LocationPriority.PRIORITY_BALANCED_POWER_ACCURACY,
             120_000L
         )
-            .setMinUpdateDistanceMeters(MOVEMENT_THRESHOLD_M)
+            .setMinUpdateDistanceMeters(CurrentLocationStartupPolicy.MOVEMENT_THRESHOLD_METERS)
             .setWaitForAccurateLocation(false)
             .build()
 
         LocationServices.getFusedLocationProviderClient(context)
             .requestLocationUpdates(request, locationCallback, context.mainLooper)
-        Log.d("AbfahrtLocation", "▶ Location updates started (threshold=${MOVEMENT_THRESHOLD_M}m)")
+        Log.d(
+            "AbfahrtLocation",
+            "▶ Location updates started (threshold=${CurrentLocationStartupPolicy.MOVEMENT_THRESHOLD_METERS}m)"
+        )
     }
 
     fun stopLocationUpdates() {
@@ -473,40 +485,117 @@ class DepartureViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = DepartureUiState.Loading
             try {
-                val location = getBestLocation()
-                    ?: throw Exception(context.getString(R.string.error_location))
-
-                if (location.latitude == 0.0 && location.longitude == 0.0)
-                    throw Exception(context.getString(R.string.error_no_gps))
-
-                lastLat = location.latitude
-                lastLon = location.longitude
-                cachedLastLat = location.latitude
-                cachedLastLon = location.longitude
-                loadForCurrentTarget(force = true)
+                loadForCurrentTarget(
+                    force = true,
+                    allowProvisionalLocation = lastSuccessfulLoadAt == null
+                )
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                _uiState.value = DepartureUiState.Error(friendlyMessage(e))
+                val errorState = DepartureUiState.Error(friendlyMessage(e))
+                _uiState.value = errorState
+                cachedUiState = errorState
             }
         }
     }
 
     @SuppressLint("MissingPermission")
-    private suspend fun getBestLocation(): Location? {
+    private suspend fun getHighAccuracyLocation(): Location? {
         val fusedClient = LocationServices.getFusedLocationProviderClient(context)
         val cts = CancellationTokenSource()
-
-        val fresh: Location? = suspendCancellableCoroutine { cont ->
+        return suspendCancellableCoroutine { cont ->
             fusedClient.getCurrentLocation(LocationPriority.PRIORITY_HIGH_ACCURACY, cts.token)
                 .addOnSuccessListener { cont.resume(it) }
                 .addOnFailureListener { cont.resume(null) }
             cont.invokeOnCancellation { cts.cancel() }
         }
-        if (fresh != null) return fresh
+    }
 
+    @SuppressLint("MissingPermission")
+    private suspend fun getLastKnownLocation(): Location? {
+        val fusedClient = LocationServices.getFusedLocationProviderClient(context)
         return suspendCancellableCoroutine { cont ->
             fusedClient.lastLocation
                 .addOnSuccessListener { cont.resume(it) }
                 .addOnFailureListener { cont.resume(null) }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private suspend fun getBestLocation(): Location? {
+        val fresh = getHighAccuracyLocation()
+        if (fresh != null) return fresh
+        return getLastKnownLocation()
+    }
+
+    private fun isUsableLocation(location: Location): Boolean =
+        location.latitude != 0.0 || location.longitude != 0.0
+
+    private fun scheduleStartupLocationCorrection(
+        provisionalLat: Double,
+        provisionalLon: Double,
+        requestGeneration: Long
+    ) {
+        startupLocationCorrectionJob?.cancel()
+        startupLocationCorrectionJob = viewModelScope.launch {
+            val fresh = try {
+                getHighAccuracyLocation()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Log.d("AbfahrtLocation", "🎯 high-accuracy startup correction unavailable: ${e.javaClass.simpleName}")
+                null
+            }
+
+            if (fresh == null || !isUsableLocation(fresh)) {
+                Log.d("AbfahrtLocation", "🎯 high-accuracy startup correction unavailable; keeping provisional origin")
+                return@launch
+            }
+
+            val targetStillCurrent = requestGeneration == activeTargetGeneration && isUsingCurrentLocation
+            val correctionDistance = distanceMeters(
+                provisionalLat,
+                provisionalLon,
+                fresh.latitude,
+                fresh.longitude
+            )
+
+            when (
+                CurrentLocationStartupPolicy.correctionDecision(
+                    targetStillCurrent = targetStillCurrent,
+                    distanceMeters = correctionDistance
+                )
+            ) {
+                StartupLocationCorrectionDecision.IGNORE_STALE_TARGET -> {
+                    Log.d("AbfahrtLocation", "🎯 dropping stale high-accuracy startup correction")
+                }
+                StartupLocationCorrectionDecision.KEEP_PROVISIONAL -> {
+                    Log.d(
+                        "AbfahrtLocation",
+                        "🎯 high-accuracy startup correction same-origin distance=${correctionDistance.toInt()}m; keeping current Core context"
+                    )
+                }
+                StartupLocationCorrectionDecision.REANCHOR -> {
+                    lastLat = fresh.latitude
+                    lastLon = fresh.longitude
+                    cachedLastLat = fresh.latitude
+                    cachedLastLon = fresh.longitude
+                    pendingHardResetRefresh = true
+                    pendingLocationRefresh = true
+                    lastWalkingResponseSignature = null
+                    if (walkingEnrichmentJob?.isActive == true) {
+                        walkingEnrichmentJob?.cancel()
+                        Log.d("AbfahrtWalk", "🛑 cancelled provisional-origin ORS because location re-anchor is pending")
+                    }
+                    Log.d(
+                        "AbfahrtLocation",
+                        "🧭 high-accuracy startup correction requires re-anchor distance=${correctionDistance.toInt()}m"
+                    )
+                    if (!provisionalStartupLoadActive) {
+                        launchPendingLocationRefreshIfPossible()
+                    }
+                }
+            }
         }
     }
 
@@ -601,26 +690,58 @@ class DepartureViewModel @Inject constructor(
     private fun currentRequestRadius(): Int =
         if (isUsingCurrentLocation) preferences.value.radius else effectiveStationRadius
 
-    private suspend fun resolveCurrentTargetCoordinates(): Pair<Double, Double> {
+    private suspend fun resolveCurrentTargetCoordinates(
+        allowProvisionalLocation: Boolean = false
+    ): ResolvedTargetCoordinates {
         return when (val target = _searchUiState.value.selectedTarget) {
             is SearchTarget.CurrentLocation -> {
+                if (allowProvisionalLocation) {
+                    val lastKnown = getLastKnownLocation()
+                    if (
+                        CurrentLocationStartupPolicy.shouldUseProvisionalOrigin(lastKnown != null) &&
+                        lastKnown != null &&
+                        isUsableLocation(lastKnown)
+                    ) {
+                        lastLat = lastKnown.latitude
+                        lastLon = lastKnown.longitude
+                        cachedLastLat = lastKnown.latitude
+                        cachedLastLon = lastKnown.longitude
+                        Log.d(
+                            "AbfahrtLocation",
+                            "⚡ provisional lastLocation available; Core may start before high-accuracy correction"
+                        )
+                        return ResolvedTargetCoordinates(
+                            lat = lastKnown.latitude,
+                            lon = lastKnown.longitude,
+                            provisional = true
+                        )
+                    }
+                    Log.d("AbfahrtLocation", "⚡ no usable provisional lastLocation; waiting for high accuracy")
+                }
+
                 val location = getBestLocation() ?: throw Exception(context.getString(R.string.error_location))
-                if (location.latitude == 0.0 && location.longitude == 0.0) {
+                if (!isUsableLocation(location)) {
                     throw Exception(context.getString(R.string.error_no_gps))
                 }
                 lastLat = location.latitude
                 lastLon = location.longitude
                 cachedLastLat = location.latitude
                 cachedLastLon = location.longitude
-                location.latitude to location.longitude
+                ResolvedTargetCoordinates(location.latitude, location.longitude)
             }
-            is SearchTarget.Station -> target.lat to target.lon
+            is SearchTarget.Station -> ResolvedTargetCoordinates(target.lat, target.lon)
         }
     }
 
-    private suspend fun loadForCurrentTarget(force: Boolean = false, hardReset: Boolean = false) {
+    private suspend fun loadForCurrentTarget(
+        force: Boolean = false,
+        hardReset: Boolean = false,
+        allowProvisionalLocation: Boolean = false
+    ) {
         val requestGeneration = activeTargetGeneration
-        val (lat, lon) = resolveCurrentTargetCoordinates()
+        val resolved = resolveCurrentTargetCoordinates(allowProvisionalLocation = allowProvisionalLocation)
+        val lat = resolved.lat
+        val lon = resolved.lon
         if (!isCurrentTargetRequest(lat, lon, requestGeneration)) {
             Log.d("AbfahrtTarget", "🚫 Dropping stale target request before network generation=$requestGeneration active=$activeTargetGeneration lat=$lat lon=$lon")
             return
@@ -631,7 +752,39 @@ class DepartureViewModel @Inject constructor(
             return
         }
         val shouldHardReset = hardReset || pendingHardResetRefresh
-        loadWithCoordinates(lat, lon, radius, requestGeneration, shouldHardReset)
+        val provisionalFastPath = resolved.provisional && !shouldHardReset && isUsingCurrentLocation
+        if (provisionalFastPath) {
+            provisionalStartupLoadActive = true
+            scheduleStartupLocationCorrection(
+                provisionalLat = lat,
+                provisionalLon = lon,
+                requestGeneration = requestGeneration
+            )
+        }
+
+        try {
+            loadWithCoordinates(lat, lon, radius, requestGeneration, shouldHardReset)
+        } finally {
+            if (provisionalFastPath) {
+                provisionalStartupLoadActive = false
+                launchPendingLocationRefreshIfPossible()
+            }
+        }
+    }
+
+    private fun launchPendingLocationRefreshIfPossible(): Boolean {
+        if (!pendingLocationRefresh || !isUsingCurrentLocation || isLoadInProgress || provisionalStartupLoadActive) {
+            return false
+        }
+        pendingLocationRefresh = false
+        viewModelScope.launch {
+            if (!isLoadInProgress && isUsingCurrentLocation) {
+                loadForCurrentTarget(force = true, hardReset = pendingHardResetRefresh)
+            } else if (isUsingCurrentLocation) {
+                pendingLocationRefresh = true
+            }
+        }
+        return true
     }
 
     private fun restartAutoRefresh(intervalMinutes: Int) {
@@ -809,31 +962,35 @@ class DepartureViewModel @Inject constructor(
                     cachedUiState = successState
 
                     if (response.isFinal) {
-                        val walkingOrigin = when {
-                            isUsingCurrentLocation -> lat to lon
-                            searchDistanceReference != null -> searchDistanceReference
-                            else -> null
-                        }
-                        if (walkingOrigin != null) {
-                            val shouldEnrichWalking = shouldLaunchWalkingEnrichment(
-                                response = displayedResponse,
-                                sameWalkingOrigin = sameWalkingOrigin,
-                                force = forceNextWalkingEnrichment
-                            )
-                            if (shouldEnrichWalking) {
-                                forceNextWalkingEnrichment = false
-                                launchWalkingEnrichment(
-                                    response = displayedResponse,
-                                    originLat = walkingOrigin.first,
-                                    originLon = walkingOrigin.second,
-                                    requestGeneration = requestGeneration,
-                                    requestSignature = requestSignature
-                                )
-                            } else {
-                                Log.d("AbfahrtWalk", "🧘 skipped ORS enrichment: same walking origin and carried metrics are available")
+                        if (pendingLocationRefresh && isUsingCurrentLocation) {
+                            Log.d("AbfahrtWalk", "⏭️ skipping ORS enrichment because a location re-anchor is pending")
+                        } else {
+                            val walkingOrigin = when {
+                                isUsingCurrentLocation -> lat to lon
+                                searchDistanceReference != null -> searchDistanceReference
+                                else -> null
                             }
-                        } else if (BuildConfig.DEBUG && !isUsingCurrentLocation) {
-                            Log.d("AbfahrtWalk", "⏭️ search-mode ORS skipped because current location is unavailable")
+                            if (walkingOrigin != null) {
+                                val shouldEnrichWalking = shouldLaunchWalkingEnrichment(
+                                    response = displayedResponse,
+                                    sameWalkingOrigin = sameWalkingOrigin,
+                                    force = forceNextWalkingEnrichment
+                                )
+                                if (shouldEnrichWalking) {
+                                    forceNextWalkingEnrichment = false
+                                    launchWalkingEnrichment(
+                                        response = displayedResponse,
+                                        originLat = walkingOrigin.first,
+                                        originLon = walkingOrigin.second,
+                                        requestGeneration = requestGeneration,
+                                        requestSignature = requestSignature
+                                    )
+                                } else {
+                                    Log.d("AbfahrtWalk", "🧘 skipped ORS enrichment: same walking origin and carried metrics are available")
+                                }
+                            } else if (BuildConfig.DEBUG && !isUsingCurrentLocation) {
+                                Log.d("AbfahrtWalk", "⏭️ search-mode ORS skipped because current location is unavailable")
+                            }
                         }
                     }
 
@@ -900,12 +1057,7 @@ class DepartureViewModel @Inject constructor(
             isLoadInProgress = false
             _isRefreshing.value = false
             if (pendingLocationRefresh && isUsingCurrentLocation) {
-                pendingLocationRefresh = false
-                viewModelScope.launch {
-                    if (!isLoadInProgress) {
-                        loadForCurrentTarget(force = true, hardReset = pendingHardResetRefresh)
-                    }
-                }
+                launchPendingLocationRefreshIfPossible()
             } else if (pendingTravelModeRefresh) {
                 pendingTravelModeRefresh = false
                 viewModelScope.launch {
@@ -934,7 +1086,7 @@ class DepartureViewModel @Inject constructor(
         if (!isUsingCurrentLocation) return false
         val anchorLat = walkingAnchorLat ?: return false
         val anchorLon = walkingAnchorLon ?: return false
-        return distanceMeters(anchorLat, anchorLon, lat, lon) < MOVEMENT_THRESHOLD_M
+        return distanceMeters(anchorLat, anchorLon, lat, lon) < CurrentLocationStartupPolicy.MOVEMENT_THRESHOLD_METERS
     }
 
     private fun hasWalkingMetrics(response: DepartureResponse): Boolean =
@@ -1880,7 +2032,11 @@ class DepartureViewModel @Inject constructor(
 
         val anchorLat = walkingAnchorLat
         val anchorLon = walkingAnchorLon
-        if (anchorLat == null || anchorLon == null || distanceMeters(anchorLat, anchorLon, originLat, originLon) >= MOVEMENT_THRESHOLD_M) {
+        if (
+            anchorLat == null ||
+            anchorLon == null ||
+            distanceMeters(anchorLat, anchorLon, originLat, originLon) >= CurrentLocationStartupPolicy.MOVEMENT_THRESHOLD_METERS
+        ) {
             walkingAnchorLat = originLat
             walkingAnchorLon = originLon
             cachedWalkingAnchorLat = originLat
@@ -2093,6 +2249,7 @@ class DepartureViewModel @Inject constructor(
     }
 
     override fun onCleared() {
+        startupLocationCorrectionJob?.cancel()
         walkingEnrichmentJob?.cancel()
         refilterJob?.cancel()
         autoRefreshJob?.cancel()
