@@ -44,15 +44,33 @@ Acceptance-Evidence:
 
 F-152-001 und F-152-002 sind geschlossen.
 
-## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018) — next
+## Build 153 — Startup/Main-Thread-Instrumentierung (AB-018) — in progress / pending evidence
 
-Build 153 beginnt mit Messinstrumentierung der Kaltstart-/Main-Thread-Schritte auf Basis des akzeptierten Build 152. Keine spekulative Performance-Optimierung. Erst reproduzierbare Messwerte, dann problembezogene Änderung in kleinem Scope.
+Draft-PR #9 enthält Instrumentierungsstufe A auf Basis des akzeptierten Build 152. `versionCode = 1530`; `versionName`, SDK-/Toolchain-Baseline und Produktsemantik bleiben unverändert. Build 153 ist **nicht accepted**, solange die reale Cold/Warm/Resume-Evidence fehlt.
 
-Mindestziel der ersten Runde:
-- Zeitpunkte für Process/Activity/Compose-/Preference-Gate/Location-/initialen Departure-Fetch nachvollziehbar messen;
-- Main-Thread-Arbeit identifizieren statt vermuten;
-- Cold/Warm-Start getrennt erfassen;
-- keine UX-/Routing-/Provider-Semantik gleichzeitig ändern.
+Instrumentierungsstufe A:
+- zentrale, dependency-freie `StartupTrace`-Zeitbasis über Prozess-Uptime;
+- Application-/MapLibre-Initialisierung;
+- Activity-Create mit `cold`/`warm`, Compose-Commit, erster Frame und Lifecycle-Resume;
+- erste echte Preference-Emission und Access-Gate-Freigabe;
+- nicht-kritischer GitHub-Update-Check;
+- read-only Beobachtung der bestehenden Departure-State-Kette (`Idle` → `Loading` → progressive/finale `Success` oder `Error`);
+- bestehende `AbfahrtLocation`-, OkHttp-, `AbfahrtWalk`- und Android-Davey-/Skipped-Frame-Logs dienen der zeitlichen Korrelation.
+
+Bewusst **nicht** in Stufe A:
+- kein Umbau des großen `DepartureViewModel`;
+- keine neue Dependency oder Benchmark-/Jank-Library;
+- keine Lazy-Initialisierung, Dispatcher-, DataStore-, Keystore-, Netzwerk-, ORS- oder UI-Optimierung;
+- keine Änderung an Routing, Filtern, Sortierung oder Provider-Semantik.
+
+Gate vor jeder Optimierungsentscheidung:
+1. vollständiges Android-CI-Gate auf dem finalen Instrumentierungs-Head;
+2. mindestens drei Cold Starts auf eingerichtetem Realgerät;
+3. Warm-Relaunch im selben Prozess, sofern reproduzierbar, plus Home→App-Resume;
+4. `AbfahrtStartup` zeitlich mit Location, Core-Netzwerk, ORS und ggf. Davey-/Skipped-Frame-Signaturen abgleichen;
+5. erst wenn diese Evidence eine Phase belastbar eingrenzt, wird Instrumentierungsstufe B oder eine gezielte Optimierung beschlossen.
+
+Instrumentierungsstufe B ist daher optional und nicht automatisch Teil von Build 153: direkte Marker in `getBestLocation()`, Core-Response-Unterphasen oder ORS-Unterphasen werden nur ergänzt, wenn Stufe A die Ursache nicht ausreichend auflöst.
 
 ## Release-Grundsatz
 
