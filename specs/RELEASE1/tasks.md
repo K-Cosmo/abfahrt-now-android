@@ -6,16 +6,16 @@
 - [x] `.gitignore` auf Keystore-/Secret-Schutz prüfen.
 - [x] Release-Tag-Vertrag `v1.1.0-b155` bestätigen.
 - [x] Signing-/Verify-/16-KB-/Realgeräte-Gate spezifizieren.
-- [x] Feldstand aufnehmen: App ist bereits auf drei Geräten mit vorhandenem Release-Key installiert; RELEASE1 darf keinen neuen Key erzeugen.
+- [x] Feldstand aufnehmen: App ist bereits auf drei Geräten mit altem Release-Key installiert.
+- [x] Korrektur aufnehmen: historisches Zertifikat enthält irreführende Riles-Tech-/Leonard-Scharf-Metadaten; RELEASE1 rotiert deshalb kontrolliert auf neutralen Community-Key statt den alten Signer dauerhaft fortzuführen.
+- [x] Android-v3.1-Rotationspfad für API 33+ als passend zum `minSdk 34`-Produktstand festlegen.
 
 ## Repository Implementation
-- [x] `app/build.gradle.kts` um optionale `ABFAHRT_RELEASE_*`-Signing-Konfiguration erweitern.
-- [x] vollständige Vierer-Konfiguration erzwingen; Teilkonfiguration hart ablehnen.
-- [x] `releaseSigningRequired=true` als explizites Anti-Unsigned-Gate implementieren.
-- [x] fehlende Keystore-Datei bei aktivem Signing hart ablehnen.
-- [x] normale credential-freie CI ohne Release-Secrets erhalten.
-- [x] keine Secrets oder Werte loggen.
-- [x] öffentliche Signing-Anleitung ohne geheime Beispielwerte ergänzen.
+- [x] Gradle-Release bewusst unsigned lassen; keine Single-Key-`signingConfig`, die versehentlich New-Key-only-APK erzeugen könnte.
+- [x] normale credential-freie CI / Release-R8 erhalten.
+- [x] normative Rotation in `doc/15-release-signing.md` dokumentieren.
+- [x] RELEASE1 Spec/Plan auf `old -> new` Signing-Certificate-Lineage umstellen.
+- [ ] optionalen lokalen Helper für zipalign/apksigner erst nach manuell bewiesenem Rotationspfad ergänzen; kein Big-Bang-Release-Skript vor Evidence.
 
 ## Automated Verification
 - [ ] Static/Governance/Compatibility grün.
@@ -23,31 +23,42 @@
 - [ ] Unit Tests grün.
 - [ ] Debug build grün.
 - [ ] unsigned Release/R8 in normaler CI weiterhin grün.
-- [ ] negativer lokaler Test: `releaseSigningRequired=true` ohne Signing-Werte schlägt erwartbar fehl.
-- [ ] negativer lokaler Test: Teilkonfiguration schlägt erwartbar fehl.
 
-## Existing Key Verification
-- [ ] vorhandenen Release-Keystore außerhalb des Repos lokalisieren.
-- [ ] tatsächlichen bestehenden Alias per `keytool -list -v` bestimmen.
-- [ ] Signer Certificate SHA-256 des Keystore-Alias erfassen.
-- [ ] separates Backup des **bestehenden** Keystores verifizieren.
-- [ ] als Signer-Referenz entweder ein noch Release-signiertes Gerät oder eine frühere mit diesem Key signierte APK verwenden.
-- [ ] bei Geräte-Referenz APK-Pfad mit `adb shell pm path now.abfahrt.transit` ermitteln und Base-APK per `adb pull` lokal sichern.
-- [ ] Signer Certificate SHA-256 der Referenz-APK mit `apksigner verify --print-certs` erfassen.
-- [ ] Fingerprints müssen exakt übereinstimmen; bei Abweichung RELEASE1 stoppen.
+## Old-Key Verification
+- [ ] alten Release-Keystore außerhalb des Repos lokalisieren.
+- [ ] tatsächlichen alten Alias per `keytool -list -v` bestimmen.
+- [ ] Certificate SHA-256 des alten Alias erfassen.
+- [ ] separates Backup des alten Keystores verifizieren.
+- [ ] Referenz: frühere signierte APK oder `base.apk` eines noch Old-Key-signierten Geräts verwenden.
+- [ ] Referenz-APK mit `apksigner verify --verbose --print-certs` prüfen.
+- [ ] Old-Key-Fingerprints müssen exakt übereinstimmen; sonst RELEASE1 stoppen.
+
+## New Community Key
+- [ ] neuen Keystore außerhalb des Repos erzeugen.
+- [ ] RSA 4096 / JKS / lange Gültigkeit verwenden.
+- [ ] Alias `abfahrt-now-community` verwenden.
+- [ ] neutralen Subject verwenden, empfohlen `CN=Abfahrt Now Community, C=DE`.
+- [ ] neuen Keystore separat sichern und Backup-Zugriff verifizieren.
 - [ ] keine Passwörter im Terminalverlauf/Repo/Evidence hinterlassen.
 
+## Signing Certificate Lineage
+- [ ] Lineage mit `apksigner rotate` old -> new erzeugen.
+- [ ] Lineage außerhalb des Repos archivieren und sichern.
+- [ ] keinen künstlich niedrigeren `--rotation-min-sdk-version` setzen; Standard-API-33+-Pfad verwenden.
+
 ## Signed Artifact Gate
-- [ ] PowerShell-Session mit `ABFAHRT_RELEASE_*` sicher auf den bestehenden Keystore setzen.
-- [ ] Unit Tests + Release/R8 mit `releaseSigningRequired=true` erfolgreich.
+- [ ] `:app:testDebugUnitTest :app:assembleRelease` erfolgreich.
+- [ ] unsigned Release-APK mit `zipalign -P 16 -f 4` ausrichten.
+- [ ] aligned APK mit altem Signer + neuem Signer + `--lineage` signieren.
 - [ ] `apksigner verify --verbose --print-certs` erfolgreich.
-- [ ] Signer Certificate SHA-256 entspricht dem vorher bestätigten bestehenden Signer.
+- [ ] erwartete Old→New-Lineage verifizieren.
+- [ ] neuen Signer Certificate SHA-256 dokumentieren.
 - [ ] APK-Datei-SHA-256 dokumentieren.
 - [ ] `zipalign -c -P 16 -v 4` erfolgreich.
 
 ## Real-device Release Smoke
-- [ ] auf mindestens einem bestehenden Release-Gerät **nicht deinstallieren**.
-- [ ] exakt signierte Release-APK mit `adb install -r` erfolgreich aktualisieren.
+- [ ] auf mindestens einem bestehenden Old-Key-Gerät **nicht deinstallieren**.
+- [ ] exakt rotierte Release-APK mit `adb install -r` erfolgreich aktualisieren.
 - [ ] lokale Preferences/API-Keys bleiben erhalten.
 - [ ] `versionCode=1550`, `versionName=1.1.0` bestätigen.
 - [ ] `PAGE_SIZE=16384` auf dem 16-KB-Testgerät bestätigen.
@@ -60,12 +71,12 @@
 
 ## GitHub Release
 - [ ] finales APK sprechend als `abfahrt-now-v1.1.0-b155.apk` bereitstellen.
-- [ ] Release Notes inkl. APK-SHA-256 und Signing-Fingerprint vorbereiten.
-- [ ] dokumentieren, dass derselbe bestehende Release-Key weiterverwendet wird.
+- [ ] Release Notes inkl. APK-SHA-256 und neuem Signing-Fingerprint vorbereiten.
+- [ ] kontrollierte Key-Rotation / erhaltene Android-Update-Lineage dokumentieren.
 - [ ] Tag/Release `v1.1.0-b155` erstellen.
 - [ ] exakt verifiziertes APK als Asset hochladen.
 - [ ] Update-Checker gegen echtes Release testen.
 - [ ] RELEASE1-Evidence nach `/evidence/public/release-1/` konvergieren.
 
 ## Nicht blockierend / später
-- [ ] optionalen signierten GitHub-Actions-Release-Workflow erst nach bewiesenem lokalen RELEASE1-Pfad planen.
+- [ ] optionalen signierten GitHub-Actions-Release-Workflow erst nach bewiesenem lokalen RELEASE1-Rotationspfad planen.
