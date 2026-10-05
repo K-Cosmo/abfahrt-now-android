@@ -50,8 +50,9 @@ apksigner sign \
   <aligned-apk>
 ```
 
-3. Passwörter interaktiv oder über flüchtige Environment-Variablen übergeben; keine Klartext-Literale in History/Repo.
-4. Nach `apksigner sign` wird das APK nicht mehr verändert.
+3. Für Build 155 (`minSdk 34`) wird der Standard-Rotationspfad für API 33+ verwendet; kein künstlich niedrigeres `--rotation-min-sdk-version`.
+4. Passwörter interaktiv oder über flüchtige Environment-Variablen übergeben; keine Klartext-Literale in History/Repo.
+5. Nach `apksigner sign` wird das APK nicht mehr verändert.
 
 ## Phase F — kryptografische und 16-KB-Verifikation
 
