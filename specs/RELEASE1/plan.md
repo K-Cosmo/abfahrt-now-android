@@ -1,89 +1,93 @@
 # RELEASE1 Plan
 
-## Phase A — Signing-Konfiguration im Repository
+## Phase A — alten Signer verifizieren
 
-1. `app/build.gradle.kts` so erweitern, dass Release-Signing-Werte aus `ABFAHRT_RELEASE_*` gelesen werden können.
-2. Quellen: Gradle-Property oder Environment-Variable gleichen Namens; Environment unterstützt später optional CI-Secrets.
-3. Alle vier Werte müssen gemeinsam vorhanden sein. Teilkonfiguration => harter Gradle-Fehler.
-4. `releaseSigningRequired=true` erzwingt vollständige Signing-Konfiguration.
-5. Ohne Signing-Werte und ohne `releaseSigningRequired` bleibt die heutige credential-freie CI-Fähigkeit erhalten.
-6. Wenn Signing konfiguriert ist, muss die angegebene Keystore-Datei existieren; sonst harter Fehler.
-7. Kein Secret-Logging.
+1. alten Keystore mit `keytool -list -v` prüfen.
+2. tatsächlichen alten Alias und Certificate SHA-256 erfassen.
+3. frühere signierte APK verwenden oder `base.apk` von einem noch Old-Key-signierten Gerät ziehen.
+4. Referenz-APK mit `apksigner verify --verbose --print-certs` prüfen.
+5. Fingerprints müssen exakt übereinstimmen; sonst Stop.
 
-## Phase B — Repository-Gates
+## Phase B — neuen neutralen Community-Key erzeugen
 
-1. vorhandene `.gitignore`-Regeln für `*.jks`, `*.keystore`, `*.p12` beibehalten.
-2. keine Beispieldatei mit echten Passwörtern anlegen.
-3. öffentliche Release-Signing-Anleitung nur mit Variablennamen und sicheren Eingabemustern; niemals echte Werte.
-4. normale Android-CI muss weiterhin erfolgreich sein.
+1. neuen JKS außerhalb des Repository-Workspaces erzeugen.
+2. RSA 4096 Bit, Alias `abfahrt-now-community`, lange Gültigkeit.
+3. neutraler Subject, empfohlen `CN=Abfahrt Now Community, C=DE`.
+4. kein historischer Firmen-/Personenname als vermeintlicher Eigentümer.
+5. separates Backup des neuen Keystores anlegen und lesbar prüfen.
+6. alten Keystore weiterhin unverändert sichern.
 
-## Phase C — bestehenden Release-Key verifizieren
+## Phase C — Signing-Certificate-Lineage erzeugen
 
-Es wird **kein neuer Keystore erzeugt**. Die App ist bereits auf drei realen Geräten mit dem vorhandenen Release-Key installiert. Die Identität dieses bestehenden Keypairs ist ab RELEASE1 ein Release-Invariant.
+Mit aktuellem Android-SDK-`apksigner`:
 
-Auf dem Windows-Entwicklungsrechner:
+```text
+apksigner rotate --out <lineage-file> \
+  --old-signer --ks <old-keystore> --ks-key-alias <old-alias> \
+  --new-signer --ks <new-keystore> --ks-key-alias <new-alias>
+```
 
-1. vorhandenen Keystore außerhalb des Repository-Workspaces lokalisieren;
-2. mit `keytool -list -v -keystore <pfad>` Alias/Certificate-Fingerprint prüfen;
-3. mindestens ein separates Backup des bestehenden Keystores verifizieren;
-4. als zweite Referenz entweder eine frühere mit demselben Key signierte APK-Datei oder ein Gerät verwenden, das noch eine solche Release-Installation trägt;
-5. bei Geräte-Referenz APK per `adb shell pm path now.abfahrt.transit` lokalisieren und per `adb pull` sichern;
-6. Referenz-APK mit `apksigner verify --print-certs` prüfen;
-7. Signer Certificate SHA-256 von Keystore und Referenz-APK müssen exakt übereinstimmen.
+Lineage außerhalb des Repos archivieren und separat sichern.
 
-Bei Abweichung wird gestoppt. Kein neuer Key und keine Deinstallation als Workaround.
+## Phase D — unsigned Release bauen
 
-## Phase D — lokale sichere Übergabe an Gradle
+1. Branch/Commit des akzeptierten Build-155-Release-Kandidaten verwenden.
+2. `./gradlew :app:testDebugUnitTest :app:assembleRelease`.
+3. Gradle signiert RELEASE1 bewusst nicht selbst.
+4. unsigned/minifiziertes Release-APK identifizieren.
 
-Für RELEASE1 bevorzugt PowerShell-Session-Variablen:
+## Phase E — alignen und mit Rotation signieren
 
-- Pfad und tatsächlicher bestehender Alias dürfen direkt als Environment gesetzt werden.
-- Store-/Key-Passwort werden mit `Read-Host -AsSecureString` abgefragt und nur für den laufenden Prozess in Klartext konvertiert.
-- keine Passwörter in PowerShell-History, Repo-Dateien oder öffentlichen Logs.
+1. unsigned APK mit `zipalign -P 16 -f 4` in finales Kandidaten-APK überführen.
+2. anschließend mit `apksigner sign` signieren:
 
-## Phase E — signierter Build
+```text
+apksigner sign \
+  --ks <old-keystore> --ks-key-alias <old-alias> \
+  --next-signer \
+  --ks <new-keystore> --ks-key-alias <new-alias> \
+  --lineage <lineage-file> \
+  <aligned-apk>
+```
 
-1. Branch/Commit des akzeptierten Build-155-Release-Kandidaten plus RELEASE1-Signing-Mechanik verwenden.
-2. `releaseSigningRequired=true` setzen.
-3. Unit Tests + Release/R8 bauen.
-4. Ergebnis muss eine mit dem bestehenden Release-Key signierte `app-release.apk` sein.
-5. Build darf bei fehlender/inkonsistenter Signing-Konfiguration nicht still auf unsigned zurückfallen.
+3. Passwörter interaktiv oder über flüchtige Environment-Variablen übergeben; keine Klartext-Literale in History/Repo.
+4. Nach `apksigner sign` wird das APK nicht mehr verändert.
 
-## Phase F — kryptografische und Artefakt-Verifikation
+## Phase F — kryptografische und 16-KB-Verifikation
 
-1. `apksigner verify --verbose --print-certs app-release.apk`.
-2. Signer Certificate SHA-256 muss mit dem in Phase C bestätigten bestehenden Signer übereinstimmen.
-3. Datei-SHA-256 mit PowerShell `Get-FileHash -Algorithm SHA256` berechnen.
-4. 16-KB-Alignment mit `zipalign -c -P 16 -v 4` auf derselben APK prüfen.
-5. Keine Secret-Inhalte in Evidence übernehmen.
+1. `apksigner verify --verbose --print-certs`.
+2. erwartete Old→New-Lineage prüfen.
+3. neuen Signer Certificate SHA-256 sichern.
+4. Datei-SHA-256 mit `Get-FileHash -Algorithm SHA256` berechnen.
+5. `zipalign -c -P 16 -v 4` auf derselben APK prüfen.
 
-## Phase G — Realgeräte-Release-Smoke
+## Phase G — reales In-place-Update
 
-1. Auf mindestens einem der drei bestehenden Release-Geräte **keine Deinstallation** durchführen.
-2. Signierte Release-APK mit `adb install -r` als echtes In-place-Update installieren.
-3. Paketversion prüfen: `versionCode=1550`, `versionName=1.1.0`.
-4. Vorhandene Preferences/API-Keys müssen erhalten bleiben.
-5. `adb shell getconf PAGE_SIZE` => `16384` auf dem 16-KB-Testgerät.
-6. App starten und `AbfahrtCompat memoryPageSizeBytes=16384` bestätigen.
-7. Current Location / erster Departure-State.
-8. Sortierprofil und Persistenz prüfen.
-9. ORS mit gültigem Nutzer-Key mindestens einmal erfolgreich.
-10. RoutePlanner-Grundpfad prüfen.
-11. kein FATAL/ANR.
+1. mindestens eines der drei Geräte mit noch vorhandener Old-Key-Installation verwenden.
+2. **nicht deinstallieren**.
+3. `adb install -r <finale-apk>` muss erfolgreich sein.
+4. vorhandene Preferences/API-Keys müssen erhalten bleiben.
+5. Signaturkonflikt/`INSTALL_FAILED_UPDATE_INCOMPATIBLE` => Stop und Ursachenanalyse, keine Neuinstallation als Workaround.
 
-Geräte mit reiner Debug-Signatur können getrennt behandelt werden; der bestehende Release-Updatepfad darf dadurch nicht verwässert werden.
+## Phase H — Release-Smoke
 
-## Phase H — GitHub Release
+1. `versionCode=1550`, `versionName=1.1.0`.
+2. `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`.
+3. Current Location / Departure First Paint.
+4. Sortierprofil + Persistenz.
+5. ORS mit gültigem Key.
+6. RoutePlanner-Grundpfad.
+7. Settings/Community-Footer.
+8. kein FATAL/ANR.
 
-Erst nach positivem Gate:
+## Phase I — GitHub Release
 
-1. finale verifizierte APK sprechend kopieren/benennen, z. B. `abfahrt-now-v1.1.0-b155.apk`;
-2. Tag/Release `v1.1.0-b155` erstellen;
-3. exakt dieses APK als Asset anhängen;
-4. Release Notes mit Build-155-Highlights, APK-SHA-256 und Signing-Fingerprint;
-5. vermerken, dass derselbe bereits bestehende Release-Key weiterverwendet wird;
-6. Update-Checker gegen das echte Release testen.
+1. finale APK als `abfahrt-now-v1.1.0-b155.apk` bereitstellen.
+2. Tag/Release `v1.1.0-b155`.
+3. exakt verifizierte APK als Asset.
+4. Release Notes mit APK-SHA-256, neuem Signer-Fingerprint und Hinweis auf kontrollierte Key-Rotation mit erhaltener Update-Lineage.
+5. Update-Checker gegen echtes Release testen.
 
-## Folgeschritt, nicht RELEASE1-Gate
+## Folgeschritt
 
-Nach erfolgreichem ersten öffentlichen Release kann ein separater manueller/Tag-basierter GitHub-Actions-Release-Workflow mit Repository-Secrets entworfen werden. Das wird erst getan, nachdem der lokale Signing-/Verify-/In-place-Update-Pfad bewiesen ist.
+Nach erfolgreichem lokalen Rotationsrelease kann ein separater manueller/Tag-basierter GitHub-Actions-Release-Workflow geplant werden. CI-Secrets sind kein RELEASE1-Gate.
