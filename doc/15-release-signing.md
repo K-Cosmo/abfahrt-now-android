@@ -2,104 +2,106 @@
 
 Dieses Dokument ist die normative Release-Signing-Regel für direkte GitHub-APK-Releases der AbfahrtApp.
 
+## Ausgangslage RELEASE1
+
+Es existieren bereits drei Installationen, die mit einem älteren privaten Release-Key signiert sind. Das Zertifikat dieses alten Keys enthält historische Riles-Tech-/Leonard-Scharf-Metadaten und soll für neue Community-Releases nicht als dauerhafte öffentliche Signer-Identität fortgeführt werden.
+
+Wichtig: Die X.509-Subject-/Issuer-Metadaten bestimmen nicht technisch die Eigentümerschaft der Android-App. Für die Android-Update-Fähigkeit zählt die kryptografische Signer-Historie. Wegen der irreführenden historischen Attribution wird der Key trotzdem kontrolliert rotiert, statt ihn als neuen Community-Standard weiterzuführen.
+
 ## Grundsatz
 
-Ab RELEASE1 wird jede öffentlich als Release angebotene APK mit demselben dauerhaften privaten Android-Release-Key signiert, der bereits für die aktuell auf realen Geräten installierten Release-Builds verwendet wurde. Der Verlust oder Austausch dieses Keys unterbricht die direkte Update-Kette für bereits installierte APKs.
+RELEASE1 rotiert vom **alten Signer** auf einen **neuen neutralen Community-Signer**, ohne die Update-Kette der vorhandenen Installationen zu brechen.
 
-Der private Key, Keystore und Passwörter sind **kein Repository-Inhalt** und **keine Evidence**.
+Die App hat `minSdk = 34`. Android unterstützt APK Signature Scheme v3.1 und Signing-Key-Rotation auf Android 13/API 33 und höher. RELEASE1 verwendet deshalb eine `apksigner`-Signing-Certificate-Lineage `old -> new` und den Standard-Rotationspfad für API 33+.
 
-## Release-Key
+Der alte private Key bleibt dauerhaft sicher verwahrt, weil er Bestandteil der Signer-Historie ist und zur Rekonstruktion/Prüfung der Lineage benötigt werden kann. Der neue private Key wird nach RELEASE1 der normale aktive Signer für künftige Releases. Beide Keystores und die Lineage liegen außerhalb des Repository-Workspaces und erhalten getrennte Backups.
 
-Für RELEASE1 wird **kein neuer Key erzeugt**. Es wird der bereits vorhandene Release-Keystore weiterverwendet, mit dem die App heute auf drei realen Geräten installiert ist. Die Identität dieses bestehenden privaten Keypairs ist damit ein dauerhafter Release-Invariant.
+## Neuer Community-Key
 
-Vor dem ersten öffentlichen GitHub-APK-Release muss nachgewiesen werden, dass:
+Empfehlung für RELEASE1:
 
-1. der vorhandene Keystore lesbar ist;
-2. der korrekte Alias bekannt ist;
-3. das Zertifikat dieses Alias exakt dem Signer-Zertifikat einer bereits signierten Release-APK entspricht;
-4. ein unabhängiges Backup des vorhandenen Keystores existiert und lesbar ist.
-
-Alias, Store-Typ, Algorithmus, Schlüsselgröße und historische Gültigkeit werden **nicht** nachträglich auf neu erfundene Sollwerte umgestellt. Für die Update-Fähigkeit ist die Identität desselben privaten Keypairs entscheidend.
+- Algorithmus: RSA
+- Schlüsselgröße: 4096 Bit
+- Keystore: JKS
+- Alias: `abfahrt-now-community`
+- Gültigkeit: mindestens 10.000 Tage
+- neutraler Subject, z. B. `CN=Abfahrt Now Community, C=DE`
+- kein Firmenname und keine Person als vermeintlicher App-Eigentümer, sofern das nicht tatsächlich der dauerhaften Projektidentität entspricht
 
 Zertifikatsmetadaten und Fingerprints dürfen öffentlich sein. Private Keydaten und Passwörter dürfen niemals öffentlich werden.
 
-## Gradle-Konfiguration
+## Alte Signer-Identität zuerst verifizieren
 
-Der Build unterstützt vier externe Werte:
+Vor Rotation wird der alte Keystore gegen eine bereits installierte bzw. früher veröffentlichte APK geprüft:
 
-- `ABFAHRT_RELEASE_STORE_FILE`
-- `ABFAHRT_RELEASE_STORE_PASSWORD`
-- `ABFAHRT_RELEASE_KEY_ALIAS`
-- `ABFAHRT_RELEASE_KEY_PASSWORD`
+1. alten Keystore mit `keytool -list -v` prüfen;
+2. echten alten Alias und Zertifikat-SHA-256 erfassen;
+3. eine alte, sicher mit diesem Key signierte APK mit `apksigner verify --verbose --print-certs` prüfen; alternativ `base.apk` von einem der drei bestehenden Geräte ziehen;
+4. Zertifikat-SHA-256 von Keystore und APK müssen exakt übereinstimmen.
 
-Jeder Wert kann als Gradle-Property oder gleichnamige Environment-Variable bereitgestellt werden.
+Ohne diesen Nachweis wird keine Rotation durchgeführt.
 
-Regeln:
+## Signing-Certificate-Lineage
 
-1. Kein Wert vorhanden: normale CI darf den Release-Build weiterhin credential-frei und unsigned für Compile/R8-Verifikation bauen.
-2. Alle vier Werte vorhanden: Release-Build wird mit diesem Key signiert.
-3. Nur ein Teil vorhanden: Build muss fehlschlagen.
-4. `releaseSigningRequired=true`: vollständige Signing-Konfiguration ist zwingend; fehlt sie, muss der Build fehlschlagen.
-5. Existiert der konfigurierte Keystore-Pfad nicht, muss der Build fehlschlagen.
-6. Secret-Werte dürfen nicht geloggt werden.
-
-Für einen echten Release-Kandidaten ist `releaseSigningRequired=true` verpflichtend.
-
-## Lokale Secret-Übergabe
-
-Für RELEASE1 werden Passwörter bevorzugt nur in der aktuellen PowerShell-Session gehalten. Sie werden per `Read-Host -AsSecureString` abgefragt und anschließend nur als Prozess-Environment an Gradle weitergegeben.
-
-Passwörter dürfen nicht:
-
-- als Klartext in Git-Dateien stehen;
-- als Klartext in Build-Skripten stehen;
-- als Literal in der PowerShell-History landen;
-- in `/doc` oder `/evidence/public` auftauchen.
-
-## Signer-Identität vor dem Build prüfen
-
-Vor dem ersten öffentlichen Release muss der Signer-Fingerprint des vorhandenen Keystores gegen eine bereits signierte Release-APK geprüft werden.
-
-Keystore-Seite:
+Die Lineage wird mit beiden privaten Schlüsseln erzeugt:
 
 ```text
-keytool -list -v -keystore <bestehender-keystore> -alias <bestehender-alias>
+apksigner rotate --out <lineage-file> \
+  --old-signer --ks <old-keystore> --ks-key-alias <old-alias> \
+  --new-signer --ks <new-keystore> --ks-key-alias <new-alias>
 ```
 
-Referenz-APK-Seite: Entweder eine noch vorhandene frühere signierte APK verwenden oder die APK einer noch Release-signierten Installation vom Gerät ziehen und mit `apksigner verify --print-certs` prüfen. Die Signer Certificate SHA-256-Werte müssen identisch sein.
+Passwörter werden nicht inline in der Shell-History angegeben. `apksigner` darf interaktiv fragen oder `env:<NAME>` verwenden.
 
-Erst nach diesem Match gilt der vorhandene Keystore als RELEASE1-Key.
+Die Lineage-Datei enthält keine privaten Schlüssel, ist aber releasekritischer Zustand und wird zusammen mit den Keystore-Backups sicher archiviert.
+
+## Build- und Signierpfad
+
+Der Gradle-Release-Build bleibt bewusst **unsigned**. Die Rotation wird nicht durch eine einfache Gradle-`signingConfig` modelliert, weil ein nur mit dem neuen Key signiertes APK die bestehenden Old-Key-Installationen nicht sicher aktualisieren würde.
+
+RELEASE1:
+
+1. `:app:testDebugUnitTest :app:assembleRelease` ausführen;
+2. unsigned/minifiziertes Release-APK bestimmen;
+3. vor dem Signieren mit `zipalign -P 16` ausrichten;
+4. anschließend mit `apksigner sign` und `--lineage` signieren;
+5. alter Signer wird als erster Signer, neuer Signer als `--next-signer` angegeben;
+6. für den vorhandenen Android-14+-Support wird keine niedrigere `--rotation-min-sdk-version` erzwungen; der Standardpfad zielt auf API 33+.
+
+Schematisch:
+
+```text
+apksigner sign \
+  --ks <old-keystore> --ks-key-alias <old-alias> \
+  --next-signer \
+  --ks <new-keystore> --ks-key-alias <new-alias> \
+  --lineage <lineage-file> \
+  <aligned-apk>
+```
+
+Danach dürfen keinerlei Änderungen mehr am APK erfolgen.
 
 ## Verifikation vor Veröffentlichung
 
 Ein GitHub-APK-Release ist erst zulässig, wenn **genau das hochzuladende APK** erfolgreich geprüft wurde:
 
 1. `apksigner verify --verbose --print-certs`
-2. Signer Certificate SHA-256 dokumentieren
-3. APK-Datei-SHA-256 dokumentieren
-4. `zipalign -c -P 16 -v 4`
-5. In-place-Update auf mindestens einem der bereits mit demselben Key installierten Geräte
-6. Installation/Update auf dem 16-KB-Testgerät
-7. Runtime `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`
-8. Kernsmoke ohne FATAL/ANR
+2. alter und neuer Signer/Lineage wie erwartet vorhanden
+3. neuer Signer Certificate SHA-256 dokumentiert
+4. APK-Datei-SHA-256 dokumentiert
+5. `zipalign -c -P 16 -v 4`
+6. reales `adb install -r` auf mindestens einem der drei bestehenden Old-Key-Geräte erfolgreich
+7. Einstellungen/API-Keys bleiben bei diesem In-place-Update erhalten
+8. Runtime `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`
+9. Kernsmoke ohne FATAL/ANR
 
-## Bestehende Release-Installationen
+Ein Signaturfehler darf **nicht** durch Deinstallation umgangen werden. Ein fehlgeschlagenes `adb install -r` ist ein Stop-Signal für RELEASE1.
 
-Da die App bereits auf drei Geräten mit dem vorhandenen Release-Key installiert ist, ist für diese Geräte **keine Deinstallation** vorgesehen. RELEASE1 muss dort als normales Update funktionieren.
+## Folge-Releases
 
-Acceptance:
+Nach erfolgreicher Rotation wird der neue Community-Key der aktive Release-Signer. Die Signing-Certificate-Lineage muss bei künftigen direkten APK-Releases weitergeführt werden, solange Updates von Installationen aus der alten Signer-Historie unterstützt werden sollen.
 
-```text
-adb install -r <signierte-release-apk>
-```
-
-muss auf mindestens einem bestehenden Release-Gerät ohne Signaturfehler erfolgreich sein und lokale App-Daten/Preferences erhalten.
-
-Falls Android `INSTALL_FAILED_UPDATE_INCOMPATIBLE` oder einen Signaturkonflikt meldet, wird RELEASE1 gestoppt. Es wird **nicht** deinstalliert, um den Fehler zu umgehen; stattdessen wird zuerst die Signer-Identität geklärt.
-
-Wichtig: Ein Gerät, auf dem während der Entwicklung inzwischen eine Debug-APK installiert wurde, ist für diesen Update-Kompatibilitätstest nicht geeignet. Mindestens eines der drei Geräte muss noch eine mit dem bestehenden Release-Key signierte Installation tragen, oder es muss eine frühere signierte APK-Datei als Fingerprint-Referenz vorliegen.
-
-Geräte, die heute nur eine Debug-Signatur tragen, benötigen weiterhin einmalig Deinstallation/Neuinstallation. Dieser Debug→Release-Sonderfall darf nicht mit den drei bestehenden Release-Installationen verwechselt werden.
+Der alte Keystore wird deshalb nicht gelöscht oder absichtlich unbrauchbar gemacht.
 
 ## GitHub Release Contract
 
@@ -119,9 +121,9 @@ Die Release Notes enthalten mindestens:
 
 - Version und Build
 - APK-Datei-SHA-256
-- Signer Certificate SHA-256
-- Hinweis, dass der bereits bestehende dauerhafte Release-Key weiterverwendet wird
+- neuer Signer Certificate SHA-256
+- Hinweis auf kontrollierte Signing-Key-Rotation mit erhaltener Android-Update-Lineage
 
 ## CI
 
-Die normale Android-CI bleibt credential-frei. Ein späterer signierter GitHub-Actions-Release-Workflow ist optional und wird erst eingeführt, nachdem RELEASE1 lokal erfolgreich mit dem bestehenden Key signiert, verifiziert, als In-place-Update installiert und veröffentlicht wurde.
+Die normale Android-CI bleibt credential-frei und baut weiterhin das unsigned Release/R8-Artefakt zur Compile-/Shrink-Verifikation. Ein späterer signierter Release-Workflow ist optional und wird erst nach erfolgreichem lokalen RELEASE1-Rotationspfad eingeführt.
