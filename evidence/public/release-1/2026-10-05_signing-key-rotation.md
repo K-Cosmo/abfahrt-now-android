@@ -73,12 +73,25 @@ After the update:
 
 This proves real Android update compatibility from the historical signer to the new Community signer for the supported product range.
 
+## 16-KB runtime proof
+
+The same signed candidate was installed on an official Android 16-KB x86_64 emulator.
+
+Observed cold-start evidence:
+
+- runtime page size: `16384`
+- app log: `AbfahrtCompat: memoryPageSizeBytes=16384`
+- `lib/x86_64/libmaplibre.so` loaded successfully via the native loader
+- no `FATAL EXCEPTION`
+- no app ANR observed in the captured run
+
+The real end-user update device used for the signing-rotation proof runs with 4-KB pages. RELEASE1 therefore deliberately separates the two proofs: real-hardware old->new signer update compatibility on 4-KB Android, and exact-candidate native/runtime compatibility on the official 16-KB emulator.
+
 ## Remaining gates
 
 Before public GitHub release:
 
 - confirm Preferences/API-key retention on the updated device
-- confirm 16-KB runtime (`PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`) on the release artifact/device
-- core release smoke: Current Location, departure first paint, sorting persistence, ORS enrichment, RoutePlanner
-- no FATAL/ANR
+- core release smoke on real hardware: Current Location, departure first paint, sorting persistence, ORS enrichment, RoutePlanner
+- verify separate backups for historical keystore, Community keystore and signing lineage
 - generate the final post-merge release APK from `main`, verify it again, and publish that exact artifact
