@@ -5,10 +5,10 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ## P0 — aktuelle Reihenfolge
 
 ### B-156-001 Sichtbaren App-Namen differenzieren (F-NAME-001)
-- **Status:** planned / Namensentscheidung ausstehend.
+- **Status:** in progress / Build 156.
 - Anlass: Der aktuelle sichtbare Name `Abfahrt!` kollidiert mit dem Namen der offiziellen abfahrt.now-Android-App und schwächt die in D-072 geforderte Community-Abgrenzung.
-- Ziel: kurzer, merkbarer eigener Display-Name; Package-ID `now.abfahrt.transit`, Update-Signing-Lineage und GitHub-Repository bleiben bei einer reinen Display-Umbenennung unverändert.
-- Vor Implementierung: Namen auf offensichtliche App-/Projektkollisionen prüfen und Nutzerentscheidung dokumentieren.
+- Entscheidung: sichtbarer Produktname **Abfahrtsradar**; Package-ID `now.abfahrt.transit` und Update-Signing-Lineage bleiben unverändert. Kanonisches GitHub-Repository ist `K-Cosmo/abfahrtsradar-android`.
+- Repository-Rename ist erfolgt; alter `releases/latest`-Pfad liefert HTTP 301, neuer Pfad liefert `v1.1.0-b155`. Build 156 stellt Runtime/Locales/öffentliche Links auf den neuen kanonischen Pfad um.
 - KIS: keine Umbenennung von technischen Identitäten ohne Not; zunächst nur sichtbarer Produktname, App-Label und zugehörige Community-Texte.
 
 
@@ -38,7 +38,7 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - finaler APK-Signer: `CN=Abfahrt Now Community, C=DE`, Zertifikat-SHA-256 `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`.
 - finales APK nach Signing mit `apksigner verify` und `zipalign -c -P 16 -v 4` verifiziert; offizieller 16-KB-Emulator-Smoke grün.
 - GitHub `releases/latest` liefert den veröffentlichten Tag `v1.1.0-b155` samt APK-Asset.
-- Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+- Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
 ### B-155-001 Wählbare Sortierprofile für die Abfahrtsseite (F-SORT-001) — Build 155
 - **Status:** closed / accepted 04.10.2026.
