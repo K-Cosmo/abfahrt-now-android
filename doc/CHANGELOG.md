@@ -1,4 +1,4 @@
-## v1.1.0 Build 156 — Abfahrtsradar identity migration — in progress
+## v1.1.0 Build 156 — Abfahrtsradar identity migration — accepted 06.10.2026
 
 - sichtbarer Produktname von `Abfahrt!` auf **Abfahrtsradar** festgelegt; `applicationId = now.abfahrt.transit` und Signing-Lineage bleiben unverändert.
 - GitHub-Repository zu `K-Cosmo/abfahrtsradar-android` umbenannt; lokaler `origin` aktualisiert.
@@ -8,6 +8,12 @@
 - historische Riles-Tech-Attribution wird aus den verbleibenden Runtime-Stringressourcen entfernt.
 - `versionCode = 1560`, `versionName = 1.1.0`.
 - keine Departure-, Routing-, ORS-, Photon-, Location-, Sortier-, Persistenz- oder Dependency-Semantik wird verändert.
+- Android CI #188 auf PR-Head `054847735011161840da0a28a8bb1c56a82637bc` vollständig grün.
+- realer Build-155-Redirect-Smoke erfolgreich; alter Updatechecker verarbeitet den GitHub-301 nach Repository-Rename.
+- signierter Build 156 installiert per `adb install -r` über das veröffentlichte Build-155-APK; Einstellungen, API-Key-Status und Sortierprofil bleiben erhalten.
+- Realgeräte-Smoke: sichtbarer Name Abfahrtsradar, Standort/Abfahrten, ORS und RoutePlanner erfolgreich; Build-156-Updatechecker `result=success`; kein App-FATAL/ANR.
+- signierter Kandidat SHA-256 `BC1143C08844E21B569BAB41F192BEFB10F8DACA6F681FAAFA216C908B2C5703`; Community-Signer unverändert; 16-KB-`zipalign` und 16-KB-Runtime mit erfolgreichem MapLibre-Native-Load grün.
+- Build 156 ist accepted, aber noch nicht veröffentlicht; `v1.1.0-b155` bleibt bis zum separaten Release-Schritt der letzte öffentliche Release.
 
 ## DOC3 — MIT-Lizenz / README- und Release-Drift-Konvergenz — 06.10.2026
 
