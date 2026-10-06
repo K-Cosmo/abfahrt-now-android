@@ -2,7 +2,7 @@
 
 ## Aktuell akzeptiert: v1.1.0 Build 156 (`versionCode 1560`) — Abfahrtsradar Identity Migration
 
-Build 156 ist am 06.10.2026 nach automatisierten Gates, realem Build-155→156-In-place-Update, Kernfunktions-Smoke und 16-KB-Runtime-Smoke akzeptiert. Build 155 bleibt bis zur separaten Veröffentlichung von `v1.1.0-b156` der letzte öffentliche GitHub-APK-Release.
+Build 156 ist am 06.10.2026 nach automatisierten Gates, realem Build-155→156-In-place-Update, Kernfunktions-Smoke und 16-KB-Runtime-Smoke akzeptiert und anschließend als `v1.1.0-b156` veröffentlicht. `releases/latest` zeigt auf Build 156.
 
 ### Build-156-Semantik
 
@@ -28,6 +28,19 @@ Build 156 ist am 06.10.2026 nach automatisierten Gates, realem Build-155→156-I
 
 Bereinigte Evidence: `/evidence/public/build-156/2026-10-06_acceptance.md`.
 
+### Veröffentlichung v1.1.0-b156
+
+- Runtime-Source-Commit: `6ccec47ce72b3e00cbc302ec65a226a4622b70b6`
+- Asset: `abfahrtsradar-v1.1.0-b156.apk`
+- Größe: 46.317.530 Byte
+- finales APK SHA-256: `53DE476E02271C6545906DEC47D0F3B2E66E9AB2A060EE5542AD1C75E106591B`
+- aktiver Signer: `CN=Abfahrt Now Community, C=DE`
+- Signer Certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
+- finales `apksigner verify` und `zipalign -c -P 16 -v 4` grün
+- finales Release-Artefakt real 155→156 update-kompatibel und auf 16-KB-x86_64 mit MapLibre-Native-Load `ok`
+- GitHub Release öffentlich, weder Draft noch Prerelease; APK + `SHA256SUMS.txt`; `releases/latest` = `v1.1.0-b156`
+- Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b156
+
 ## RELEASE1 veröffentlicht — 06.10.2026
 
 Build 155 ist nicht mehr nur Release-Kandidat: **`v1.1.0-b155`** ist der erste öffentliche signierte GitHub-APK-Release.
@@ -48,7 +61,7 @@ Der normale Gradle-Release bleibt absichtlich credential-frei/unsigned. Der loka
 
 ## Nächster Produkt-/Hardening-Schritt
 
-Build 156 ist accepted. Vor Veröffentlichung folgt nach Merge ein finaler Tag-/Artefakt-Gate für `v1.1.0-b156`. Der nächste **fachliche** Hardening-Block bleibt danach F-ORS-001/B-ORS-001.
+Build 156 ist accepted und als `v1.1.0-b156` veröffentlicht. Der nächste **fachliche** Hardening-Block ist F-ORS-001/B-ORS-001.
 
 ## Separates Finding: ORS-Key-Probe
 
