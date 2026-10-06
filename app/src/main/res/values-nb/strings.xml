@@ -208,7 +208,7 @@ Sjekk Wi‑Fi eller mobildata.</string>
     <string name="api_key_request_button">Be om API-nøkkel</string>
     <string name="api_key_request_subject">Forespørsel om API-nøkkel – bruk av Android-app</string>
     <string name="api_key_request_body">Hei,
-Jeg vil gjerne be om en personlig API-nøkkel for å bruke Abfahrt Android-appen.
+Jeg vil gjerne be om en personlig API-nøkkel for å bruke Abfahrtsradar Android-appen.
 Med vennlig hilsen</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Med sykkel</string>
