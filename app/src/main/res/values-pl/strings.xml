@@ -193,7 +193,7 @@ Wyjdź na zewnątrz lub włącz GPS.</string>
     <string name="key_status_not_configured">Nie skonfigurowano</string>
     <string name="key_action_add">Dodaj klucz API</string>
     <string name="key_action_change_or_delete">Zarządzaj kluczem API</string>
-    <string name="ors_apikey_sheet_hint">Z kluczem OpenRouteService Abfahrt może pokazywać dokładne trasy piesze lub rowerowe i pasujące czasy. Klucz jest opcjonalny i zapisany lokalnie.</string>
+    <string name="ors_apikey_sheet_hint">Z kluczem OpenRouteService Abfahrtsradar może pokazywać dokładne trasy piesze lub rowerowe i pasujące czasy. Klucz jest opcjonalny i zapisany lokalnie.</string>
     <string name="ors_plans_label">Zobacz cennik</string>
     <string name="ors_plans_url">https://account.heigit.org/info/plans</string>
     <string name="ors_signup_label">Utwórz konto</string>
@@ -205,7 +205,7 @@ Wyjdź na zewnątrz lub włącz GPS.</string>
     <string name="api_key_request_button">Poproś o klucz API</string>
     <string name="api_key_request_subject">Prośba o klucz API</string>
     <string name="api_key_request_body">Hello,
-I would like to request a personal API key for using the Abfahrt Android app.
+I would like to request a personal API key for using the Abfahrtsradar Android app.
 Best regards</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Rowerem</string>
