@@ -208,7 +208,7 @@ Controleer wifi of mobiele data.</string>
     <string name="api_key_request_button">API-key vragen</string>
     <string name="api_key_request_subject">API-sleutelverzoek – gebruik Android-app</string>
     <string name="api_key_request_body">Hallo,
-Ik wil graag een persoonlijke API-sleutel aanvragen voor het gebruik van de Abfahrt Android-app.
+Ik wil graag een persoonlijke API-sleutel aanvragen voor het gebruik van de Abfahrtsradar Android-app.
 Met vriendelijke groet</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Met de fiets</string>
