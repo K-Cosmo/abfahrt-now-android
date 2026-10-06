@@ -50,10 +50,18 @@ Credentials are service-scoped: an abfahrt.now key must never be sent to HeiGIT,
 ## Current development state
 
 - Version: **1.1.0**
-- Development build: **156** (`versionCode 1560`)
+- Current accepted build: **156** (`versionCode 1560`)
 - Android: **minSdk 34**, **compileSdk 37**, **targetSdk 37**
 - Stack: Kotlin, Jetpack Compose, Material 3, Hilt, Retrofit/OkHttp, DataStore, MapLibre
-- Latest public APK release: [v1.1.0-b155](https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155)
+- Latest public APK release: [GitHub Releases / latest](https://github.com/K-Cosmo/abfahrtsradar-android/releases/latest)
+
+## Install
+
+Signed APK releases are published on the [GitHub Releases page](https://github.com/K-Cosmo/abfahrtsradar-android/releases). For normal installation or updates, use the APK attached to the latest release.
+
+Each release also publishes a `SHA256SUMS.txt` file so the downloaded APK can be verified independently. Existing release installations are updated in place; uninstalling the app is neither required nor recommended for a normal update because uninstalling removes local app data.
+
+Abfahrtsradar also checks GitHub release metadata at app start and offers a link when a newer build is available. The app does not silently download or install APK files.
 
 ## Build / development
 
