@@ -5,8 +5,8 @@
 în toată Europa</string>
     <string name="app_subtitle">Transport public în timp real pentru Europa</string>
     <string name="powered_by">Cu tehnologia abfahrt.now</string>
-    <string name="built_by">Creat de Riles Tech UG  ↗</string>
-    <string name="disclaimer">Orele de plecare sunt furnizate de abfahrt.now. Riles Tech UG nu își asumă răspunderea pentru corectitudinea datelor.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Orele de plecare sunt furnizate de abfahrt.now.</string>
     <string name="version_label">Versiunea %s</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Confidențialitate</string>
