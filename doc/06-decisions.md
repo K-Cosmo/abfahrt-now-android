@@ -507,7 +507,7 @@ Verbindlich:
 
 ## D-071 — Update-Metadaten sind ein separater anonymer Komfortpfad
 
-Ab Build 150 ist der GitHub-Release-Check bewusst **nicht** Teil der Transit-/Routing- oder Credential-Architektur. Er verwendet einen separaten anonymen Client ausschließlich gegen `GET /repos/K-Cosmo/abfahrt-now-android/releases/latest`.
+Ab Build 150 ist der GitHub-Release-Check bewusst **nicht** Teil der Transit-/Routing- oder Credential-Architektur. Er verwendet einen separaten anonymen Client ausschließlich gegen `GET /repos/K-Cosmo/abfahrtsradar-android/releases/latest`.
 
 Verbindlich:
 - kein GitHub-Token;
@@ -523,7 +523,7 @@ Verbindlich:
 Ab Build 151 muss die App in der sichtbaren Runtime klar als unabhängig entwickelte, inoffizielle Community-App erkennbar sein. abfahrt.now ist Daten-/API-Anbieter, nicht App-Betreiber oder Projektinhaber.
 
 Verbindlich:
-- Community-Projektlink zeigt auf `K-Cosmo/abfahrt-now-android`;
+- Community-Projektlink zeigt ab Build 156 auf `K-Cosmo/abfahrtsradar-android`;
 - externe Privacy-/Terms-Links werden als API-Provider-Links bezeichnet;
 - die Abgrenzung muss in allen ausgelieferten UI-Sprachen vorhanden sein;
 - Provider-/Markenhinweise dürfen nicht den Eindruck einer offiziellen Zugehörigkeit erzeugen.
@@ -549,10 +549,25 @@ Verbindlich:
 
 ## D-075 — KI-Unterstützung ist transparent, aber kein Ersatz für Evidence
 
-Die AbfahrtApp wird **KI-gestützt entwickelt**. KI-Werkzeuge dürfen bei Analyse, Spezifikation, Implementierung, Review, Tests und Dokumentation mitwirken.
+Abfahrtsradar wird **KI-gestützt entwickelt**. KI-Werkzeuge dürfen bei Analyse, Spezifikation, Implementierung, Review, Tests und Dokumentation mitwirken.
 
 Verbindlich:
 - `/doc/AI-CODING-GUARDRAILS.md` bleibt die projektspezifische Leitplanke für KI-gestützte Änderungen;
 - KI-generierter oder KI-veränderter Code unterliegt denselben Reviews, CI-, Build-, Runtime- und Evidence-Gates wie manuell erstellter Code;
 - eine KI-Einschätzung allein ist niemals Abnahmebeleg;
 - die öffentliche README weist transparent auf die KI-gestützte Entwicklung hin.
+
+
+## D-076 — Sichtbarer Produktname ist Abfahrtsradar; technische Identität bleibt stabil
+
+Ab Build 156 heißt die Community-App sichtbar **Abfahrtsradar**. Anlass ist die klare Trennung von der offiziellen App **Abfahrt!** bei gleichzeitig erhaltener semantischer Nähe zur Kernfunktion. „Radar“ beschreibt die ortsnahe Umgebungssuche nach relevanten Abfahrten.
+
+Verbindlich:
+- Produkt-/Launcher-Name in allen ausgelieferten Locale-Sets: `Abfahrtsradar`;
+- umgebende UI-Texte bleiben lokalisiert, der Produktname selbst wird nicht pro Sprache variiert;
+- `abfahrt.now` bleibt unverändert die Bezeichnung des externen API-/Datenanbieters;
+- kanonisches Repository: `K-Cosmo/abfahrtsradar-android`;
+- Build-156-Updatechecker nutzt direkt `/repos/K-Cosmo/abfahrtsradar-android/releases/latest`;
+- die alte Repository-URL darf für bereits ausgelieferte Build-155-Installationen nur über GitHubs Redirect weiterleben und ist kein neuer kanonischer Link;
+- `applicationId = now.abfahrt.transit`, Kotlin-Packages, DataStore, Android-Keystore-Daten und Signing-Certificate-Lineage bleiben unverändert;
+- interne historische Klassennamen/Theme-/Log-Tags werden nicht kosmetisch umbenannt, solange kein technischer Anlass besteht.

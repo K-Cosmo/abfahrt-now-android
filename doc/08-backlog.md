@@ -4,14 +4,6 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-156-001 Sichtbaren App-Namen differenzieren (F-NAME-001)
-- **Status:** planned / Namensentscheidung ausstehend.
-- Anlass: Der aktuelle sichtbare Name `Abfahrt!` kollidiert mit dem Namen der offiziellen abfahrt.now-Android-App und schwächt die in D-072 geforderte Community-Abgrenzung.
-- Ziel: kurzer, merkbarer eigener Display-Name; Package-ID `now.abfahrt.transit`, Update-Signing-Lineage und GitHub-Repository bleiben bei einer reinen Display-Umbenennung unverändert.
-- Vor Implementierung: Namen auf offensichtliche App-/Projektkollisionen prüfen und Nutzerentscheidung dokumentieren.
-- KIS: keine Umbenennung von technischen Identitäten ohne Not; zunächst nur sichtbarer Produktname, App-Label und zugehörige Community-Texte.
-
-
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
@@ -29,6 +21,18 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## Abgeschlossen
 
+### B-156-001 Sichtbaren App-Namen differenzieren (F-NAME-001) — Build 156
+- **Status:** closed / accepted 06.10.2026.
+- sichtbarer Produktname **Abfahrtsradar**; kanonisches Repository `K-Cosmo/abfahrtsradar-android`.
+- `applicationId = now.abfahrt.transit`, Package/Namespace, Signing-Lineage, DataStore-/Keystore-Identität und fachliche Runtime-Semantik unverändert.
+- alter Build-155-`releases/latest`-Pfad liefert nach dem Rename HTTP 301 und der reale Build-155-Checker verarbeitet den Redirect erfolgreich.
+- signierter Build 156 installiert per `adb install -r` über das veröffentlichte Build-155-APK; Einstellungen, API-Keys und Sortierprofil bleiben erhalten.
+- Standort/Abfahrten, ORS und RoutePlanner real grün; Build-156-Updatechecker erfolgreich; kein App-FATAL/ANR im Acceptance-Smoke.
+- signierter Kandidat: SHA-256 `BC1143C08844E21B569BAB41F192BEFB10F8DACA6F681FAAFA216C908B2C5703`, Community-Signer unverändert, `zipalign -c -P 16` grün.
+- 16-KB-Runtime: `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`, MapLibre-x86_64-Native-Library lädt erfolgreich.
+- bereinigte Evidence: `/evidence/public/build-156/2026-10-06_acceptance.md`.
+- Veröffentlichung als `v1.1.0-b156` bleibt ein separater Release-Schritt nach Merge und finaler Artefaktverifikation.
+
 ### B-REL-001 Erstes signiertes GitHub-APK-Release (F-REL-001) — RELEASE1
 - **Status:** closed / released 06.10.2026.
 - Öffentlicher Release: `v1.1.0-b155` auf Commit `85df24b280f60e47d813d17aa93f400b22fca787`.
@@ -38,7 +42,7 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - finaler APK-Signer: `CN=Abfahrt Now Community, C=DE`, Zertifikat-SHA-256 `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`.
 - finales APK nach Signing mit `apksigner verify` und `zipalign -c -P 16 -v 4` verifiziert; offizieller 16-KB-Emulator-Smoke grün.
 - GitHub `releases/latest` liefert den veröffentlichten Tag `v1.1.0-b155` samt APK-Asset.
-- Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+- Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
 ### B-155-001 Wählbare Sortierprofile für die Abfahrtsseite (F-SORT-001) — Build 155
 - **Status:** closed / accepted 04.10.2026.

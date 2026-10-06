@@ -1,41 +1,32 @@
 # Build-Handoff
 
-## Aktuell akzeptiert: v1.1.0 Build 155 (`versionCode 1550`) — wählbare Abfahrts-Sortierung
+## Aktuell akzeptiert: v1.1.0 Build 156 (`versionCode 1560`) — Abfahrtsradar Identity Migration
 
-Build 155 ist am 04.10.2026 nach vollständigem Android-CI-Gate und Realgeräte-Smoke akzeptiert. Build 154 bleibt die vorherige Performance-Baseline.
+Build 156 ist am 06.10.2026 nach automatisierten Gates, realem Build-155→156-In-place-Update, Kernfunktions-Smoke und 16-KB-Runtime-Smoke akzeptiert. Build 155 bleibt bis zur separaten Veröffentlichung von `v1.1.0-b156` der letzte öffentliche GitHub-APK-Release.
 
-### Build-155-Semantik
+### Build-156-Semantik
 
-Persistente Sortierprofile:
+- sichtbarer Produktname **Abfahrtsradar**;
+- kanonisches Repository `K-Cosmo/abfahrtsradar-android`;
+- direkter neuer GitHub-`releases/latest`-Pfad und neue Release-/Community-Links;
+- alle 22 Locale-Sets auf die neue sichtbare Community-Identität konvergiert;
+- `applicationId = now.abfahrt.transit`, Package/Namespace, Signing-Lineage, DataStore/Keystore und fachliche Departure-/Routing-/ORS-/Photon-/Location-/Sortiersemantik unverändert.
 
-- **Nähe zuerst / `NEARBY`** — Entfernung → Abfahrtszeit → Richtung → Linie; Default.
-- **Nächste Abfahrt / `SOONEST`** — Abfahrtszeit → Entfernung → Richtung → Linie.
-- **Linien bündeln / `LINE_GROUPED`** — Entfernung → Linie → Abfahrtszeit → Richtung; Legacy-Sicht.
+### Acceptance-Evidence 06.10.2026
 
-Die Auswahl liegt in den Einstellungen direkt nach „Abfahrten pro Richtung“ und vor den Quick-Filtern. `DepartureDisplayOrdering` bleibt einzige Comparator-Quelle. Profilwechsel refiltern den bereits vorhandenen Response-State lokal und verändern nicht die API-, Merge-, Dedup-, ORS-, Location- oder First-Paint-Pipeline.
+- Android CI #188 auf PR-Head `054847735011161840da0a28a8bb1c56a82637bc` vollständig grün.
+- lokaler Gate `:app:testDebugUnitTest :app:assembleRelease --no-daemon` erfolgreich.
+- veröffentlichter Build 155 vor Update per APK-SHA-256 `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5` bestätigt.
+- alter Build-155-Updatechecker verarbeitet den Repository-Rename über HTTP 301 erfolgreich.
+- signierter Build 156 installiert per `adb install -r`; danach `versionCode=1560`, `versionName=1.1.0`.
+- Einstellungen, abfahrt.now-/ORS-Key-Status und Sortierprofil erhalten.
+- Nutzer-Smoke: Name Abfahrtsradar, Standort/Abfahrten, ORS und RoutePlanner erfolgreich.
+- Build-156-Updatechecker: `update_check_complete ... result=success`.
+- kein App-FATAL/ANR im Acceptance-Smoke.
+- signierter Kandidat SHA-256 `BC1143C08844E21B569BAB41F192BEFB10F8DACA6F681FAAFA216C908B2C5703`; Community-Signer-Zertifikat unverändert `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`; `zipalign -c -P 16` erfolgreich.
+- 16-KB-Emulator: `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`, `lib/x86_64/libmaplibre.so` Native-Load `ok`.
 
-HERE bleibt profilkonform: In Distanzprofilen wirkt die bestehende effektive Distanz 0; `SOONEST` besitzt keinen globalen HERE-Vorrang vor der Abfahrtszeit.
-
-### Automatisierte Evidence
-
-Android CI #125 auf Runtime-Head `02ac2a6…` ist vollständig grün:
-
-```text
-./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon
-```
-
-Locale-/Governance-/Compatibility-Gates, committed Wrapper, Unit Tests, Debug und Release/R8 sind erfolgreich. Tests decken alle drei Profile, Default/Fallback und die HERE-/SOONEST-Semantik ab.
-
-### Realgeräte-Evidence 04.10.2026
-
-- Settings-Screenshot zeigt die neue Sektion mit allen drei Radio-Profilen; Nutzer bestätigt die Darstellung als passend.
-- Nutzer bestätigt die erwartete Sortierung auf der Abfahrtsseite für alle drei Profile.
-- Logcat zeigt lokale `AbfahrtFilter`-Ergebnisse für `SOONEST`, `LINE_GROUPED` und `NEARBY` ohne `departure_state_loading`.
-- Kein unmittelbar an den Sortierwechsel gekoppelter `/departures`-/ORS-Zyklus wurde beobachtet. Spätere Netzwerkaktivität gehört zum normalen Stable-Refresh; Same-Origin-ORS-Metriken werden wiederverwendet.
-- Gewählte Sortierung bleibt nach `force-stop`/Neustart erhalten.
-- Keine FATAL-/ANR-/Navigation-/Settings-Regression im Abnahmeumfang.
-
-F-SORT-001 / B-155-001 ist geschlossen. Build 155 wurde als RELEASE1 `v1.1.0-b155` veröffentlicht.
+Bereinigte Evidence: `/evidence/public/build-156/2026-10-06_acceptance.md`.
 
 ## RELEASE1 veröffentlicht — 06.10.2026
 
@@ -51,13 +42,13 @@ Build 155 ist nicht mehr nur Release-Kandidat: **`v1.1.0-b155`** ist der erste �
 - 16-KB-Runtime-Smoke auf offiziellem 16-KB-x86_64-Emulator grün
 - GitHub `releases/latest` zeigt auf `v1.1.0-b155`
 
-Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
 Der normale Gradle-Release bleibt absichtlich credential-frei/unsigned. Der lokale transparente Signing-Pfad mit Signing-Certificate-Lineage ist für RELEASE1 bewiesen; ein automatisierter signierter CI-Release-Workflow bleibt optionaler Folgeschritt.
 
 ## Nächster Produkt-/Hardening-Schritt
 
-Für den nächsten Produktbuild ist zuerst F-NAME-001 zu entscheiden: ein eigener sichtbarer App-Name, klar getrennt von der offiziellen `Abfahrt!`-App. F-ORS-001/B-ORS-001 bleibt der nächste getrennte technische Hardening-Kandidat.
+Build 156 ist accepted. Vor Veröffentlichung folgt nach Merge ein finaler Tag-/Artefakt-Gate für `v1.1.0-b156`. Der nächste **fachliche** Hardening-Block bleibt danach F-ORS-001/B-ORS-001.
 
 ## Separates Finding: ORS-Key-Probe
 

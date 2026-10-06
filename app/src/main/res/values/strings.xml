@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Echtzeit-Abfahrten\nfür ganz Europa</string>
     <string name="app_subtitle">Echtzeit-Transit für Europa</string>
     <string name="powered_by">Powered by abfahrt.now</string>
-    <string name="built_by">Built by Riles Tech UG  ↗</string>
-    <string name="disclaimer">Abfahrtszeiten werden von abfahrt.now bereitgestellt. Riles Tech UG übernimmt keine Haftung für die Richtigkeit der Daten.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Abfahrtszeiten werden von abfahrt.now bereitgestellt.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Impressum</string>
     <string name="datenschutz">Datenschutz</string>
     <string name="agb">AGB</string>
-    <string name="welcome_title">Willkommen bei Abfahrt!</string>
+    <string name="welcome_title">Willkommen bei Abfahrtsradar</string>
     <string name="welcome_body">Gib deinen API-Schlüssel ein, um Echtzeit-Abfahrten in deiner Nähe zu sehen.\nSchlüssel erhältlich unter abfahrt.now</string>
     <string name="api_key_hint">API-Schlüssel eingeben…</string>
     <string name="api_key_label">API-Schlüssel</string>
@@ -46,7 +46,7 @@
     <string name="occupancy_high">🔴  Hoch</string>
     <string name="occupancy_full">🔴  Überfüllt</string>
     <string name="allow_location">Standort erlauben</string>
-    <string name="location_rationale">Abfahrt! benötigt deinen Standort, um Abfahrten in deiner Nähe anzuzeigen.</string>
+    <string name="location_rationale">Abfahrtsradar benötigt deinen Standort, um Abfahrten in deiner Nähe anzuzeigen.</string>
     <string name="retry">Erneut versuchen</string>
     <string name="error_location">Standort nicht verfügbar.\nBitte GPS aktivieren.</string>
     <string name="error_no_gps">Kein GPS-Signal.\nBitte ins Freie gehen oder GPS aktivieren.</string>
@@ -87,7 +87,7 @@
     <string name="apikey_local_note">Ihr Schlüssel wird ausschließlich lokal gespeichert.</string>
     <string name="feedback_button">Feedback an API-Anbieter</string>
     <string name="feedback_hint">Öffnet E-Mail an hi@abfahrt.now</string>
-    <string name="feedback_subject">Feedback zur Abfahrt! API</string>
+    <string name="feedback_subject">Feedback zur abfahrt.now API</string>
     <string name="lang_system">Systemsprache</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -135,7 +135,7 @@
     <string name="language_update_note">Neue Sprachen kommen mit App-Updates.</string>
     <string name="loading_departures">Abfahrten werden geladen…</string>
     <string name="close">Schließen</string>
-    <string name="permission_rationale_full">Abfahrt! benötigt deinen Standort, um nahe Haltestellen und aktuelle Abfahrtszeiten anzuzeigen.</string>
+    <string name="permission_rationale_full">Abfahrtsradar benötigt deinen Standort, um nahe Haltestellen und aktuelle Abfahrtszeiten anzuzeigen.</string>
     <string name="no_departures_found">Keine Abfahrten gefunden.</string>
     <string name="no_results_time_window">Kein Treffer im gewählten Zeitfenster.</string>
     <string name="no_results_time_window_hint">Die API liefert nur die nächsten ~15 Abfahrten ab sofort. Bitte das Zeitfenster nach links verschieben oder mit Aktualisieren neue Daten laden.</string>
@@ -146,7 +146,7 @@
     <string name="refresh_minutes">Alle %d Minute</string>
     <string name="refresh_minutes_plural">Alle %d Minuten</string>
     <string name="feedback_email_hint">Öffnet E-Mail an hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Hallo Abfahrt!-Team,
+    <string name="api_feedback_greeting">Hallo abfahrt.now-Team,
 </string>
     <string name="lang_picker_system">System</string>
     <string name="lang_picker_english_uk">English</string>
@@ -202,7 +202,7 @@
     <string name="api_key_request_button">API-Key anfragen</string>
     <string name="api_key_request_subject">API-Key Anfrage – Android App Nutzung</string>
     <string name="api_key_request_body">Hallo,
-ich möchte einen persönlichen API-Key für die Nutzung der Abfahrt-App in der Android App anfragen.
+ich möchte einen persönlichen API-Key für die Nutzung der Abfahrtsradar-App in der Android App anfragen.
 Viele Grüße</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Mit Rad</string>
@@ -224,7 +224,7 @@ Viele Grüße</string>
     <string name="onboarding_welcome_title">API-Schlüssel erforderlich</string>
     <string name="onboarding_welcome_body">Für die Nutzung von abfahrt.now ist ein persönlicher API-Schlüssel erforderlich. Gib deinen Schlüssel ein, um fortzufahren. Den OpenRouteService-Schlüssel kannst du weiterhin optional im nächsten Schritt oder später in den Einstellungen hinterlegen.</string>
     <string name="onboarding_ors_title">Optional: Geh- und Radwege aktivieren</string>
-    <string name="onboarding_ors_body">Mit einem OpenRouteService-Schlüssel zeigt dir Abfahrt genaue Geh- oder Radwege sowie passende Zeiten an. Auch das ist optional und kann später jederzeit in den Einstellungen ergänzt werden.</string>
+    <string name="onboarding_ors_body">Mit einem OpenRouteService-Schlüssel zeigt dir Abfahrtsradar genaue Geh- oder Radwege sowie passende Zeiten an. Auch das ist optional und kann später jederzeit in den Einstellungen ergänzt werden.</string>
     <string name="onboarding_step_counter">Schritt %1$d von %2$d</string>
 <string name="next_step">Weiter</string>
     <string name="next_without_ors_key">Weiter ohne Geh- und Radwege</string>

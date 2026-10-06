@@ -18,7 +18,7 @@ class UpdateReleasePolicyTest {
         assertEquals("1.1.0", update.versionName)
         assertEquals(150, update.buildNumber)
         assertEquals(
-            "https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b150",
+            "https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b150",
             update.releaseUrl
         )
     }

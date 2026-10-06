@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">reH narghbogh mej
 EuropaDaq</string>
     <string name="app_subtitle">EuropaDaq QeDmey real-time</string>
     <string name="powered_by">abfahrt.now ra’moHlu’</string>
-    <string name="built_by">Riles Tech UG chenmoH ↗</string>
-    <string name="disclaimer">abfahrt.now nob mej poH. ngeb’eghHa’ data, Riles Tech UG yIbuSQo’.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">abfahrt.now nob mej poH.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
     <string name="agb">Terms</string>
-    <string name="welcome_title">Abfahrt! yI’el</string>
+    <string name="welcome_title">Abfahrtsradar yI’el</string>
     <string name="welcome_body">realtime mej yIleghmeH API key yIghaj.
 abfahrt.nowDaq yInej</string>
     <string name="api_key_hint">API key yIghItlh…</string>
@@ -47,7 +47,7 @@ abfahrt.nowDaq yInej</string>
     <string name="occupancy_high">🔴  tIn</string>
     <string name="occupancy_full">🔴  teHqu’</string>
     <string name="allow_location">Daq yIchaw’</string>
-    <string name="location_rationale">Sum Daqmey yIleghmeH Daq neH Abfahrt!.</string>
+    <string name="location_rationale">Sum Daqmey yIleghmeH Daq neH Abfahrtsradar.</string>
     <string name="retry">qaSpa’ yIqaD</string>
     <string name="error_location">Daq tu’lu’be’.
 GPS yIchu’.</string>
@@ -90,7 +90,7 @@ bIQDaq yIghoS qoj GPS yIchu’.</string>
     <string name="apikey_local_note">key DaqvamDaq poltaH.</string>
     <string name="feedback_button">API providervaD qech yIlab</string>
     <string name="feedback_hint">hi@abfahrt.nowvaD email poS</string>
-    <string name="feedback_subject">Abfahrt! API qech</string>
+    <string name="feedback_subject">abfahrt.now API qech</string>
     <string name="lang_system">System Hol</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Wi‑Fi qoj data yIlegh.</string>
     <string name="language_update_note">app choHlu’taHboghDaq Holmey chu’ tu’lu’.</string>
     <string name="loading_departures">mej lucheltaH…</string>
     <string name="close">SoQmoH</string>
-    <string name="permission_rationale_full">Sum Daqmey yIcha’meH Daq neH Abfahrt!.</string>
+    <string name="permission_rationale_full">Sum Daqmey yIcha’meH Daq neH Abfahrtsradar.</string>
     <string name="no_departures_found">mej tu’lu’be’.</string>
     <string name="no_results_time_window">poHvetlhDaq pagh tu’lu’.</string>
     <string name="no_results_time_window_hint">API ~15 mej neH nob. poH retlh yIchoH qoj choHlu’.</string>
@@ -152,7 +152,7 @@ Wi‑Fi qoj data yIlegh.</string>
     <string name="refresh_minutes">Hoch %d tup</string>
     <string name="refresh_minutes_plural">Hoch %d tup</string>
     <string name="feedback_email_hint">hi@abfahrt.nowvaD email poS</string>
-    <string name="api_feedback_greeting">nuqneH, Abfahrt! team,</string>
+    <string name="api_feedback_greeting">nuqneH, abfahrt.now team,</string>
     <string name="lang_picker_system">System</string>
     <string name="lang_picker_english_uk">English</string>
     <string name="lang_picker_german">Deutsch</string>
@@ -207,7 +207,7 @@ Wi‑Fi qoj data yIlegh.</string>
     <string name="api_key_request_button">API key yIpoQ</string>
     <string name="api_key_request_subject">API key poQ – Android app</string>
     <string name="api_key_request_body">nuqneH,
-Abfahrt Android app yIlo’meH API key vIpoQ.
+Abfahrtsradar Android app yIlo’meH API key vIpoQ.
 Qapla’</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">baD</string>
@@ -229,7 +229,7 @@ Qapla’</string>
     <string name="onboarding_welcome_title">API key poQlu’</string>
     <string name="onboarding_welcome_body">abfahrt.now lo’meH API key poQlu’. taHmeH key yIghItlh. OpenRouteService key poQbe’lu’ ’ej mIw vebDaq pagh pIq SeHlawDaq yIchellaH.</string>
     <string name="onboarding_ors_title">optional: yIt je baD routes yIchu’</string>
-    <string name="onboarding_ors_body">OpenRouteService key ghajchugh, Abfahrt ngoQ yIt qoj baD ghoH tIQ je poH cha’laH. optional je, pIq SeHlawDaq yIchel.</string>
+    <string name="onboarding_ors_body">OpenRouteService key ghajchugh, Abfahrtsradar ngoQ yIt qoj baD ghoH tIQ je poH cha’laH. optional je, pIq SeHlawDaq yIchel.</string>
     <string name="onboarding_step_counter">Step %1$d of %2$d</string>
 <string name="next_step">veb</string>
     <string name="next_without_ors_key">yIt je baD routes ghajbe’taHvIS yItI’</string>

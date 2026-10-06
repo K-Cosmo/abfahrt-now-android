@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Afgange i realtid
 i hele Europa</string>
     <string name="app_subtitle">Kollektivtrafik i realtid i Europa</string>
     <string name="powered_by">Drevet af abfahrt.now</string>
-    <string name="built_by">Bygget af Riles Tech UG  ↗</string>
-    <string name="disclaimer">Afgangstider leveres af abfahrt.now. Riles Tech UG påtager sig intet ansvar for oplysningernes rigtighed.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Afgangstider leveres af abfahrt.now.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Impressum</string>
     <string name="datenschutz">Privatliv</string>
     <string name="agb">Vilkår</string>
-    <string name="welcome_title">Velkommen til Abfahrt!</string>
+    <string name="welcome_title">Velkommen til Abfahrtsradar</string>
     <string name="welcome_body">Indtast din API-nøgle for at se realtidsafgange i nærheden.
 Få en nøgle på abfahrt.now</string>
     <string name="api_key_hint">Indtast API-nøgle…</string>
@@ -47,7 +47,7 @@ Få en nøgle på abfahrt.now</string>
     <string name="occupancy_high">🔴  Høj</string>
     <string name="occupancy_full">🔴  Fuld</string>
     <string name="allow_location">Tillad placering</string>
-    <string name="location_rationale">Abfahrt! har brug for din placering for at vise afgange i nærheden.</string>
+    <string name="location_rationale">Abfahrtsradar har brug for din placering for at vise afgange i nærheden.</string>
     <string name="retry">Prøv igen</string>
     <string name="error_location">Placering ikke tilgængelig.
 Aktivér GPS.</string>
@@ -90,7 +90,7 @@ Gå udenfor eller aktivér GPS.</string>
     <string name="apikey_local_note">Din nøgle gemmes kun lokalt.</string>
     <string name="feedback_button">Send feedback til API-udbyderen</string>
     <string name="feedback_hint">Åbner e-mail til hi@abfahrt.now</string>
-    <string name="feedback_subject">Feedback om Abfahrt!-API’en</string>
+    <string name="feedback_subject">Feedback om abfahrt.now-API’en</string>
     <string name="lang_system">Systemsprog</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Tjek Wi‑Fi eller mobildata.</string>
     <string name="language_update_note">Nye sprog kommer med app-opdateringer.</string>
     <string name="loading_departures">Indlæser afgange…</string>
     <string name="close">Luk</string>
-    <string name="permission_rationale_full">Abfahrt! har brug for din placering for at vise stop i nærheden og aktuelle afgange.</string>
+    <string name="permission_rationale_full">Abfahrtsradar har brug for din placering for at vise stop i nærheden og aktuelle afgange.</string>
     <string name="no_departures_found">Ingen afgange fundet.</string>
     <string name="no_results_time_window">Ingen match i det valgte tidsvindue.</string>
     <string name="no_results_time_window_hint">API’en returnerer kun de næste cirka 15 afgange fra nu. Flyt tidsvinduet mod venstre eller opdater for at hente nye data.</string>
@@ -152,7 +152,7 @@ Tjek Wi‑Fi eller mobildata.</string>
     <string name="refresh_minutes">Hvert %d minut</string>
     <string name="refresh_minutes_plural">Hvert %d. minut</string>
     <string name="feedback_email_hint">Åbner e-mail til hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Hej Abfahrt!-team,
+    <string name="api_feedback_greeting">Hej abfahrt.now-team,
 </string>
     <string name="lang_picker_system">System</string>
     <string name="lang_picker_english_uk">English</string>
@@ -208,7 +208,7 @@ Tjek Wi‑Fi eller mobildata.</string>
     <string name="api_key_request_button">Bed om API-nøgle</string>
     <string name="api_key_request_subject">Anmodning om API-nøgle – brug af Android-app</string>
     <string name="api_key_request_body">Hej,
-Jeg vil gerne anmode om en personlig API-nøgle til brug af Abfahrt Android-appen.
+Jeg vil gerne anmode om en personlig API-nøgle til brug af Abfahrtsradar Android-appen.
 Venlig hilsen</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">På cykel</string>
@@ -230,7 +230,7 @@ Venlig hilsen</string>
     <string name="onboarding_welcome_title">API-nøgle påkrævet</string>
     <string name="onboarding_welcome_body">En personlig API-nøgle er påkrævet for at bruge abfahrt.now. Indtast din nøgle for at fortsætte. OpenRouteService-nøglen er fortsat valgfri og kan tilføjes i næste trin eller senere i Indstillinger.</string>
     <string name="onboarding_ors_title">Valgfrit: aktivér gå- og cykelruter</string>
-    <string name="onboarding_ors_body">Med en OpenRouteService-nøgle kan Abfahrt vise præcise gå- eller cykelruter og passende tider. Det er også valgfrit og kan altid tilføjes senere i indstillingerne.</string>
+    <string name="onboarding_ors_body">Med en OpenRouteService-nøgle kan Abfahrtsradar vise præcise gå- eller cykelruter og passende tider. Det er også valgfrit og kan altid tilføjes senere i indstillingerne.</string>
     <string name="onboarding_step_counter">Trin %1$d af %2$d</string>
 <string name="next_step">Videre</string>
     <string name="next_without_ors_key">Videre uden gang- og cykelruter</string>

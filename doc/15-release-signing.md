@@ -1,6 +1,6 @@
 # Release-Signing und APK-Veröffentlichung
 
-Dieses Dokument ist die normative Release-Signing-Regel für direkte GitHub-APK-Releases der AbfahrtApp.
+Dieses Dokument ist die normative Release-Signing-Regel für direkte GitHub-APK-Releases der Abfahrtsradar.
 
 ## Ausgangslage RELEASE1
 
@@ -12,7 +12,7 @@ Wichtig: Die X.509-Subject-/Issuer-Metadaten bestimmen nicht technisch die Eigen
 
 RELEASE1 rotiert vom **alten Signer** auf einen **neuen neutralen Community-Signer**, ohne die Update-Kette der vorhandenen Installationen zu brechen.
 
-Die App hat `minSdk = 34`. RELEASE1 verwendet eine `apksigner`-Signing-Certificate-Lineage `old -> new`. Der akzeptierte Rotationsnachweis ist **nicht** an die Bedingung `Verified using v3.1 = true` gebunden: Mit Android Build Tools 37.0.0 verifiziert das tatsächlich erzeugte RELEASE1-Kandidaten-APK als APK Signature Scheme v3, trägt den neuen Community-Signer und wurde auf einem Android-14+-Gerät mit noch installiertem alten Release-Signer erfolgreich per `adb install -r` aktualisiert. Dieser reale In-place-Update-Nachweis ist für die AbfahrtApp maßgeblich.
+Die App hat `minSdk = 34`. RELEASE1 verwendet eine `apksigner`-Signing-Certificate-Lineage `old -> new`. Der akzeptierte Rotationsnachweis ist **nicht** an die Bedingung `Verified using v3.1 = true` gebunden: Mit Android Build Tools 37.0.0 verifiziert das tatsächlich erzeugte RELEASE1-Kandidaten-APK als APK Signature Scheme v3, trägt den neuen Community-Signer und wurde auf einem Android-14+-Gerät mit noch installiertem alten Release-Signer erfolgreich per `adb install -r` aktualisiert. Dieser reale In-place-Update-Nachweis ist für die Abfahrtsradar maßgeblich.
 
 Der alte private Key bleibt dauerhaft sicher verwahrt, weil er Bestandteil der Signer-Historie ist und zur Rekonstruktion/Prüfung der Lineage benötigt werden kann. Der neue private Key wird nach RELEASE1 der normale aktive Signer für künftige Releases. Beide Keystores und die Lineage liegen außerhalb des Repository-Workspaces und erhalten getrennte Backups.
 
@@ -138,7 +138,7 @@ Der erste öffentliche signierte APK-Release ist live:
 - APK SHA-256: `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`
 - aktueller Signer: `CN=Abfahrt Now Community, C=DE`
 - Signer Certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
-- Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+- Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
 Der finale Build wurde aus dem sauberen annotierten Tag auf Commit `85df24b280f60e47d813d17aa93f400b22fca787` erzeugt. `:app:testDebugUnitTest :app:assembleRelease` war erfolgreich. Nach `zipalign -P 16` wurde mit historischem Signer + Community-Signer + Lineage signiert; `apksigner verify --min-sdk-version 34 --verbose --print-certs` meldete `Verifies`, und der abschließende `zipalign -c -P 16 -v 4`-Check war erfolgreich.
 

@@ -1,11 +1,11 @@
-# Abfahrt! — Community Android App
+# Abfahrtsradar — Community Android App
 
 **Independent community Android client for nearby public transport departures and route planning.**
 
 > [!IMPORTANT]
 > This is an **independent community project**. It is **not the official abfahrt.now Android app**, is not affiliated with the operator or developer of the abfahrt.now API, and this project does not develop or operate that API. The app is an independent client that consumes public/authorised interfaces provided by external services.
 
-Abfahrt! focuses on a simple everyday question: which useful public transport departures are near me right now, and how do I reach them? The UI deliberately stays compact while the app combines live departure data, location-aware search, optional walking/cycling routing, and public-transport trip planning.
+Abfahrtsradar focuses on a simple everyday question: which useful public transport departures are near me right now, and how do I reach them? The UI deliberately stays compact while the app combines live departure data, location-aware search, optional walking/cycling routing, and public-transport trip planning.
 
 ## What you need
 
@@ -50,10 +50,10 @@ Credentials are service-scoped: an abfahrt.now key must never be sent to HeiGIT,
 ## Current development state
 
 - Version: **1.1.0**
-- Build: **155** (`versionCode 1550`)
+- Development build: **156** (`versionCode 1560`)
 - Android: **minSdk 34**, **compileSdk 37**, **targetSdk 37**
 - Stack: Kotlin, Jetpack Compose, Material 3, Hilt, Retrofit/OkHttp, DataStore, MapLibre
-- Latest public APK release: [v1.1.0-b155](https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155)
+- Latest public APK release: [v1.1.0-b155](https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155)
 
 ## Build / development
 

@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Plecări în timp real
 în toată Europa</string>
     <string name="app_subtitle">Transport public în timp real pentru Europa</string>
     <string name="powered_by">Cu tehnologia abfahrt.now</string>
-    <string name="built_by">Creat de Riles Tech UG  ↗</string>
-    <string name="disclaimer">Orele de plecare sunt furnizate de abfahrt.now. Riles Tech UG nu își asumă răspunderea pentru corectitudinea datelor.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Orele de plecare sunt furnizate de abfahrt.now.</string>
     <string name="version_label">Versiunea %s</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Confidențialitate</string>
     <string name="agb">Termeni</string>
-    <string name="welcome_title">Bine ai venit la Abfahrt!</string>
+    <string name="welcome_title">Bine ai venit la Abfahrtsradar</string>
     <string name="welcome_body">Introdu cheia API pentru a vedea plecările în timp real din apropiere.
 Obține o cheie la abfahrt.now</string>
     <string name="api_key_hint">Introdu cheia API…</string>
@@ -47,7 +47,7 @@ Obține o cheie la abfahrt.now</string>
     <string name="occupancy_high">🔴  Ridicat</string>
     <string name="occupancy_full">🔴  Plin</string>
     <string name="allow_location">Dopusti lokaciju</string>
-    <string name="location_rationale">Abfahrt! are nevoie de locația ta pentru a afișa plecările din apropiere.</string>
+    <string name="location_rationale">Abfahrtsradar are nevoie de locația ta pentru a afișa plecările din apropiere.</string>
     <string name="retry">Pokušaj ponovno</string>
     <string name="error_location">Locație indisponibilă.
 Activează GPS-ul.</string>
@@ -90,7 +90,7 @@ Ieși afară sau activează GPS-ul.</string>
     <string name="apikey_local_note">Cheia ta este stocată doar local.</string>
     <string name="feedback_button">Trimite feedback furnizorului API</string>
     <string name="feedback_hint">Deschide email către hi@abfahrt.now</string>
-    <string name="feedback_subject">Feedback despre API-ul Abfahrt!</string>
+    <string name="feedback_subject">Feedback despre API-ul abfahrt.now</string>
     <string name="lang_system">Limba sistemului</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Verifică Wi‑Fi-ul sau datele mobile.</string>
     <string name="language_update_note">Limbile noi vor veni cu actualizările aplicației.</string>
     <string name="loading_departures">Se încarcă plecările…</string>
     <string name="close">Zatvori</string>
-    <string name="permission_rationale_full">Abfahrt! are nevoie de locația ta pentru a afișa stațiile din apropiere și plecările curente.</string>
+    <string name="permission_rationale_full">Abfahrtsradar are nevoie de locația ta pentru a afișa stațiile din apropiere și plecările curente.</string>
     <string name="no_departures_found">Nu s-au găsit plecări.</string>
     <string name="no_results_time_window">Nicio potrivire în intervalul selectat.</string>
     <string name="no_results_time_window_hint">API-ul returnează doar următoarele ~15 plecări de acum înainte. Mută fereastra de timp spre stânga sau actualizează pentru a încărca date noi.</string>
@@ -152,7 +152,7 @@ Verifică Wi‑Fi-ul sau datele mobile.</string>
     <string name="refresh_minutes">La fiecare %d minut</string>
     <string name="refresh_minutes_plural">La fiecare %d minute</string>
     <string name="feedback_email_hint">Deschide email către hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Salut echipa Abfahrt!,
+    <string name="api_feedback_greeting">Salut echipa abfahrt.now,
 </string>
     <string name="lang_picker_system">Sistem</string>
     <string name="lang_picker_english_uk">English</string>
@@ -208,7 +208,7 @@ Verifică Wi‑Fi-ul sau datele mobile.</string>
     <string name="api_key_request_button">Solicită cheie API</string>
     <string name="api_key_request_subject">Solicitare cheie API – utilizare aplicație Android</string>
     <string name="api_key_request_body">Salut,
-Aș dori să solicit o cheie API personală pentru utilizarea aplicației Android Abfahrt.
+Aș dori să solicit o cheie API personală pentru utilizarea aplicației Android Abfahrtsradar.
 Cu stimă</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Biciklom</string>
@@ -230,7 +230,7 @@ Cu stimă</string>
     <string name="onboarding_welcome_title">Potreban je API ključ</string>
     <string name="onboarding_welcome_body">Za korištenje abfahrt.now potreban je osobni API ključ. Unesi ključ za nastavak. OpenRouteService ključ i dalje je opcionalan i može se dodati u sljedećem koraku ili kasnije u postavkama.</string>
     <string name="onboarding_ors_title">Opțional: activează rutele de mers și bicicletă</string>
-    <string name="onboarding_ors_body">Cu o cheie OpenRouteService, Abfahrt poate afișa rute precise de mers pe jos sau cu bicicleta și duratele potrivite. Și aceasta este opțională și poate fi adăugată oricând mai târziu din setări.</string>
+    <string name="onboarding_ors_body">Cu o cheie OpenRouteService, Abfahrtsradar poate afișa rute precise de mers pe jos sau cu bicicleta și duratele potrivite. Și aceasta este opțională și poate fi adăugată oricând mai târziu din setări.</string>
     <string name="onboarding_step_counter">Pasul %1$d din %2$d</string>
 <string name="next_step">Următorul</string>
     <string name="next_without_ors_key">Continuă fără rute de mers și bicicletă</string>

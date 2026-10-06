@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Odchody v reálnom čase
 po celej Európe</string>
     <string name="app_subtitle">Verejná doprava v reálnom čase pre Európu</string>
     <string name="powered_by">Poháňa abfahrt.now</string>
-    <string name="built_by">Vytvorila Riles Tech UG  ↗</string>
-    <string name="disclaimer">Časy odchodov poskytuje abfahrt.now. Riles Tech UG nezodpovedá za správnosť údajov.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Časy odchodov poskytuje abfahrt.now.</string>
     <string name="version_label">Verzia %s</string>
     <string name="impressum">Tiráž</string>
     <string name="datenschutz">Súkromie</string>
     <string name="agb">Podmienky</string>
-    <string name="welcome_title">Vitaj v Abfahrt!</string>
+    <string name="welcome_title">Vitaj v Abfahrtsradar</string>
     <string name="welcome_body">Zadaj svoj API kľúč a uvidíš odchody v reálnom čase vo svojom okolí.
 Kľúč získaš na abfahrt.now</string>
     <string name="api_key_hint">Zadaj API kľúč…</string>
@@ -47,7 +47,7 @@ Kľúč získaš na abfahrt.now</string>
     <string name="occupancy_high">🔴  Vysoká</string>
     <string name="occupancy_full">🔴  Plné</string>
     <string name="allow_location">Povoliť polohu</string>
-    <string name="location_rationale">Abfahrt! potrebuje tvoju polohu, aby zobrazil blízke odchody.</string>
+    <string name="location_rationale">Abfahrtsradar potrebuje tvoju polohu, aby zobrazil blízke odchody.</string>
     <string name="retry">Skúsiť znova</string>
     <string name="error_location">Poloha nie je dostupná.
 Povoľ GPS.</string>
@@ -90,7 +90,7 @@ Choď von alebo povoľ GPS.</string>
     <string name="apikey_local_note">Tvoj kľúč je uložený len lokálne.</string>
     <string name="feedback_button">Poslať spätnú väzbu poskytovateľovi API</string>
     <string name="feedback_hint">Otvorí email na hi@abfahrt.now</string>
-    <string name="feedback_subject">Spätná väzba k API Abfahrt!</string>
+    <string name="feedback_subject">Spätná väzba k API abfahrt.now</string>
     <string name="lang_system">Jazyk systému</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Skontroluj Wi‑Fi alebo dáta.</string>
     <string name="language_update_note">Nové jazyky prídu s aktualizáciami aplikácie.</string>
     <string name="loading_departures">Načítavajú sa odchody…</string>
     <string name="close">Zavrieť</string>
-    <string name="permission_rationale_full">Abfahrt! potrebuje tvoju polohu na zobrazenie blízkych zastávok a aktuálnych odchodov.</string>
+    <string name="permission_rationale_full">Abfahrtsradar potrebuje tvoju polohu na zobrazenie blízkych zastávok a aktuálnych odchodov.</string>
     <string name="no_departures_found">Nenašli sa žiadne odchody.</string>
     <string name="no_results_time_window">V zvolenom časovom okne nič nevyhovuje.</string>
     <string name="no_results_time_window_hint">API vracia len najbližších ~15 odchodov odteraz. Posuň časové okno doľava alebo obnov, aby sa načítali nové údaje.</string>
@@ -152,7 +152,7 @@ Skontroluj Wi‑Fi alebo dáta.</string>
     <string name="refresh_minutes">Každú %d minútu</string>
     <string name="refresh_minutes_plural">Každé %d minúty</string>
     <string name="feedback_email_hint">Otvorí email na hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Ahoj tím Abfahrt!,
+    <string name="api_feedback_greeting">Ahoj tím abfahrt.now,
 </string>
     <string name="lang_picker_system">Systém</string>
     <string name="lang_picker_english_uk">English</string>
@@ -208,7 +208,7 @@ Skontroluj Wi‑Fi alebo dáta.</string>
     <string name="api_key_request_button">Požiadať o API kľúč</string>
     <string name="api_key_request_subject">Žiadosť o API kľúč – používanie Android aplikácie</string>
     <string name="api_key_request_body">Dobrý deň,
-chcel by som požiadať o osobný API kľúč na používanie aplikácie Abfahrt pre Android.
+chcel by som požiadať o osobný API kľúč na používanie aplikácie Abfahrtsradar pre Android.
 S pozdravom</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Na bicykli</string>
@@ -230,7 +230,7 @@ S pozdravom</string>
     <string name="onboarding_welcome_title">Vyžaduje sa API kľúč</string>
     <string name="onboarding_welcome_body">Na používanie abfahrt.now je potrebný osobný API kľúč. Zadaj svoj kľúč a pokračuj. Kľúč OpenRouteService zostáva voliteľný a môžeš ho pridať v ďalšom kroku alebo neskôr v nastaveniach.</string>
     <string name="onboarding_ors_title">Voliteľné: zapnúť trasy pešo a na bicykli</string>
-    <string name="onboarding_ors_body">S kľúčom OpenRouteService môže Abfahrt zobrazovať presné pešie alebo cyklo trasy a zodpovedajúce časy. Aj toto je voliteľné a dá sa kedykoľvek pridať neskôr v nastaveniach.</string>
+    <string name="onboarding_ors_body">S kľúčom OpenRouteService môže Abfahrtsradar zobrazovať presné pešie alebo cyklo trasy a zodpovedajúce časy. Aj toto je voliteľné a dá sa kedykoľvek pridať neskôr v nastaveniach.</string>
     <string name="onboarding_step_counter">Krok %1$d z %2$d</string>
 <string name="next_step">Ďalej</string>
     <string name="next_without_ors_key">Pokračovať bez trás pešo a na bicykli</string>

@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Salidas en tiempo real
 en toda Europa</string>
     <string name="app_subtitle">Transporte en tiempo real para Europa</string>
     <string name="powered_by">Con tecnología de abfahrt.now</string>
-    <string name="built_by">Creado por Riles Tech UG ↗</string>
-    <string name="disclaimer">Los horarios de salida los proporciona abfahrt.now. Riles Tech UG no asume responsabilidad por la exactitud de los datos.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Los horarios de salida los proporciona abfahrt.now.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
     <string name="agb">Terms</string>
-    <string name="welcome_title">Te damos la bienvenida a Abfahrt!</string>
+    <string name="welcome_title">Te damos la bienvenida a Abfahrtsradar</string>
     <string name="welcome_body">Introduce tu API key para ver salidas en tiempo real cerca de ti.
 Consigue una en abfahrt.now</string>
     <string name="api_key_hint">Introduce la API key…</string>
@@ -47,7 +47,7 @@ Consigue una en abfahrt.now</string>
     <string name="occupancy_high">🔴  Alta</string>
     <string name="occupancy_full">🔴  Llena</string>
     <string name="allow_location">Permitir ubicación</string>
-    <string name="location_rationale">Abfahrt! necesita tu ubicación para mostrar salidas cercanas.</string>
+    <string name="location_rationale">Abfahrtsradar necesita tu ubicación para mostrar salidas cercanas.</string>
     <string name="retry">Reintentar</string>
     <string name="error_location">Ubicación no disponible.
 Activa el GPS.</string>
@@ -90,7 +90,7 @@ Sal fuera o activa el GPS.</string>
     <string name="apikey_local_note">Tu key solo se guarda en local.</string>
     <string name="feedback_button">Enviar comentario al proveedor de la API</string>
     <string name="feedback_hint">Abre un correo a hi@abfahrt.now</string>
-    <string name="feedback_subject">Comentario sobre la API de Abfahrt!</string>
+    <string name="feedback_subject">Comentario sobre la API de abfahrt.now</string>
     <string name="lang_system">Idioma del sistema</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Comprueba tu wifi o tus datos.</string>
     <string name="language_update_note">Los nuevos idiomas llegarán con las actualizaciones de la app.</string>
     <string name="loading_departures">Cargando salidas…</string>
     <string name="close">Cerrar</string>
-    <string name="permission_rationale_full">Abfahrt! necesita tu ubicación para mostrar paradas cercanas y salidas actuales.</string>
+    <string name="permission_rationale_full">Abfahrtsradar necesita tu ubicación para mostrar paradas cercanas y salidas actuales.</string>
     <string name="no_departures_found">No se encontraron salidas.</string>
     <string name="no_results_time_window">No hay coincidencias en la ventana de tiempo seleccionada.</string>
     <string name="no_results_time_window_hint">La API solo devuelve las próximas ~15 salidas desde ahora. Mueve la ventana de tiempo hacia la izquierda o actualiza para cargar datos nuevos.</string>
@@ -152,7 +152,7 @@ Comprueba tu wifi o tus datos.</string>
     <string name="refresh_minutes">Cada %d minuto</string>
     <string name="refresh_minutes_plural">Cada %d minutos</string>
     <string name="feedback_email_hint">Abre un correo a hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Hola, equipo de Abfahrt!,</string>
+    <string name="api_feedback_greeting">Hola, equipo de abfahrt.now,</string>
     <string name="lang_picker_system">Sistema</string>
     <string name="lang_picker_english_uk">Inglés</string>
     <string name="lang_picker_german">Deutsch</string>
@@ -207,7 +207,7 @@ Comprueba tu wifi o tus datos.</string>
     <string name="api_key_request_button">Solicitar API key</string>
     <string name="api_key_request_subject">Solicitud de API key – uso de la app Android</string>
     <string name="api_key_request_body">Hola,
-me gustaría solicitar una API key personal para usar la app Android de Abfahrt.
+me gustaría solicitar una API key personal para usar la app Android de Abfahrtsradar.
 Saludos</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">En bici</string>
@@ -229,7 +229,7 @@ Saludos</string>
     <string name="onboarding_welcome_title">Se requiere una clave API</string>
     <string name="onboarding_welcome_body">Se requiere una clave API personal para usar abfahrt.now. Introduce tu clave para continuar. La clave de OpenRouteService sigue siendo opcional y puede añadirse en el siguiente paso o más tarde en Ajustes.</string>
     <string name="onboarding_ors_title">Opcional: activar rutas a pie y en bici</string>
-    <string name="onboarding_ors_body">Con una key de OpenRouteService, Abfahrt puede mostrar rutas precisas a pie o en bici y los tiempos correspondientes. También es opcional y se puede añadir más tarde en Ajustes en cualquier momento.</string>
+    <string name="onboarding_ors_body">Con una key de OpenRouteService, Abfahrtsradar puede mostrar rutas precisas a pie o en bici y los tiempos correspondientes. También es opcional y se puede añadir más tarde en Ajustes en cualquier momento.</string>
     <string name="onboarding_step_counter">Paso %1$d de %2$d</string>
 <string name="next_step">Siguiente</string>
     <string name="next_without_ors_key">Seguir sin rutas a pie y en bici</string>

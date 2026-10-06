@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Realtime vertrektijden
 in heel Europa</string>
     <string name="app_subtitle">Realtime ov voor Europa</string>
     <string name="powered_by">Mogelijk gemaakt door abfahrt.now</string>
-    <string name="built_by">Gebouwd door Riles Tech UG  ↗</string>
-    <string name="disclaimer">Vertrektijden worden geleverd door abfahrt.now. Riles Tech UG aanvaardt geen aansprakelijkheid voor de juistheid van de gegevens.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Vertrektijden worden geleverd door abfahrt.now.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Colofon</string>
     <string name="datenschutz">Privacy</string>
     <string name="agb">Voorwaarden</string>
-    <string name="welcome_title">Welkom bij Abfahrt!</string>
+    <string name="welcome_title">Welkom bij Abfahrtsradar</string>
     <string name="welcome_body">Voer je API-sleutel in om realtime vertrektijden bij jou in de buurt te zien.
 Vraag een sleutel aan via abfahrt.now</string>
     <string name="api_key_hint">API-sleutel invoeren…</string>
@@ -47,7 +47,7 @@ Vraag een sleutel aan via abfahrt.now</string>
     <string name="occupancy_high">🔴  Hoog</string>
     <string name="occupancy_full">🔴  Vol</string>
     <string name="allow_location">Locatie toestaan</string>
-    <string name="location_rationale">Abfahrt! heeft je locatie nodig om vertrektijden in de buurt te tonen.</string>
+    <string name="location_rationale">Abfahrtsradar heeft je locatie nodig om vertrektijden in de buurt te tonen.</string>
     <string name="retry">Opnieuw</string>
     <string name="error_location">Locatie niet beschikbaar.
 Schakel gps in.</string>
@@ -90,7 +90,7 @@ Ga naar buiten of schakel gps in.</string>
     <string name="apikey_local_note">Je sleutel wordt alleen lokaal opgeslagen.</string>
     <string name="feedback_button">Feedback sturen naar API-provider</string>
     <string name="feedback_hint">Opent e-mail naar hi@abfahrt.now</string>
-    <string name="feedback_subject">Feedback over de Abfahrt!-API</string>
+    <string name="feedback_subject">Feedback over de abfahrt.now-API</string>
     <string name="lang_system">Systeemtaal</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Controleer wifi of mobiele data.</string>
     <string name="language_update_note">Nieuwe talen komen mee met app-updates.</string>
     <string name="loading_departures">Vertrekken laden…</string>
     <string name="close">Sluiten</string>
-    <string name="permission_rationale_full">Abfahrt! heeft je locatie nodig om haltes in de buurt en actuele vertrektijden te tonen.</string>
+    <string name="permission_rationale_full">Abfahrtsradar heeft je locatie nodig om haltes in de buurt en actuele vertrektijden te tonen.</string>
     <string name="no_departures_found">Geen vertrektijden gevonden.</string>
     <string name="no_results_time_window">Geen resultaat in het gekozen tijdvenster.</string>
     <string name="no_results_time_window_hint">De API geeft alleen de volgende ongeveer 15 vertrektijden vanaf nu terug. Schuif het tijdvenster naar links of vernieuw om nieuwe data te laden.</string>
@@ -152,7 +152,7 @@ Controleer wifi of mobiele data.</string>
     <string name="refresh_minutes">Elke %d minuut</string>
     <string name="refresh_minutes_plural">Elke %d minuten</string>
     <string name="feedback_email_hint">Opent e-mail naar hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Hallo Abfahrt!-team,
+    <string name="api_feedback_greeting">Hallo abfahrt.now-team,
 </string>
     <string name="lang_picker_system">Systeem</string>
     <string name="lang_picker_english_uk">English</string>
@@ -208,7 +208,7 @@ Controleer wifi of mobiele data.</string>
     <string name="api_key_request_button">API-key vragen</string>
     <string name="api_key_request_subject">API-sleutelverzoek – gebruik Android-app</string>
     <string name="api_key_request_body">Hallo,
-Ik wil graag een persoonlijke API-sleutel aanvragen voor het gebruik van de Abfahrt Android-app.
+Ik wil graag een persoonlijke API-sleutel aanvragen voor het gebruik van de Abfahrtsradar Android-app.
 Met vriendelijke groet</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Met de fiets</string>
@@ -230,7 +230,7 @@ Met vriendelijke groet</string>
     <string name="onboarding_welcome_title">API-sleutel vereist</string>
     <string name="onboarding_welcome_body">Voor het gebruik van abfahrt.now is een persoonlijke API-sleutel vereist. Voer je sleutel in om door te gaan. De OpenRouteService-sleutel blijft optioneel en kan in de volgende stap of later in Instellingen worden toegevoegd.</string>
     <string name="onboarding_ors_title">Optioneel: loop- en fietsroutes inschakelen</string>
-    <string name="onboarding_ors_body">Met een OpenRouteService-sleutel kan Abfahrt nauwkeurige loop- of fietsroutes en passende tijden tonen. Ook dit is optioneel en kan later altijd in de instellingen worden toegevoegd.</string>
+    <string name="onboarding_ors_body">Met een OpenRouteService-sleutel kan Abfahrtsradar nauwkeurige loop- of fietsroutes en passende tijden tonen. Ook dit is optioneel en kan later altijd in de instellingen worden toegevoegd.</string>
     <string name="onboarding_step_counter">Stap %1$d van %2$d</string>
 <string name="next_step">Verder</string>
     <string name="next_without_ors_key">Verder zonder loop- en fietsroutes</string>
