@@ -18,8 +18,10 @@ Die App soll ausdrücklich **kein Google-Maps-Ersatz** sein. Kern ist eine schne
 - Fehlende Zusatzdaten dürfen die Kernfunktion nicht blockieren.
 - Update-Verfügbarkeit ist Zusatzkomfort: ein fehlgeschlagener Update-Check darf die App weder blockieren noch als Kernfehler erscheinen.
 - Die App ist ein unabhängiges Community-Projekt. Externe Daten-/API-Anbieter werden klar als solche benannt und dürfen nicht als App-Betreiber erscheinen.
+- Der Projektquellcode steht unter der MIT-Lizenz; Drittanbieter-Komponenten behalten ihre jeweiligen Lizenzen.
+- Die Entwicklung ist KI-gestützt. KI-Unterstützung ändert weder Qualitätsmaßstab noch Abnahmeprozess: CI, reale Tests und Evidence bleiben verbindlich.
 
-## Aktueller Funktionsumfang Build 151
+## Aktueller Funktionsumfang Build 155
 
 ### Community-Identität Build 151
 - Settings-Footer bezeichnet Abfahrt! sichtbar als unabhängige/unoffizielle Community-App und grenzt sie von abfahrt.now ab.

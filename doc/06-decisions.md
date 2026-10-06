@@ -535,3 +535,24 @@ Ab Build 151 umfasst der Standard-Gate auf Pull Requests dauerhaft:
 `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease --no-daemon`
 
 Damit werden Unit-Tests, Debug-Build und minifizierter Release/R8-Build auf demselben Commit geprüft. Ein grüner CI-Gate bleibt trotzdem **nur ein technischer Gate**: sichtbare UX, reale Netzwerk-/Gerätepfade und andere definierte Runtime-Evidence werden dadurch nicht automatisch akzeptiert.
+
+
+## D-074 — Projektquellcode steht unter MIT-Lizenz
+
+Ab 06.10.2026 wird der eigenständige Quellcode dieses Community-Projekts wieder unter der **MIT License** veröffentlicht. Die kanonische Lizenzdatei liegt als `LICENSE` im Repository-Root.
+
+Verbindlich:
+- der Projektquellcode darf als Open-Source-Projekt unter MIT bezeichnet werden;
+- Copyright-Hinweis: `Copyright (c) 2026 K-Cosmo and contributors`;
+- Drittanbieter-Abhängigkeiten, Daten, Marken und sonstige Fremdinhalte werden dadurch nicht unter MIT umgelizenziert und behalten ihre jeweiligen Rechte/Lizenzen;
+- README und öffentliche Projektbeschreibung dürfen keine fehlende Projektlizenz mehr behaupten.
+
+## D-075 — KI-Unterstützung ist transparent, aber kein Ersatz für Evidence
+
+Die AbfahrtApp wird **KI-gestützt entwickelt**. KI-Werkzeuge dürfen bei Analyse, Spezifikation, Implementierung, Review, Tests und Dokumentation mitwirken.
+
+Verbindlich:
+- `/doc/AI-CODING-GUARDRAILS.md` bleibt die projektspezifische Leitplanke für KI-gestützte Änderungen;
+- KI-generierter oder KI-veränderter Code unterliegt denselben Reviews, CI-, Build-, Runtime- und Evidence-Gates wie manuell erstellter Code;
+- eine KI-Einschätzung allein ist niemals Abnahmebeleg;
+- die öffentliche README weist transparent auf die KI-gestützte Entwicklung hin.

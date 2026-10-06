@@ -35,7 +35,7 @@ Locale-/Governance-/Compatibility-Gates, committed Wrapper, Unit Tests, Debug un
 - Gewählte Sortierung bleibt nach `force-stop`/Neustart erhalten.
 - Keine FATAL-/ANR-/Navigation-/Settings-Regression im Abnahmeumfang.
 
-F-SORT-001 / B-155-001 ist geschlossen. Build 155 ist Release-Kandidat für RELEASE1.
+F-SORT-001 / B-155-001 ist geschlossen. Build 155 wurde als RELEASE1 `v1.1.0-b155` veröffentlicht.
 
 ## RELEASE1 veröffentlicht — 06.10.2026
 
@@ -57,7 +57,7 @@ Der normale Gradle-Release bleibt absichtlich credential-frei/unsigned. Der loka
 
 ## Nächster Produkt-/Hardening-Schritt
 
-F-ORS-001/B-ORS-001 ist der nächste getrennte Hardening-Kandidat. RELEASE1 selbst benötigt keinen weiteren Produktbuild.
+Für den nächsten Produktbuild ist zuerst F-NAME-001 zu entscheiden: ein eigener sichtbarer App-Name, klar getrennt von der offiziellen `Abfahrt!`-App. F-ORS-001/B-ORS-001 bleibt der nächste getrennte technische Hardening-Kandidat.
 
 ## Separates Finding: ORS-Key-Probe
 

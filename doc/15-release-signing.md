@@ -109,7 +109,7 @@ Auf einem realen Gerät wurde vor dem Update die installierte `base.apk` gezogen
 
 Damit ist die **kryptografische Update-Kompatibilität alt -> neuer Community-Signer real bewiesen**. Das reale Endnutzergerät lief im RELEASE1-Smoke mit 4-KB-Seiten; dieser Pfad belegt die Update-/Datenkompatibilität auf normaler Hardware, ersetzt aber nicht den separaten 16-KB-Runtime-Gate.
 
-Der exakt signierte Kandidat wurde deshalb zusätzlich auf einem offiziellen Android-16-KB-x86_64-Emulator gestartet. Der Kaltstart meldete `AbfahrtCompat: memoryPageSizeBytes=16384`, und `lib/x86_64/libmaplibre.so` wurde durch den Native Loader erfolgreich geladen (`ok`). Im aufgezeichneten 16-KB-Smoke trat weder `FATAL EXCEPTION` noch eine App-ANR auf. Damit ist der 16-KB-Runtime-Gate für das RELEASE1-Kandidaten-APK erfüllt. Noch separat zu bestätigen bleiben Daten-/Preferences-Erhalt und der vollständige Kernsmoke auf dem realen Endnutzergerät.
+Der exakt signierte Kandidat wurde deshalb zusätzlich auf einem offiziellen Android-16-KB-x86_64-Emulator gestartet. Der Kaltstart meldete `AbfahrtCompat: memoryPageSizeBytes=16384`, und `lib/x86_64/libmaplibre.so` wurde durch den Native Loader erfolgreich geladen (`ok`). Im aufgezeichneten 16-KB-Smoke trat weder `FATAL EXCEPTION` noch eine App-ANR auf. Damit ist der 16-KB-Runtime-Gate für das RELEASE1-Kandidaten-APK erfüllt. Diese Passage beschreibt den damaligen Kandidaten-Gate; der endgültige Veröffentlichungsstatus und das finale Artefakt sind im Abschnitt `RELEASE1 — veröffentlicht 06.10.2026` dokumentiert.
 
 ## Verifikation vor Veröffentlichung
 

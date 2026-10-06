@@ -8,6 +8,10 @@ Sie ist **nicht** die offizielle Android-App von abfahrt.now, nicht mit dem Betr
 
 Diese Abgrenzung muss in öffentlichen Projektflächen klar erkennbar bleiben. Marken-/Anbieterhinweise dürfen nicht den Eindruck erwecken, das Community-Projekt vertrete einen externen API-Anbieter.
 
+Der eigenständige Projektquellcode steht unter der **MIT License**. Diese Projektlizenz ändert keine Rechte an Drittanbieter-Komponenten, externen Daten, Marken oder Diensten.
+
+Die Entwicklung ist **KI-gestützt**. KI-Werkzeuge dürfen bei Analyse, Implementierung, Review, Tests und Dokumentation eingesetzt werden; sie ersetzen keine CI-, Runtime- oder Evidence-Gates. Maßgeblich sind die Guardrails in [`AI-CODING-GUARDRAILS.md`](AI-CODING-GUARDRAILS.md).
+
 ## EU-first
 
 Bei neuen externen Runtime-Diensten gilt **EU-first** als Architektur- und Beschaffungsprinzip:
