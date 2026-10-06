@@ -1,3 +1,11 @@
+## DOC3 — MIT-Lizenz / README- und Release-Drift-Konvergenz — 06.10.2026
+
+- Projektlizenz wieder auf MIT festgelegt; Root-`LICENSE` ergänzt und F-DOC1-014 geschlossen.
+- README ergänzt den direkten API-Key-Anfrageweg über `hi@abfahrt.now`, weist transparent auf KI-gestützte Entwicklung hin und beschreibt das Projekt wieder als MIT-lizenziert.
+- F-REL-001 nach real veröffentlichtem `v1.1.0-b155` geschlossen; stale Release-Kandidat-/RELEASE1-next-Formulierungen in `/doc` konvergiert.
+- F-NAME-001 / B-156-001 neu: sichtbarer Community-App-Name soll sich im nächsten Produktbuild klar von der offiziellen `Abfahrt!`-App unterscheiden; konkrete Namensentscheidung noch offen.
+- keine Android-Runtime-, Dependency-, Package-ID-, Signing- oder Versionsänderung.
+
 ## v1.1.0 Build 155 — first public signed APK release — 06.10.2026
 
 - erster öffentlicher signierter GitHub-APK-Release: `v1.1.0-b155`.
