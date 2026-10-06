@@ -1,3 +1,12 @@
+## v1.1.0 Build 155 — first public signed APK release — 06.10.2026
+
+- erster öffentlicher signierter GitHub-APK-Release: `v1.1.0-b155`.
+- Source/Tag-Commit: `85df24b280f60e47d813d17aa93f400b22fca787`.
+- finales Asset: `abfahrt-now-v1.1.0-b155.apk`, SHA-256 `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`.
+- kontrollierte Signing-Key-Rotation vom historischen Release-Signer auf `CN=Abfahrt Now Community, C=DE` über Android Signing-Certificate-Lineage; reales In-place-Update von einer Old-Key-Installation erfolgreich.
+- finales Tag-Artefakt mit `apksigner verify` und `zipalign -c -P 16 -v 4` verifiziert; 16-KB-Runtime-Smoke auf offiziellem x86_64-16-KB-Emulator grün.
+- GitHub Release enthält APK + `SHA256SUMS.txt`; `releases/latest` liefert `v1.1.0-b155`.
+
 ## DOC2 — Build-151-Dokumentationskonvergenz — 03.10.2026
 
 - reine Dokumentations-/Governance-Konvergenz; keine Android-Runtime-, Ressourcen-, Dependency- oder Versionsänderung.
