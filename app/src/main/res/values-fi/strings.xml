@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Lähdöt reaaliajassa
 ympäri Eurooppaa</string>
     <string name="app_subtitle">Joukkoliikenne reaaliajassa Eurooppaan</string>
@@ -11,7 +11,7 @@ ympäri Eurooppaa</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
     <string name="agb">Terms</string>
-    <string name="welcome_title">Tervetuloa Abfahrtiin!</string>
+    <string name="welcome_title">Tervetuloa Abfahrtsradariin</string>
     <string name="welcome_body">Anna API-avaimesi nähdäksesi reaaliaikaiset lähdöt lähelläsi.
 Saat avaimen osoitteesta abfahrt.now</string>
     <string name="api_key_hint">Anna API-avain…</string>
@@ -47,7 +47,7 @@ Saat avaimen osoitteesta abfahrt.now</string>
     <string name="occupancy_high">🔴  Korkea</string>
     <string name="occupancy_full">🔴  Täynnä</string>
     <string name="allow_location">Salli sijainti</string>
-    <string name="location_rationale">Abfahrt! tarvitsee sijaintisi näyttääkseen läheiset lähdöt.</string>
+    <string name="location_rationale">Abfahrtsradar tarvitsee sijaintisi näyttääkseen läheiset lähdöt.</string>
     <string name="retry">Yritä uudelleen</string>
     <string name="error_location">Sijainti ei ole saatavilla.
 Ota GPS käyttöön.</string>
@@ -90,7 +90,7 @@ Mene ulos tai ota GPS käyttöön.</string>
     <string name="apikey_local_note">Avaimesi tallennetaan vain paikallisesti.</string>
     <string name="feedback_button">Lähetä palautetta API-tarjoajalle</string>
     <string name="feedback_hint">Avaa sähköpostin osoitteeseen hi@abfahrt.now</string>
-    <string name="feedback_subject">Palaute Abfahrt!-API:sta</string>
+    <string name="feedback_subject">Palaute abfahrt.now-API:sta</string>
     <string name="lang_system">Järjestelmän kieli</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Tarkista Wi‑Fi tai mobiilidata.</string>
     <string name="language_update_note">Uudet kielet tulevat sovelluspäivityksissä.</string>
     <string name="loading_departures">Ladataan lähtöjä…</string>
     <string name="close">Sulje</string>
-    <string name="permission_rationale_full">Abfahrt! tarvitsee sijaintisi näyttääkseen läheiset pysäkit ja nykyiset lähdöt.</string>
+    <string name="permission_rationale_full">Abfahrtsradar tarvitsee sijaintisi näyttääkseen läheiset pysäkit ja nykyiset lähdöt.</string>
     <string name="no_departures_found">Lähtöjä ei löytynyt.</string>
     <string name="no_results_time_window">Valitussa aikaikkunassa ei ole osumia.</string>
     <string name="no_results_time_window_hint">API palauttaa vain seuraavat ~15 lähtöä tästä hetkestä alkaen. Siirrä aikaikkunaa vasemmalle tai päivitä ladataksesi uutta dataa.</string>
@@ -152,7 +152,7 @@ Tarkista Wi‑Fi tai mobiilidata.</string>
     <string name="refresh_minutes">Joka %d minuutti</string>
     <string name="refresh_minutes_plural">Joka %d minuuttia</string>
     <string name="feedback_email_hint">Avaa sähköpostin osoitteeseen hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Hei Abfahrt!-tiimi,</string>
+    <string name="api_feedback_greeting">Hei abfahrt.now-tiimi,</string>
     <string name="lang_picker_system">Järjestelmä</string>
     <string name="lang_picker_english_uk">Englanti</string>
     <string name="lang_picker_german">Deutsch</string>
@@ -229,7 +229,7 @@ Ystävällisin terveisin</string>
     <string name="onboarding_welcome_title">API-avain vaaditaan</string>
     <string name="onboarding_welcome_body">abfahrt.now-palvelun käyttö vaatii henkilökohtaisen API-avaimen. Jatka syöttämällä avain. OpenRouteService-avain on edelleen valinnainen ja sen voi lisätä seuraavassa vaiheessa tai myöhemmin asetuksissa.</string>
     <string name="onboarding_ors_title">Valinnainen: ota käyttöön kävely- ja pyöräreitit</string>
-    <string name="onboarding_ors_body">OpenRouteService-avaimella Abfahrt voi näyttää tarkat kävely- tai pyöräreitit ja niihin sopivat ajat. Tämäkin on valinnaista ja sen voi lisätä myöhemmin milloin tahansa asetuksissa.</string>
+    <string name="onboarding_ors_body">OpenRouteService-avaimella Abfahrtsradar voi näyttää tarkat kävely- tai pyöräreitit ja niihin sopivat ajat. Tämäkin on valinnaista ja sen voi lisätä myöhemmin milloin tahansa asetuksissa.</string>
     <string name="onboarding_step_counter">Vaihe %1$d / %2$d</string>
 <string name="next_step">Seuraava</string>
     <string name="next_without_ors_key">Jatka ilman kävely- ja pyöräreittejä</string>
