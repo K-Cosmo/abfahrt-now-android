@@ -5,8 +5,8 @@
 in heel Europa</string>
     <string name="app_subtitle">Realtime ov voor Europa</string>
     <string name="powered_by">Mogelijk gemaakt door abfahrt.now</string>
-    <string name="built_by">Gebouwd door Riles Tech UG  ↗</string>
-    <string name="disclaimer">Vertrektijden worden geleverd door abfahrt.now. Riles Tech UG aanvaardt geen aansprakelijkheid voor de juistheid van de gegevens.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Vertrektijden worden geleverd door abfahrt.now.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Colofon</string>
     <string name="datenschutz">Privacy</string>
