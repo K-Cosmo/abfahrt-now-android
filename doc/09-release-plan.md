@@ -51,7 +51,7 @@ Acceptance-Evidence:
 6. Gewählte Sortierung bleibt nach `force-stop`/Neustart erhalten.
 7. Keine FATAL-/ANR-/Navigation-/Settings-Regression im Abnahmeumfang.
 
-Build 155 ist damit Release-Kandidat für RELEASE1.
+Build 155 wurde am 06.10.2026 als RELEASE1 `v1.1.0-b155` veröffentlicht.
 
 ## RELEASE1 — erste signierte GitHub-APK — released 06.10.2026
 
@@ -68,6 +68,10 @@ Release-Evidence:
 8. GitHub Release ist weder Draft noch Prerelease; APK und `SHA256SUMS.txt` sind öffentliche Assets. `releases/latest` liefert `v1.1.0-b155`.
 
 Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+
+## Nächster Produktbuild — Namensdifferenzierung
+
+Vor weiteren sichtbaren Features soll F-NAME-001 entschieden werden: Der Display-Name der Community-App soll sich klar von der offiziellen `Abfahrt!`-App unterscheiden. Eine reine Display-Umbenennung ändert weder Package-ID noch Signing-Lineage. Der konkrete Name wird erst nach Kollisionsprüfung und Nutzerentscheidung festgelegt.
 
 ## Separater Hardening-Block — ORS-Key-Probe
 
