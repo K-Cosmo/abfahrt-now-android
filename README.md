@@ -10,7 +10,7 @@ Abfahrt! focuses on a simple everyday question: which useful public transport de
 ## What you need
 
 - **Android 14 or newer** (`minSdk 34`).
-- A personal **abfahrt.now API key** — required for departures and public-transport routing. See the [abfahrt.now API documentation](https://www.abfahrt.now/docs/).
+- A personal **abfahrt.now API key** — required for departures and public-transport routing. To request an API key, email [hi@abfahrt.now](mailto:hi@abfahrt.now?subject=API%20Key%20Request). See the [abfahrt.now API documentation](https://www.abfahrt.now/docs/).
 - Optional: a **HeiGIT / openrouteservice API key** for precise walking/cycling routes and reachability enrichment. A free Standard API key can be requested through the [HeiGIT account signup](https://account.heigit.org/signup); API information is available at [api.heigit.org](https://api.heigit.org/).
 
 API keys are entered at runtime and stored locally as Android-Keystore-backed encrypted values. Keys are never part of this repository.
@@ -77,6 +77,12 @@ The wrapper pins and verifies the Gradle 9.6.0 distribution. GitHub Actions uses
 
 `local.properties`, Android Studio metadata, build outputs, keystores, API keys and raw runtime logs remain local and are intentionally not committed.
 
+## AI-assisted development
+
+This project is developed with **AI-assisted engineering**. AI tools are used as collaborators for analysis, implementation, review, tests and documentation. They do not replace the project's evidence requirements: changes are expected to pass the same CI, runtime and acceptance gates regardless of how they were authored.
+
+The binding guardrails for AI-assisted changes are documented in [`doc/AI-CODING-GUARDRAILS.md`](doc/AI-CODING-GUARDRAILS.md).
+
 ## Source of truth and contribution workflow
 
 The only normative product and technical documentation lives in [`/doc`](doc/00-index.md). Spec Kit and [`/specs`](specs/) provide **process governance**, not a second product specification.
@@ -102,4 +108,4 @@ Raw Logcat/device evidence is intentionally not published by default because it 
 
 ## License
 
-A project license has **not yet been selected**. The repository is publicly visible and community-developed, but it must not be described as open source until an explicit project license has been chosen. Third-party components retain their respective licenses and notices.
+This project is licensed under the [MIT License](LICENSE). Third-party components retain their respective licenses and notices.
