@@ -62,13 +62,13 @@
 - [x] exakt rotierte Release-APK mit `adb install -r` erfolgreich aktualisiert.
 - [ ] lokale Preferences/API-Keys bleiben erhalten.
 - [x] `versionCode=1550`, `versionName=1.1.0` bestätigt.
-- [ ] `PAGE_SIZE=16384` auf dem 16-KB-Testgerät bestätigen.
-- [ ] `AbfahrtCompat memoryPageSizeBytes=16384` bestätigen.
+- [x] `PAGE_SIZE=16384` auf dem offiziellen 16-KB-Testsystem/Emulator bestätigt.
+- [x] `AbfahrtCompat memoryPageSizeBytes=16384` im Cold-Start-Log bestätigt.
 - [ ] Current Location / Departure First Paint erfolgreich.
 - [ ] mindestens ein Sortierprofil + Persistenz erfolgreich.
 - [ ] ORS mit gültigem Key HTTP 200 / Enrichment erfolgreich.
 - [ ] RoutePlanner-Grundpfad erfolgreich.
-- [ ] keine FATAL-/ANR-Regression.
+- [x] keine FATAL-/ANR-Regression im 4-KB-Cold-Start und 16-KB-Emulator-Smoke.
 
 ## GitHub Release
 - [ ] finales APK sprechend als `abfahrt-now-v1.1.0-b155.apk` bereitstellen.
