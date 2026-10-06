@@ -96,4 +96,27 @@ The physical-device in-place-update proof and the emulator 16-KB runtime proof a
 
 Build 156 is **accepted** for the Abfahrtsradar identity migration. F-NAME-001 / B-156-001 can be closed.
 
-Acceptance is not publication: the last public release remains `v1.1.0-b155` until Build 156 is merged and the exact final tag artifact for `v1.1.0-b156` is rebuilt, signed, verified and published.
+Acceptance preceded publication. Build 156 was subsequently rebuilt from the merged Runtime-Source-Commit, re-signed and re-verified as the final publication artifact.
+
+## Publication closure
+
+Public release:
+
+- tag: `v1.1.0-b156`
+- Runtime-Source-Commit: `6ccec47ce72b3e00cbc302ec65a226a4622b70b6`
+- asset: `abfahrtsradar-v1.1.0-b156.apk`
+- size: 46,317,530 bytes
+- final APK SHA-256: `53DE476E02271C6545906DEC47D0F3B2E66E9AB2A060EE5542AD1C75E106591B`
+- active signer: `CN=Abfahrt Now Community, C=DE`
+- signer certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
+- `apksigner verify`: `Verifies`, APK Signature Scheme v3 = true
+- `zipalign -c -P 16 -v 4`: successful
+- final real Build-155→156 in-place update: successful, persisted settings/API-key state/sort profile retained
+- final 16-KB runtime: `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`, MapLibre x86_64 native load = `ok`, no app FATAL/ANR
+- GitHub Release: public, not draft, not prerelease
+- assets: APK + `SHA256SUMS.txt`
+- `releases/latest`: `v1.1.0-b156`
+
+Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b156
+
+The earlier `BC1143...` candidate hash above remains historical acceptance evidence and must not be confused with the final published APK hash `53DE476E...`.
