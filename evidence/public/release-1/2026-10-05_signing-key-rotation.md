@@ -87,11 +87,31 @@ Observed cold-start evidence:
 
 The real end-user update device used for the signing-rotation proof runs with 4-KB pages. RELEASE1 therefore deliberately separates the two proofs: real-hardware old->new signer update compatibility on 4-KB Android, and exact-candidate native/runtime compatibility on the official 16-KB emulator.
 
-## Remaining gates
+## Final public release — 2026-10-06
 
-Before public GitHub release:
+The public RELEASE1 artifact was rebuilt from the clean annotated tag `v1.1.0-b155` pointing to commit `85df24b280f60e47d813d17aa93f400b22fca787`.
 
-- confirm Preferences/API-key retention on the updated device
-- core release smoke on real hardware: Current Location, departure first paint, sorting persistence, ORS enrichment, RoutePlanner
-- verify separate backups for historical keystore, Community keystore and signing lineage
-- generate the final post-merge release APK from `main`, verify it again, and publish that exact artifact
+Final artifact verification:
+
+- `:app:testDebugUnitTest :app:assembleRelease`: successful
+- `apksigner verify --min-sdk-version 34 --verbose --print-certs`: `Verifies`
+- APK Signature Scheme v3: `true`
+- current signer: `CN=Abfahrt Now Community, C=DE`
+- current signer certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
+- `zipalign -c -P 16 -v 4`: successful
+- published APK SHA-256: `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`
+- published APK size: 46,317,530 bytes
+
+GitHub release state:
+
+- tag: `v1.1.0-b155`
+- name: `Abfahrt Now v1.1.0 – Build 155`
+- draft: `false`
+- prerelease: `false`
+- assets: `abfahrt-now-v1.1.0-b155.apk`, `SHA256SUMS.txt`
+- GitHub-reported APK digest: `sha256:0fe1a8d7eb8a6038ff4446dd4f696ba37737875982945a60df860abe255bd9a5`
+- release URL: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+
+The production `/releases/latest` endpoint returns this release and its APK asset, satisfying the live provider-side contract used by the Build-150 update checker.
+
+Raw keystores, the signing lineage, passwords, device serials and private runtime logs remain outside the public repository.
