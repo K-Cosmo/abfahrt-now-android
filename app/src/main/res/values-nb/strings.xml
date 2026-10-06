@@ -5,8 +5,8 @@
 i hele Europa</string>
     <string name="app_subtitle">Sanntidskollektiv for Europa</string>
     <string name="powered_by">Drevet av abfahrt.now</string>
-    <string name="built_by">Bygget av Riles Tech UG  ↗</string>
-    <string name="disclaimer">Avgangstidene leveres av abfahrt.now. Riles Tech UG tar ikke ansvar for at dataene er korrekte.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Avgangstidene leveres av abfahrt.now.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Impressum</string>
     <string name="datenschutz">Personvern</string>
