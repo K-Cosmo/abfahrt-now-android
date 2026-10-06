@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 /** Public release metadata only; this API must never receive app credentials. */
 interface GitHubReleaseApi {
-    @GET("repos/K-Cosmo/abfahrt-now-android/releases/latest")
+    @GET("repos/K-Cosmo/abfahrtsradar-android/releases/latest")
     suspend fun latestRelease(): GitHubReleaseDto
 }
 
