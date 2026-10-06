@@ -5,8 +5,8 @@
 po celé Evropě</string>
     <string name="app_subtitle">Doprava v reálném čase pro Evropu</string>
     <string name="powered_by">Pohání abfahrt.now</string>
-    <string name="built_by">Vytvořilo Riles Tech UG  ↗</string>
-    <string name="disclaimer">Departure times are provided by abfahrt.now. Riles Tech UG assumes no liability for the accuracy of the data.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Departure times are provided by abfahrt.now.</string>
     <string name="version_label">Verze %s</string>
     <string name="impressum">Impresum</string>
     <string name="datenschutz">Soukromí</string>
