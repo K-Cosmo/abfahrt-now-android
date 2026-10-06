@@ -127,6 +127,25 @@ Ein GitHub-APK-Release ist erst zulässig, wenn **genau das hochzuladende APK** 
 
 Ein Signaturfehler darf **nicht** durch Deinstallation umgangen werden. Ein fehlgeschlagenes `adb install -r` auf einer tatsächlich Old-Key-signierten Installation ist ein Stop-Signal für RELEASE1.
 
+## RELEASE1 — veröffentlicht 06.10.2026
+
+Der erste öffentliche signierte APK-Release ist live:
+
+- Tag: `v1.1.0-b155`
+- Source commit: `85df24b280f60e47d813d17aa93f400b22fca787`
+- Asset: `abfahrt-now-v1.1.0-b155.apk`
+- Asset-Größe: 46.317.530 Byte
+- APK SHA-256: `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`
+- aktueller Signer: `CN=Abfahrt Now Community, C=DE`
+- Signer Certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
+- Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+
+Der finale Build wurde aus dem sauberen annotierten Tag auf Commit `85df24b280f60e47d813d17aa93f400b22fca787` erzeugt. `:app:testDebugUnitTest :app:assembleRelease` war erfolgreich. Nach `zipalign -P 16` wurde mit historischem Signer + Community-Signer + Lineage signiert; `apksigner verify --min-sdk-version 34 --verbose --print-certs` meldete `Verifies`, und der abschließende `zipalign -c -P 16 -v 4`-Check war erfolgreich.
+
+Der öffentliche GitHub-Release ist weder Draft noch Prerelease und enthält neben dem APK ein `SHA256SUMS.txt`. Der GitHub-Endpunkt `/releases/latest`, den der Build-150-Update-Checker verwendet, liefert nach Veröffentlichung `v1.1.0-b155` und das APK-Asset.
+
+Die Runtime-Evidence stammt aus dem zuvor signierten RELEASE1-Kandidaten auf unveränderter Runtime-Implementierung: reales Old-Key→New-Key-In-place-Update und offizieller 16-KB-Emulator-Smoke. Zwischen Kandidat und finalem Tag wurden keine Produkt-/Runtime-Quellen, Dependencies oder Versionswerte verändert; die nachfolgenden Branch-Commits konvergierten Release-Dokumentation/Evidence und kommentierten den absichtlich unsigned Gradle-Releasepfad.
+
 ## Folge-Releases
 
 Nach erfolgreicher Rotation wird der neue Community-Key der aktive Release-Signer. Die Signing-Certificate-Lineage muss bei künftigen direkten APK-Releases weitergeführt werden, solange Updates von Installationen aus der alten Signer-Historie unterstützt werden sollen.
