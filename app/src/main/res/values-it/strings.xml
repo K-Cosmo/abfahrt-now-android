@@ -5,8 +5,8 @@
 in tutta Europa</string>
     <string name="app_subtitle">Trasporto in tempo reale per l’Europa</string>
     <string name="powered_by">Powered by abfahrt.now</string>
-    <string name="built_by">Creato da Riles Tech UG ↗</string>
-    <string name="disclaimer">Gli orari di partenza sono forniti da abfahrt.now. Riles Tech UG non si assume alcuna responsabilità per l’accuratezza dei dati.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Gli orari di partenza sono forniti da abfahrt.now.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
