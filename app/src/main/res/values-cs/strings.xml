@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Odjezdy v reálném čase
 po celé Evropě</string>
     <string name="app_subtitle">Doprava v reálném čase pro Evropu</string>
@@ -11,7 +11,7 @@ po celé Evropě</string>
     <string name="impressum">Impresum</string>
     <string name="datenschutz">Soukromí</string>
     <string name="agb">Podmínky</string>
-    <string name="welcome_title">Vítejte v Abfahrt!</string>
+    <string name="welcome_title">Vítejte v Abfahrtsradar</string>
     <string name="welcome_body">Zadejte svůj API klíč a uvidíte odjezdy v reálném čase ve svém okolí.
 Klíč získáte na abfahrt.now</string>
     <string name="api_key_hint">Zadejte API klíč…</string>
@@ -47,7 +47,7 @@ Klíč získáte na abfahrt.now</string>
     <string name="occupancy_high">🔴  Vysoká</string>
     <string name="occupancy_full">🔴  Plno</string>
     <string name="allow_location">Povolit polohu</string>
-    <string name="location_rationale">Abfahrt! potřebuje vaši polohu, aby ukázal blízké odjezdy.</string>
+    <string name="location_rationale">Abfahrtsradar potřebuje vaši polohu, aby ukázal blízké odjezdy.</string>
     <string name="retry">Zkusit znovu</string>
     <string name="error_location">Poloha není dostupná.
 Zapněte GPS.</string>
@@ -90,7 +90,7 @@ Jděte ven nebo zapněte GPS.</string>
     <string name="apikey_local_note">Váš klíč je uložen jen lokálně.</string>
     <string name="feedback_button">Poslat zpětnou vazbu poskytovateli API</string>
     <string name="feedback_hint">Otevře e-mail na hi@abfahrt.now</string>
-    <string name="feedback_subject">Zpětná vazba k API Abfahrt!</string>
+    <string name="feedback_subject">Zpětná vazba k API abfahrt.now</string>
     <string name="lang_system">Systémový jazyk</string>
     <string name="lang_de">Němčina</string>
     <string name="lang_en">Angličtina</string>
@@ -138,7 +138,7 @@ Jděte ven nebo zapněte GPS.</string>
     <string name="language_update_note">Nové jazyky přijdou s aktualizacemi aplikace.</string>
     <string name="loading_departures">Načítání odjezdů…</string>
     <string name="close">Zavřít</string>
-    <string name="permission_rationale_full">Abfahrt! potřebuje vaši polohu, aby zobrazil blízké zastávky a aktuální odjezdy.</string>
+    <string name="permission_rationale_full">Abfahrtsradar potřebuje vaši polohu, aby zobrazil blízké zastávky a aktuální odjezdy.</string>
     <string name="no_departures_found">No departures found.</string>
     <string name="no_results_time_window">Žádný výsledek ve zvoleném časovém okně.</string>
     <string name="no_results_time_window_hint">API vrací jen asi 15 nejbližších odjezdů odteď. Posuňte okno doleva nebo obnovte data.</string>
@@ -149,7 +149,7 @@ Jděte ven nebo zapněte GPS.</string>
     <string name="refresh_minutes">Každou %d minutu</string>
     <string name="refresh_minutes_plural">Každých %d minut</string>
     <string name="feedback_email_hint">Otevře e-mail na hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Ahoj týme Abfahrt!,
+    <string name="api_feedback_greeting">Ahoj týme abfahrt.now,
 </string>
     <string name="lang_picker_system">Systém</string>
     <string name="lang_picker_english_uk">English</string>
@@ -227,7 +227,7 @@ Best regards</string>
     <string name="onboarding_welcome_title">Je vyžadován API klíč</string>
     <string name="onboarding_welcome_body">Pro používání abfahrt.now je vyžadován osobní API klíč. Pro pokračování zadejte svůj klíč. Klíč OpenRouteService zůstává volitelný a lze jej přidat v dalším kroku nebo později v nastavení.</string>
     <string name="onboarding_ors_title">Volitelné: zapnout pěší a cyklo trasy</string>
-    <string name="onboarding_ors_body">S klíčem OpenRouteService může Abfahrt zobrazit přesné pěší nebo cyklo trasy a odpovídající časy. Je to také volitelné a lze to kdykoli přidat později v nastavení.</string>
+    <string name="onboarding_ors_body">S klíčem OpenRouteService může Abfahrtsradar zobrazit přesné pěší nebo cyklo trasy a odpovídající časy. Je to také volitelné a lze to kdykoli přidat později v nastavení.</string>
     <string name="onboarding_step_counter">Krok %1$d z %2$d</string>
 <string name="next_step">Další</string>
     <string name="next_without_ors_key">Pokračovat bez pěších a cyklo tras</string>
