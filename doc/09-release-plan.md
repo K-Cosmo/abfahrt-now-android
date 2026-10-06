@@ -69,9 +69,22 @@ Release-Evidence:
 
 Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
-## Nächster Produktbuild — Namensdifferenzierung
+## Build 156 — Abfahrtsradar Identity Migration — accepted 06.10.2026
 
-F-NAME-001 ist entschieden: **Abfahrtsradar**. Build 156 migriert App-Label, brandtragende Locale-Texte, Updatechecker und öffentliche Projektlinks auf `K-Cosmo/abfahrtsradar-android`. Package-ID, Signing-Lineage, Persistenz und fachliche Runtime-Semantik bleiben unverändert. Acceptance umfasst zusätzlich den Build-155-Redirect-Smoke sowie ein signiertes In-place-Update 155→156.
+Build 156 (`versionCode = 1560`, `versionName = 1.1.0`) schließt F-NAME-001/B-156-001. App-Label, brandtragende Locale-Texte, Updatechecker und öffentliche Projektlinks verwenden **Abfahrtsradar** bzw. `K-Cosmo/abfahrtsradar-android`; Package-ID, Signing-Lineage, Persistenz und fachliche Runtime-Semantik bleiben unverändert.
+
+Acceptance-Evidence:
+1. Android CI #188 auf PR-Head `054847735011161840da0a28a8bb1c56a82637bc` vollständig grün.
+2. realer Build-155-Checker verarbeitet den alten GitHub-Pfad nach Repository-Rename erfolgreich über HTTP 301.
+3. veröffentlichtes Build-155-APK per SHA-256 bestätigt; signierter Build 156 installiert per `adb install -r` ohne Deinstallation.
+4. Einstellungen, abfahrt.now-/ORS-Key-Status und nicht-default Sortierprofil bleiben erhalten.
+5. sichtbarer Name **Abfahrtsradar**, Standort/Abfahrten, ORS-RoutePreview und RoutePlanner real erfolgreich; kein App-FATAL/ANR.
+6. Build-156-Updatechecker beendet den Check erfolgreich gegen den neuen Repository-Pfad; bei weiterhin `latest=b155` ist kein Update-Dialog zu erwarten.
+7. signierter Kandidat mit Community-Signer verifiziert, `zipalign -c -P 16` grün; offizieller 16-KB-x86_64-Emulator meldet `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384` und lädt `libmaplibre.so` erfolgreich.
+
+Bereinigte Evidence: `/evidence/public/build-156/2026-10-06_acceptance.md`.
+
+Build 156 ist damit **accepted, aber noch nicht released**. Nach Merge folgt der separate finale Tag-/Signing-/Asset-Gate für `v1.1.0-b156`.
 
 ## Separater Hardening-Block — ORS-Key-Probe
 
