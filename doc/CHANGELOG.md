@@ -1,3 +1,14 @@
+## v1.1.0 Build 156 — Abfahrtsradar identity migration — in progress
+
+- sichtbarer Produktname von `Abfahrt!` auf **Abfahrtsradar** festgelegt; `applicationId = now.abfahrt.transit` und Signing-Lineage bleiben unverändert.
+- GitHub-Repository zu `K-Cosmo/abfahrtsradar-android` umbenannt; lokaler `origin` aktualisiert.
+- alter GitHub-API-Pfad `/repos/K-Cosmo/abfahrt-now-android/releases/latest` liefert nach dem Rename HTTP 301; neuer Pfad liefert `v1.1.0-b155`.
+- Build 156 stellt Updatechecker, Release-URL und Community-Projektlink direkt auf das neue Repository um.
+- alle 22 Locale-Sets erhalten `app_name = Abfahrtsradar`; brandtragende UI-Texte werden vom alten Produktnamen getrennt und API-Feedback verweist auf `abfahrt.now`.
+- historische Riles-Tech-Attribution wird aus den verbleibenden Runtime-Stringressourcen entfernt.
+- `versionCode = 1560`, `versionName = 1.1.0`.
+- keine Departure-, Routing-, ORS-, Photon-, Location-, Sortier-, Persistenz- oder Dependency-Semantik wird verändert.
+
 ## DOC3 — MIT-Lizenz / README- und Release-Drift-Konvergenz — 06.10.2026
 
 - Projektlizenz wieder auf MIT festgelegt; Root-`LICENSE` ergänzt und F-DOC1-014 geschlossen.
