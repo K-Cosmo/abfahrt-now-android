@@ -9,7 +9,7 @@ data class AvailableUpdate(
         get() = "$versionName (Build $buildNumber)"
 
     val releaseUrl: String
-        get() = "https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/$tagName"
+        get() = "https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/$tagName"
 }
 
 /**
