@@ -67,11 +67,11 @@ Release-Evidence:
 7. Reales Old-Key→New-Key-In-place-Update ohne Deinstallation erfolgreich; 16-KB-Runtime separat auf offiziellem 16-KB-x86_64-Emulator mit `memoryPageSizeBytes=16384` und erfolgreichem MapLibre-Native-Load bewiesen.
 8. GitHub Release ist weder Draft noch Prerelease; APK und `SHA256SUMS.txt` sind öffentliche Assets. `releases/latest` liefert `v1.1.0-b155`.
 
-Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
 ## Nächster Produktbuild — Namensdifferenzierung
 
-Vor weiteren sichtbaren Features soll F-NAME-001 entschieden werden: Der Display-Name der Community-App soll sich klar von der offiziellen `Abfahrt!`-App unterscheiden. Eine reine Display-Umbenennung ändert weder Package-ID noch Signing-Lineage. Der konkrete Name wird erst nach Kollisionsprüfung und Nutzerentscheidung festgelegt.
+F-NAME-001 ist entschieden: **Abfahrtsradar**. Build 156 migriert App-Label, brandtragende Locale-Texte, Updatechecker und öffentliche Projektlinks auf `K-Cosmo/abfahrtsradar-android`. Package-ID, Signing-Lineage, Persistenz und fachliche Runtime-Semantik bleiben unverändert. Acceptance umfasst zusätzlich den Build-155-Redirect-Smoke sowie ein signiertes In-place-Update 155→156.
 
 ## Separater Hardening-Block — ORS-Key-Probe
 
