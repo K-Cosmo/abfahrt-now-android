@@ -5,8 +5,8 @@
 po celej Európe</string>
     <string name="app_subtitle">Verejná doprava v reálnom čase pre Európu</string>
     <string name="powered_by">Poháňa abfahrt.now</string>
-    <string name="built_by">Vytvorila Riles Tech UG  ↗</string>
-    <string name="disclaimer">Časy odchodov poskytuje abfahrt.now. Riles Tech UG nezodpovedá za správnosť údajov.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Časy odchodov poskytuje abfahrt.now.</string>
     <string name="version_label">Verzia %s</string>
     <string name="impressum">Tiráž</string>
     <string name="datenschutz">Súkromie</string>
