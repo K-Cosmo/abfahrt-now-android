@@ -4,6 +4,14 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
+### B-156-001 Sichtbaren App-Namen differenzieren (F-NAME-001)
+- **Status:** planned / Namensentscheidung ausstehend.
+- Anlass: Der aktuelle sichtbare Name `Abfahrt!` kollidiert mit dem Namen der offiziellen abfahrt.now-Android-App und schwächt die in D-072 geforderte Community-Abgrenzung.
+- Ziel: kurzer, merkbarer eigener Display-Name; Package-ID `now.abfahrt.transit`, Update-Signing-Lineage und GitHub-Repository bleiben bei einer reinen Display-Umbenennung unverändert.
+- Vor Implementierung: Namen auf offensichtliche App-/Projektkollisionen prüfen und Nutzerentscheidung dokumentieren.
+- KIS: keine Umbenennung von technischen Identitäten ohne Not; zunächst nur sichtbarer Produktname, App-Label und zugehörige Community-Texte.
+
+
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
@@ -44,7 +52,7 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - Profilwechsel triggert ausschließlich lokales `refilter()` über den vorhandenen Response-State; im Realgeräte-Log kein `departure_state_loading` und kein unmittelbar gekoppelter `/departures`-/ORS-Zyklus.
 - Nutzer bestätigt, dass die Hauptseite bei allen drei Profilen entsprechend sortiert und die gewählte Einstellung nach `force-stop`/Neustart erhalten bleibt.
 - keine neue API-, Dedup-, Merge-, ORS-, Location- oder First-Paint-Semantik.
-- Build 155 ist Release-Kandidat für RELEASE1 / `v1.1.0-b155`.
+- Build 155 wurde als RELEASE1 / `v1.1.0-b155` am 06.10.2026 veröffentlicht.
 
 ### B-154-001 Current-Location-Startup beschleunigen (F-153-001) — Build 154
 - **Status:** closed / accepted 04.10.2026.
