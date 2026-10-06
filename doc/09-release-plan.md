@@ -53,21 +53,21 @@ Acceptance-Evidence:
 
 Build 155 ist damit Release-Kandidat für RELEASE1.
 
-## RELEASE1 — erste signierte GitHub-APK — nächster P0-Schritt
+## RELEASE1 — erste signierte GitHub-APK — released 06.10.2026
 
-F-REL-001/B-REL-001 ist Release Engineering und kein normaler Produktbuild. Ziel ist **v1.1.0-b155** als erster echter signierter GitHub-APK-Release auf Basis des akzeptierten Build 155.
+F-REL-001/B-REL-001 ist abgeschlossen. **`v1.1.0-b155`** wurde als erster öffentlicher signierter GitHub-APK-Release veröffentlicht.
 
-Vor Veröffentlichung erforderlich:
-1. dauerhaftes Release-Keypair/Keystore lokal erzeugen und außerhalb des Repos sicher verwahren/backupen;
-2. Signing-Konfiguration nur über private lokale Properties bzw. optional später CI-Environment/Secrets; keine Secrets oder Keystore-Datei im Repo;
-3. finale APK signieren und mit `apksigner verify --verbose --print-certs` prüfen;
-4. finalen Release-/R8-/16-KB- und Realgeräte-Smoke **auf genau der signierten APK** ausführen;
-5. SHA-256 der APK in den Release Notes veröffentlichen;
-6. Tag gemäß Update-Checker-Vertrag `v1.1.0-b155` verwenden.
+Release-Evidence:
+1. Release-Tag `v1.1.0-b155` zeigt auf Commit `85df24b280f60e47d813d17aa93f400b22fca787`.
+2. Finaler Tag-Build: `:app:testDebugUnitTest :app:assembleRelease` erfolgreich.
+3. APK vor Signing mit `zipalign -P 16` ausgerichtet; danach mit historischem Signer + Community-Signer + Signing-Certificate-Lineage signiert.
+4. `apksigner verify --min-sdk-version 34 --verbose --print-certs`: `Verifies`, v3=true, aktueller Signer `CN=Abfahrt Now Community, C=DE`.
+5. Community-Signer Certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`.
+6. Finales APK `abfahrt-now-v1.1.0-b155.apk`: SHA-256 `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`; abschließendes `zipalign -c -P 16 -v 4` erfolgreich.
+7. Reales Old-Key→New-Key-In-place-Update ohne Deinstallation erfolgreich; 16-KB-Runtime separat auf offiziellem 16-KB-x86_64-Emulator mit `memoryPageSizeBytes=16384` und erfolgreichem MapLibre-Native-Load bewiesen.
+8. GitHub Release ist weder Draft noch Prerelease; APK und `SHA256SUMS.txt` sind öffentliche Assets. `releases/latest` liefert `v1.1.0-b155`.
 
-Wichtiger Erstinstallationspunkt: bisherige lokale Debug-Installationen sind mit dem Debug-Key signiert. Die erste Release-Key-APK kann deshalb nicht als reguläres In-place-Update über die Debug-App installiert werden; Deinstallation/Neuinstallation löscht lokale App-Daten/API-Keys. Ab RELEASE1 muss derselbe Release-Key dauerhaft für alle Updates verwendet werden.
-
-Die normale Android-CI bleibt credential-frei. Ein automatisierter signierter Release-Workflow ist optionaler Folgeschritt und wird nicht vor den ersten lokalen, verifizierten Release erzwungen.
+Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
 
 ## Separater Hardening-Block — ORS-Key-Probe
 

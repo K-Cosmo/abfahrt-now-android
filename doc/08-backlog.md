@@ -4,19 +4,6 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-REL-001 Erstes signiertes GitHub-APK-Release vorbereiten (F-REL-001)
-- **Status:** next / Release Engineering.
-- Zielkandidat: erster echter öffentlicher APK-Release auf Basis des akzeptierten Build 155, Tag `v1.1.0-b155`.
-- Feldstand: drei Installationen existieren bereits mit einem alten privaten Release-Key. Dessen Zertifikat enthält historische Riles-Tech-/Leonard-Scharf-Metadaten, die für das unabhängige Community-Projekt nicht als dauerhafte öffentliche Signer-Identität fortgeführt werden sollen.
-- deshalb kontrollierte **Signing-Key-Rotation** statt New-Key-only oder dauerhafter Wiederverwendung des alten Zertifikats: alter Signer -> neuer neutraler Community-Signer über APK Signature Scheme v3.1 / `apksigner` Signing-Certificate-Lineage.
-- Build 155 hat `minSdk 34`; der Android-13+/API-33+-Rotationspfad ist damit innerhalb des unterstützten Plattformbereichs.
-- alter Keystore bleibt erhalten und wird vor Rotation gegen eine frühere/installierte Old-Key-APK per Certificate-SHA-256 verifiziert.
-- neuer Keystore: außerhalb des Repos, RSA-4096/JKS, neutraler Subject (empfohlen `CN=Abfahrt Now Community, C=DE`), separates Backup.
-- Gradle-Release bleibt credential-frei und unsigned; finales APK wird nach `zipalign -P 16` mit `apksigner`, altem Signer, neuem Signer und `--lineage` signiert.
-- Acceptance: `apksigner verify`, SHA-256, `zipalign -c -P 16`, danach reales `adb install -r` auf mindestens einem bestehenden Old-Key-Gerät **ohne Deinstallation** und mit erhaltenen Preferences/API-Keys.
-- Signaturkonflikt ist Stop-Befund; kein Deinstallations-Workaround.
-- GitHub-Release-Tag bleibt `v<versionName>-b<human build>`; RELEASE1 `v1.1.0-b155`.
-
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
@@ -33,6 +20,17 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - Separat prüfen, ob bei einem späteren 401/403 im normalen ORS-Enrichment weitere Fallback-Requests mit demselben Key früh beendet werden sollen.
 
 ## Abgeschlossen
+
+### B-REL-001 Erstes signiertes GitHub-APK-Release (F-REL-001) — RELEASE1
+- **Status:** closed / released 06.10.2026.
+- Öffentlicher Release: `v1.1.0-b155` auf Commit `85df24b280f60e47d813d17aa93f400b22fca787`.
+- Asset: `abfahrt-now-v1.1.0-b155.apk`, SHA-256 `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`.
+- Historischer Release-Signer wurde kontrolliert auf den neutralen Community-Signer rotiert; die Signing-Certificate-Lineage erhält die Update-Kompatibilität bestehender Installationen.
+- reales Old-Key→New-Key-In-place-Update per `adb install -r` erfolgreich; kein Deinstallations-Workaround.
+- finaler APK-Signer: `CN=Abfahrt Now Community, C=DE`, Zertifikat-SHA-256 `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`.
+- finales APK nach Signing mit `apksigner verify` und `zipalign -c -P 16 -v 4` verifiziert; offizieller 16-KB-Emulator-Smoke grün.
+- GitHub `releases/latest` liefert den veröffentlichten Tag `v1.1.0-b155` samt APK-Asset.
+- Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
 
 ### B-155-001 Wählbare Sortierprofile für die Abfahrtsseite (F-SORT-001) — Build 155
 - **Status:** closed / accepted 04.10.2026.

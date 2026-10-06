@@ -37,30 +37,27 @@ Locale-/Governance-/Compatibility-Gates, committed Wrapper, Unit Tests, Debug un
 
 F-SORT-001 / B-155-001 ist geschlossen. Build 155 ist Release-Kandidat für RELEASE1.
 
-## Nächster Schritt: RELEASE1 — erste signierte GitHub-APK
+## RELEASE1 veröffentlicht — 06.10.2026
 
-Zielartefakt: **v1.1.0-b155** auf Basis des akzeptierten Build 155.
+Build 155 ist nicht mehr nur Release-Kandidat: **`v1.1.0-b155`** ist der erste öffentliche signierte GitHub-APK-Release.
 
-Aktueller Stand:
-- `assembleRelease` inklusive R8 ist grün;
-- es gibt noch keine projektdefinierte dauerhafte Release-`signingConfig`;
-- Android CI bleibt credential-frei;
-- der bisherige GitHub-Release `v1.1.0-b150` war nur ein metadata-only Update-Checker-Test ohne APK.
+- Source/Tag-Commit: `85df24b280f60e47d813d17aa93f400b22fca787`
+- Asset: `abfahrt-now-v1.1.0-b155.apk`
+- APK SHA-256: `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`
+- aktiver Signer: `CN=Abfahrt Now Community, C=DE`
+- Signer Certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
+- reales Old-Key→New-Key-In-place-Update erfolgreich
+- finales APK mit `apksigner verify` und `zipalign -c -P 16 -v 4` verifiziert
+- 16-KB-Runtime-Smoke auf offiziellem 16-KB-x86_64-Emulator grün
+- GitHub `releases/latest` zeigt auf `v1.1.0-b155`
 
-RELEASE1 muss vor Veröffentlichung erfüllen:
+Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
 
-1. dauerhaftes Android-Release-Keypair/Keystore lokal erzeugen;
-2. Keystore außerhalb des Repos sicher verwahren und separat sichern;
-3. Gradle-Signing nur über private lokale Properties/Environment anbinden; keine Secrets oder Keystore-Datei committen;
-4. signierte Release-APK mit `apksigner verify --verbose --print-certs` prüfen;
-5. Release-/R8-/16-KB-Smoke auf genau diesem Artefakt;
-6. auf Realgerät installieren und Kernpfade prüfen;
-7. SHA-256 der APK berechnen und in GitHub Release Notes veröffentlichen;
-8. Release-Tag `v1.1.0-b155`.
+Der normale Gradle-Release bleibt absichtlich credential-frei/unsigned. Der lokale transparente Signing-Pfad mit Signing-Certificate-Lineage ist für RELEASE1 bewiesen; ein automatisierter signierter CI-Release-Workflow bleibt optionaler Folgeschritt.
 
-Wichtig: Die aktuelle Testinstallation ist eine Debug-Signatur. Der erste Wechsel auf den Release-Key erfordert eine Deinstallation/Neuinstallation; lokale Preferences und API-Keys gehen dabei verloren. Ab dem ersten signierten Release muss derselbe Release-Key dauerhaft für alle Updates beibehalten werden.
+## Nächster Produkt-/Hardening-Schritt
 
-Ein automatisierter signierter GitHub-Release-Workflow ist optionaler Folgeschritt. Für RELEASE1 bevorzugen wir zunächst den transparenten lokalen Signing-/Verify-Pfad, bevor Signing-Secrets in CI eingeführt werden.
+F-ORS-001/B-ORS-001 ist der nächste getrennte Hardening-Kandidat. RELEASE1 selbst benötigt keinen weiteren Produktbuild.
 
 ## Separates Finding: ORS-Key-Probe
 

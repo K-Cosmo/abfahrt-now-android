@@ -54,7 +54,7 @@
 - [x] `apksigner verify --verbose --print-certs` erfolgreich.
 - [x] realen Old→New-Updatepfad über erfolgreiches `adb install -r` bewiesen.
 - [x] neuen Signer Certificate SHA-256 dokumentiert: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`.
-- [x] APK-Datei-SHA-256 dokumentiert: `9A165BCABC74CC40600A96BF6B7D83116B20FE9456EFF7344D39A4A26223BC3F`.
+- [x] Kandidaten-APK-SHA-256 dokumentiert: `9A165BCABC74CC40600A96BF6B7D83116B20FE9456EFF7344D39A4A26223BC3F`; final veröffentlichtes Tag-Artefakt: `0FE1A8D7EB8A6038FF4446DD4F696BA37737875982945A60DF860ABE255BD9A5`.
 - [x] `zipalign -c -P 16 -v 4` auf dem signierten Kandidaten erfolgreich.
 
 ## Real-device Release Smoke
@@ -71,13 +71,13 @@
 - [x] keine FATAL-/ANR-Regression im 4-KB-Cold-Start und 16-KB-Emulator-Smoke.
 
 ## GitHub Release
-- [ ] finales APK sprechend als `abfahrt-now-v1.1.0-b155.apk` bereitstellen.
-- [ ] Release Notes inkl. APK-SHA-256 und neuem Signing-Fingerprint vorbereiten.
-- [ ] kontrollierte Key-Rotation / erhaltene Android-Update-Lineage dokumentieren.
-- [ ] Tag/Release `v1.1.0-b155` erstellen.
-- [ ] exakt verifiziertes APK als Asset hochladen.
-- [ ] Update-Checker gegen echtes Release testen.
-- [ ] RELEASE1-Evidence nach `/evidence/public/release-1/` konvergieren.
+- [x] finales APK sprechend als `abfahrt-now-v1.1.0-b155.apk` bereitgestellt.
+- [x] Release Notes inkl. finalem APK-SHA-256 und neuem Signing-Fingerprint veröffentlicht.
+- [x] kontrollierte Key-Rotation / erhaltene Android-Update-Lineage dokumentiert.
+- [x] Tag/Release `v1.1.0-b155` erstellt und öffentlich veröffentlicht.
+- [x] exakt verifiziertes APK als Asset hochgeladen; GitHub-Digest entspricht finalem SHA-256.
+- [x] Produktions-Endpunkt `releases/latest` nach Veröffentlichung geprüft: liefert `v1.1.0-b155` und das APK-Asset; Build-150-Policy behandelt Build 155 damit als aktuell.
+- [x] RELEASE1-Evidence nach `/evidence/public/release-1/` konvergiert.
 
 ## Nicht blockierend / später
 - [ ] optionalen signierten GitHub-Actions-Release-Workflow erst nach bewiesenem lokalen RELEASE1-Rotationspfad planen.

@@ -50,9 +50,10 @@ Credentials are service-scoped: an abfahrt.now key must never be sent to HeiGIT,
 ## Current development state
 
 - Version: **1.1.0**
-- Build: **149** (`versionCode 1490`)
+- Build: **155** (`versionCode 1550`)
 - Android: **minSdk 34**, **compileSdk 37**, **targetSdk 37**
 - Stack: Kotlin, Jetpack Compose, Material 3, Hilt, Retrofit/OkHttp, DataStore, MapLibre
+- Latest public APK release: [v1.1.0-b155](https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155)
 
 ## Build / development
 
