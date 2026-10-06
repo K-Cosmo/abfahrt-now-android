@@ -69,7 +69,7 @@ Release-Evidence:
 
 Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
-## Build 156 — Abfahrtsradar Identity Migration — accepted 06.10.2026
+## Build 156 — Abfahrtsradar Identity Migration — released 06.10.2026
 
 Build 156 (`versionCode = 1560`, `versionName = 1.1.0`) schließt F-NAME-001/B-156-001. App-Label, brandtragende Locale-Texte, Updatechecker und öffentliche Projektlinks verwenden **Abfahrtsradar** bzw. `K-Cosmo/abfahrtsradar-android`; Package-ID, Signing-Lineage, Persistenz und fachliche Runtime-Semantik bleiben unverändert.
 
@@ -84,7 +84,18 @@ Acceptance-Evidence:
 
 Bereinigte Evidence: `/evidence/public/build-156/2026-10-06_acceptance.md`.
 
-Build 156 ist damit **accepted, aber noch nicht released**. Nach Merge folgt der separate finale Tag-/Signing-/Asset-Gate für `v1.1.0-b156`.
+Build 156 ist als **`v1.1.0-b156` veröffentlicht**.
+
+Release-Evidence:
+1. Source-Commit des Runtime-Builds: `6ccec47ce72b3e00cbc302ec65a226a4622b70b6`.
+2. finales Asset `abfahrtsradar-v1.1.0-b156.apk`, 46.317.530 Byte, SHA-256 `53DE476E02271C6545906DEC47D0F3B2E66E9AB2A060EE5542AD1C75E106591B`.
+3. `apksigner verify --min-sdk-version 34 --verbose --print-certs`: `Verifies`, v3=true, genau ein aktueller Signer `CN=Abfahrt Now Community, C=DE`, Certificate SHA-256 `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`.
+4. `zipalign -c -P 16 -v 4` auf exakt dem veröffentlichten APK erfolgreich.
+5. finales APK real als Build-155→156-In-place-Update getestet; persistente Einstellungen/Keys/Sortierprofil bleiben erhalten.
+6. finales APK auf offiziellem 16-KB-x86_64-Emulator: `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`, MapLibre-Native-Load `ok`, kein App-FATAL/ANR.
+7. GitHub Release ist öffentlich, weder Draft noch Prerelease, enthält APK + `SHA256SUMS.txt`; `releases/latest` liefert `v1.1.0-b156`.
+
+Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b156
 
 ## Separater Hardening-Block — ORS-Key-Probe
 
