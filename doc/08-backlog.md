@@ -4,14 +4,6 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 
 ## P0 — aktuelle Reihenfolge
 
-### B-156-001 Sichtbaren App-Namen differenzieren (F-NAME-001)
-- **Status:** in progress / Build 156.
-- Anlass: Der aktuelle sichtbare Name `Abfahrt!` kollidiert mit dem Namen der offiziellen abfahrt.now-Android-App und schwächt die in D-072 geforderte Community-Abgrenzung.
-- Entscheidung: sichtbarer Produktname **Abfahrtsradar**; Package-ID `now.abfahrt.transit` und Update-Signing-Lineage bleiben unverändert. Kanonisches GitHub-Repository ist `K-Cosmo/abfahrtsradar-android`.
-- Repository-Rename ist erfolgt; alter `releases/latest`-Pfad liefert HTTP 301, neuer Pfad liefert `v1.1.0-b155`. Build 156 stellt Runtime/Locales/öffentliche Links auf den neuen kanonischen Pfad um.
-- KIS: keine Umbenennung von technischen Identitäten ohne Not; zunächst nur sichtbarer Produktname, App-Label und zugehörige Community-Texte.
-
-
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
 - HERE short-circuited ORS und zeigt bei vorhandenen Koordinaten nur Query-Origin + Haltestellenmarker.
@@ -28,6 +20,18 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 - Separat prüfen, ob bei einem späteren 401/403 im normalen ORS-Enrichment weitere Fallback-Requests mit demselben Key früh beendet werden sollen.
 
 ## Abgeschlossen
+
+### B-156-001 Sichtbaren App-Namen differenzieren (F-NAME-001) — Build 156
+- **Status:** closed / accepted 06.10.2026.
+- sichtbarer Produktname **Abfahrtsradar**; kanonisches Repository `K-Cosmo/abfahrtsradar-android`.
+- `applicationId = now.abfahrt.transit`, Package/Namespace, Signing-Lineage, DataStore-/Keystore-Identität und fachliche Runtime-Semantik unverändert.
+- alter Build-155-`releases/latest`-Pfad liefert nach dem Rename HTTP 301 und der reale Build-155-Checker verarbeitet den Redirect erfolgreich.
+- signierter Build 156 installiert per `adb install -r` über das veröffentlichte Build-155-APK; Einstellungen, API-Keys und Sortierprofil bleiben erhalten.
+- Standort/Abfahrten, ORS und RoutePlanner real grün; Build-156-Updatechecker erfolgreich; kein App-FATAL/ANR im Acceptance-Smoke.
+- signierter Kandidat: SHA-256 `BC1143C08844E21B569BAB41F192BEFB10F8DACA6F681FAAFA216C908B2C5703`, Community-Signer unverändert, `zipalign -c -P 16` grün.
+- 16-KB-Runtime: `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`, MapLibre-x86_64-Native-Library lädt erfolgreich.
+- bereinigte Evidence: `/evidence/public/build-156/2026-10-06_acceptance.md`.
+- Veröffentlichung als `v1.1.0-b156` bleibt ein separater Release-Schritt nach Merge und finaler Artefaktverifikation.
 
 ### B-REL-001 Erstes signiertes GitHub-APK-Release (F-REL-001) — RELEASE1
 - **Status:** closed / released 06.10.2026.
