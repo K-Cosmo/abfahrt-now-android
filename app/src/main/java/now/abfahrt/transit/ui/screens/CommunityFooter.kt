@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import now.abfahrt.transit.R
 import now.abfahrt.transit.util.AppVersionInfo
 
-private const val COMMUNITY_REPOSITORY_URL = "https://github.com/K-Cosmo/abfahrt-now-android"
+private const val COMMUNITY_REPOSITORY_URL = "https://github.com/K-Cosmo/abfahrtsradar-android"
 private const val ABFAHRT_PRIVACY_URL = "https://www.abfahrt.now/privacy"
 private const val ABFAHRT_TERMS_URL = "https://www.abfahrt.now/terms"
 
