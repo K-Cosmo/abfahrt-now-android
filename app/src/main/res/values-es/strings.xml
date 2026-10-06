@@ -207,7 +207,7 @@ Comprueba tu wifi o tus datos.</string>
     <string name="api_key_request_button">Solicitar API key</string>
     <string name="api_key_request_subject">Solicitud de API key – uso de la app Android</string>
     <string name="api_key_request_body">Hola,
-me gustaría solicitar una API key personal para usar la app Android de Abfahrt.
+me gustaría solicitar una API key personal para usar la app Android de Abfahrtsradar.
 Saludos</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">En bici</string>
