@@ -201,7 +201,7 @@
     <string name="api_key_request_button">Request API key</string>
     <string name="api_key_request_subject">API key request – Android app usage</string>
     <string name="api_key_request_body">Hello,
-I would like to request a personal API key for using the Abfahrt Android app.
+I would like to request a personal API key for using the Abfahrtsradar Android app.
 Best regards</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">S kolesom</string>
