@@ -167,6 +167,27 @@ Die Verifikation des fertigen APK muss weiterhin genau **einen aktuellen Signer*
 
 Die Signing-Certificate-Lineage muss bei künftigen direkten APK-Releases weitergeführt werden, solange Updates von Installationen aus der alten Signer-Historie unterstützt werden sollen. Der alte Keystore wird deshalb nicht gelöscht oder absichtlich unbrauchbar gemacht.
 
+## Build 156 — veröffentlicht 06.10.2026
+
+Der zweite öffentliche signierte APK-Release ist live:
+
+- Tag: `v1.1.0-b156`
+- Runtime-Source-Commit: `6ccec47ce72b3e00cbc302ec65a226a4622b70b6`
+- Asset: `abfahrtsradar-v1.1.0-b156.apk`
+- Asset-Größe: 46.317.530 Byte
+- APK SHA-256: `53DE476E02271C6545906DEC47D0F3B2E66E9AB2A060EE5542AD1C75E106591B`
+- aktueller Signer: `CN=Abfahrt Now Community, C=DE`
+- Signer Certificate SHA-256: `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`
+- Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b156
+
+Der finale Build wurde vom gemergten Runtime-Commit erzeugt. `:app:testDebugUnitTest :app:assembleRelease` war erfolgreich. Das unsigned APK wurde vor dem Signieren mit `zipalign -P 16` ausgerichtet und anschließend mit historischem Signer, Community-Signer als `--next-signer` und der bestehenden Lineage signiert.
+
+`apksigner verify --min-sdk-version 34 --verbose --print-certs` meldete `Verifies`, v3=true und genau einen aktuellen Signer `CN=Abfahrt Now Community, C=DE`. Der abschließende `zipalign -c -P 16 -v 4`-Check war erfolgreich.
+
+Genau dieses finale APK wurde zusätzlich real als Build-155→156-In-place-Update geprüft; die persistierten Einstellungen, API-Key-Zustände und das gewählte Sortierprofil blieben erhalten. Auf dem offiziellen x86_64-16-KB-Emulator meldete das finale APK `PAGE_SIZE=16384`, `memoryPageSizeBytes=16384`, und `lib/x86_64/libmaplibre.so` wurde erfolgreich geladen. Im gefilterten Runtime-Smoke trat kein App-FATAL/ANR auf.
+
+Der öffentliche GitHub-Release ist weder Draft noch Prerelease, enthält `abfahrtsradar-v1.1.0-b156.apk` und `SHA256SUMS.txt`, und `releases/latest` liefert `v1.1.0-b156`.
+
 ## GitHub Release Contract
 
 Tag-Schema bleibt:
