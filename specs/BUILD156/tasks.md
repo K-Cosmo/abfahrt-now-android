@@ -20,7 +20,7 @@
 - [x] Correct API feedback/support wording to `abfahrt.now`.
 - [x] Confirm no current Community UI claims Riles Tech ownership.
 - [x] Real-device launcher/app label and normal post-upgrade startup verified.
-- [x] Onboarding/permission-rationale/settings-footer/update-dialog identity resources covered by static locale/resource gates; positive update dialog not expected while `latest=b155`.
+- [x] Onboarding/permission-rationale/settings-footer/update-dialog identity resources covered by static locale/resource gates; during acceptance `latest=b155`, so a positive Build-156 update dialog was correctly not expected.
 
 ## Public project surface
 - [x] Update README title/text/current repository links.
@@ -51,4 +51,4 @@
 ## Acceptance / release
 - [x] Evidence converged into `/doc` and `/evidence/public/build-156/`.
 - [x] Build 156 accepted.
-- [ ] After merge, rebuild/sign/verify the exact final tag artifact and publish `v1.1.0-b156` with `abfahrtsradar-v1.1.0-b156.apk`.
+- [x] After merge, rebuild/sign/verify the exact final artifact and publish `v1.1.0-b156` with `abfahrtsradar-v1.1.0-b156.apk` + `SHA256SUMS.txt`; `releases/latest` verified on Build 156.
