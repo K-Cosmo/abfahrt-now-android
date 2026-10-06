@@ -19,7 +19,8 @@
 - [x] Replace visible old Community-app brand references in all locale sets.
 - [x] Correct API feedback/support wording to `abfahrt.now`.
 - [x] Confirm no current Community UI claims Riles Tech ownership.
-- [ ] Verify launcher, onboarding, permission rationale, settings footer and update dialog.
+- [x] Real-device launcher/app label and normal post-upgrade startup verified.
+- [x] Onboarding/permission-rationale/settings-footer/update-dialog identity resources covered by static locale/resource gates; positive update dialog not expected while `latest=b155`.
 
 ## Public project surface
 - [x] Update README title/text/current repository links.
@@ -28,25 +29,26 @@
 - [x] Keep MIT and AI-assisted-development disclosures intact.
 
 ## Automated verification
-- [ ] Locale parity/static governance gates green.
-- [ ] Unit tests green.
-- [ ] Debug build green.
-- [ ] Release/R8 build green.
+- [x] Locale parity/static governance gates green.
+- [x] Unit tests green.
+- [x] Debug build green.
+- [x] Release/R8 build green.
 - [x] No current runtime source reference to old repository slug (known runtime update/footer/policy paths statically checked).
 - [x] No stale visible `Abfahrt!` Community-app identity in any of the 22 locale resource sets.
 
 ## Migration/runtime evidence
-- [ ] Existing Build 155 update checker succeeds through renamed-repo redirect.
-- [ ] Signed Build 156 installs in-place over signed Build 155.
-- [ ] Preferences/API keys preserved.
-- [ ] Sort profile preserved.
-- [ ] Current Location / departure first paint healthy.
-- [ ] ORS enrichment healthy.
-- [ ] RoutePlanner basic path healthy.
-- [ ] No FATAL/ANR.
-- [ ] 16-KB release artifact/runtime gate remains green if a release candidate is produced.
+- [x] Existing Build 155 update checker succeeds through renamed-repo redirect.
+- [x] Signed Build 156 installs in-place over signed/public Build 155.
+- [x] Preferences/API keys preserved.
+- [x] Sort profile preserved.
+- [x] Current Location / departure first paint healthy.
+- [x] ORS enrichment healthy.
+- [x] RoutePlanner basic path healthy.
+- [x] Build-156 update checker succeeds against the new repository path.
+- [x] No app FATAL/ANR.
+- [x] Signed release-candidate artifact passes `apksigner`, `zipalign -c -P 16` and 16-KB runtime/MapLibre native-load gate.
 
 ## Acceptance / release
-- [ ] Evidence converged into `/doc` and `/evidence/public/build-156/`.
-- [ ] Build 156 accepted.
-- [ ] Prepare `v1.1.0-b156` with `abfahrtsradar-v1.1.0-b156.apk`.
+- [x] Evidence converged into `/doc` and `/evidence/public/build-156/`.
+- [x] Build 156 accepted.
+- [ ] After merge, rebuild/sign/verify the exact final tag artifact and publish `v1.1.0-b156` with `abfahrtsradar-v1.1.0-b156.apk`.
