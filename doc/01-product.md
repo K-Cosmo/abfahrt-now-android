@@ -2,7 +2,7 @@
 
 ## Zielbild
 
-Abfahrt! beantwortet eine enge, alltagsnahe Frage: **Welche relevanten öffentlichen Verkehrsmittel fahren in meiner Umgebung als Nächstes ab, und welche Haltestelle ist dafür aus Nutzersicht die sinnvollste?**
+Abfahrtsradar beantwortet eine enge, alltagsnahe Frage: **Welche relevanten öffentlichen Verkehrsmittel fahren in meiner Umgebung als Nächstes ab, und welche Haltestelle ist dafür aus Nutzersicht die sinnvollste?**
 
 Die App soll ausdrücklich **kein Google-Maps-Ersatz** sein. Kern ist eine schnell erfassbare Abfahrtsanzeige mit möglichst wenig Bedienaufwand.
 
@@ -21,12 +21,18 @@ Die App soll ausdrücklich **kein Google-Maps-Ersatz** sein. Kern ist eine schne
 - Der Projektquellcode steht unter der MIT-Lizenz; Drittanbieter-Komponenten behalten ihre jeweiligen Lizenzen.
 - Die Entwicklung ist KI-gestützt. KI-Unterstützung ändert weder Qualitätsmaßstab noch Abnahmeprozess: CI, reale Tests und Evidence bleiben verbindlich.
 
-## Aktueller Funktionsumfang Build 155
+## Aktueller Funktionsumfang Build 155 / Build 156 in Umsetzung
+
+### Identität Build 156
+- sichtbarer Produktname wird **Abfahrtsradar**; der Markenname bleibt in allen Locale-Sets identisch, die umgebenden Texte bleiben lokalisiert.
+- kanonisches GitHub-Repository ist `K-Cosmo/abfahrtsradar-android`.
+- `applicationId = now.abfahrt.transit`, Signing-Lineage, DataStore und Android-Keystore-Daten bleiben unverändert; Build 156 ist ein normales In-place-Update.
+- `abfahrt.now` bleibt klar der externe API-/Datenanbieter und wird nicht in Abfahrtsradar umbenannt.
 
 ### Community-Identität Build 151
-- Settings-Footer bezeichnet Abfahrt! sichtbar als unabhängige/unoffizielle Community-App und grenzt sie von abfahrt.now ab.
+- Settings-Footer bezeichnet Abfahrtsradar sichtbar als unabhängige/unoffizielle Community-App und grenzt sie von abfahrt.now ab.
 - abfahrt.now bleibt als Quelle der Transitdaten/API sichtbar.
-- der Projektlink führt auf das kanonische GitHub-Repository `K-Cosmo/abfahrt-now-android`.
+- der Projektlink führt auf das kanonische GitHub-Repository `K-Cosmo/abfahrtsradar-android`.
 - externe Privacy-/Terms-Links sind ausdrücklich als API-Provider-Links bezeichnet.
 - die Community-Texte liegen in allen 22 gebündelten UI-Locale-Sets vor.
 
