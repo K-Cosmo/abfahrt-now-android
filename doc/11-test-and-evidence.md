@@ -1,3 +1,29 @@
+## Build 156 Acceptance — accepted 06.10.2026
+
+Build 156 (`versionCode 1560`, `versionName 1.1.0`) ist nach automatisierter, Signatur-/Upgrade-, Realgeräte- und 16-KB-Evidence akzeptiert.
+
+Automatisierte Evidence:
+1. Android CI #188 auf PR-Head `054847735011161840da0a28a8bb1c56a82637bc` vollständig grün: Static/Governance/Compatibility, committed Wrapper, Unit Tests, Debug und Release/R8.
+2. lokaler kombinierter Gate `./gradlew :app:testDebugUnitTest :app:assembleRelease --no-daemon` erfolgreich.
+
+Migration-/Release-Kandidaten-Evidence:
+1. installierter Ausgangsstand entspricht per SHA-256 exakt dem veröffentlichten Build-155-APK.
+2. der alte Build-155-GitHub-API-Pfad antwortet nach Repository-Rename mit HTTP 301; der echte Build-155-Updatechecker beendet den Check mit `result=success`.
+3. signierter Build-156-Kandidat installiert per `adb install -r` ohne Deinstallation über Build 155; danach `versionCode=1560`.
+4. Einstellungen, abfahrt.now-/ORS-Key-Status und persistentes Sortierprofil bleiben erhalten.
+5. Kandidat: SHA-256 `BC1143C08844E21B569BAB41F192BEFB10F8DACA6F681FAAFA216C908B2C5703`; aktiver Signer `CN=Abfahrt Now Community, C=DE`, Zertifikat-SHA-256 `23283ed09731c3711d5f223f0424323697243000a78cbbf0731e4553946325f8`; `apksigner verify` und `zipalign -c -P 16` erfolgreich.
+
+Realgeräte-/Runtime-Evidence:
+1. sichtbarer Name **Abfahrtsradar**; normaler Post-Upgrade-Start ohne erneutes Onboarding.
+2. aktueller Standort und Abfahrten funktionieren; ORS-Enrichment/RoutePreview und RoutePlanner funktionieren.
+3. Build-156-Updatechecker beendet den Check gegen den neuen Repository-Pfad mit `result=success`; solange `releases/latest` weiterhin Build 155 ist, wird korrekt kein Update-Dialog erwartet.
+4. im Acceptance-Smoke kein App-`FATAL EXCEPTION` und keine App-ANR-Signatur.
+5. offizieller 16-KB-x86_64-Emulator: `PAGE_SIZE=16384`, `AbfahrtCompat: memoryPageSizeBytes=16384`, erfolgreicher Native-Load von `lib/x86_64/libmaplibre.so`; installierter Stand `versionCode=1560`.
+
+Die Permission-Rationale und ein positiver Update-Dialog wurden in diesem Upgrade-Smoke nicht künstlich provoziert. Die betroffenen Identity-/Locale-Ressourcen sind statisch/automatisiert geschützt; ein positiver Update-Dialog ist bei `latest=b155` für Build 156 fachlich nicht erwartbar.
+
+Bereinigte öffentliche Evidence liegt unter `/evidence/public/build-156/2026-10-06_acceptance.md`. Roh-Logcats bleiben wegen Standort-/Geräte-/Netzwerkdaten lokal/privat.
+
 ## Build 152 Acceptance — accepted 04.10.2026
 
 Build 152 (`versionCode 1520`, `versionName 1.1.0`) ist nach automatisierter und realer Evidence akzeptiert.
