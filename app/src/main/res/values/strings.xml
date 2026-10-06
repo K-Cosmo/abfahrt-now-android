@@ -4,8 +4,8 @@
     <string name="app_tagline">Echtzeit-Abfahrten\nfür ganz Europa</string>
     <string name="app_subtitle">Echtzeit-Transit für Europa</string>
     <string name="powered_by">Powered by abfahrt.now</string>
-    <string name="built_by">Built by Riles Tech UG  ↗</string>
-    <string name="disclaimer">Abfahrtszeiten werden von abfahrt.now bereitgestellt. Riles Tech UG übernimmt keine Haftung für die Richtigkeit der Daten.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Abfahrtszeiten werden von abfahrt.now bereitgestellt.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Impressum</string>
     <string name="datenschutz">Datenschutz</string>
