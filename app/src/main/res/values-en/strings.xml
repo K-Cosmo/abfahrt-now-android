@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Real-time departures\nacross Europe</string>
     <string name="app_subtitle">Real-time transit for Europe</string>
     <string name="powered_by">Powered by abfahrt.now</string>
@@ -10,7 +10,7 @@
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
     <string name="agb">Terms</string>
-    <string name="welcome_title">Welcome to Abfahrt!</string>
+    <string name="welcome_title">Welcome to Abfahrtsradar</string>
     <string name="welcome_body">Enter your API key to see real-time departures near you.\nGet a key at abfahrt.now</string>
     <string name="api_key_hint">Enter API key…</string>
     <string name="api_key_label">API Key</string>
@@ -45,7 +45,7 @@
     <string name="occupancy_high">🔴  High</string>
     <string name="occupancy_full">🔴  Full</string>
     <string name="allow_location">Allow location</string>
-    <string name="location_rationale">Abfahrt! needs your location to show nearby departures.</string>
+    <string name="location_rationale">Abfahrtsradar needs your location to show nearby departures.</string>
     <string name="retry">Try again</string>
     <string name="error_location">Location unavailable.\nPlease enable GPS.</string>
     <string name="error_no_gps">No GPS signal.\nPlease go outside or enable GPS.</string>
@@ -86,7 +86,7 @@
     <string name="apikey_local_note">Your key is stored locally only.</string>
     <string name="feedback_button">Send feedback to API provider</string>
     <string name="feedback_hint">Opens email to hi@abfahrt.now</string>
-    <string name="feedback_subject">Feedback on the Abfahrt! API</string>
+    <string name="feedback_subject">Feedback on the abfahrt.now API</string>
     <string name="lang_system">System language</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -134,7 +134,7 @@
     <string name="language_update_note">New languages will arrive with app updates.</string>
     <string name="loading_departures">Loading departures…</string>
     <string name="close">Close</string>
-    <string name="permission_rationale_full">Abfahrt! needs your location to show nearby stops and current departures.</string>
+    <string name="permission_rationale_full">Abfahrtsradar needs your location to show nearby stops and current departures.</string>
     <string name="no_departures_found">No departures found.</string>
     <string name="no_results_time_window">No match in the selected time window.</string>
     <string name="no_results_time_window_hint">The API only returns the next ~15 departures from now. Move the time window to the left or refresh to load new data.</string>
@@ -145,7 +145,7 @@
     <string name="refresh_minutes">Every %d minute</string>
     <string name="refresh_minutes_plural">Every %d minutes</string>
     <string name="feedback_email_hint">Opens email to hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Hello Abfahrt! team,
+    <string name="api_feedback_greeting">Hello abfahrt.now team,
 </string>
     <string name="lang_picker_system">System</string>
     <string name="lang_picker_english_uk">English</string>
@@ -223,7 +223,7 @@ Best regards</string>
     <string name="onboarding_welcome_title">API key required</string>
     <string name="onboarding_welcome_body">A personal API key is required to use abfahrt.now. Enter your key to continue. The OpenRouteService key remains optional and can be added in the next step or later in Settings.</string>
     <string name="onboarding_ors_title">Optional: enable walking and cycling routes</string>
-    <string name="onboarding_ors_body">With an OpenRouteService key, Abfahrt can show precise walking or cycling routes and matching times. This is also optional and can be added later at any time in settings.</string>
+    <string name="onboarding_ors_body">With an OpenRouteService key, Abfahrtsradar can show precise walking or cycling routes and matching times. This is also optional and can be added later at any time in settings.</string>
     <string name="onboarding_step_counter">Step %1$d of %2$d</string>
 <string name="next_step">Next</string>
     <string name="next_without_ors_key">Continue without walking and cycling routes</string>
