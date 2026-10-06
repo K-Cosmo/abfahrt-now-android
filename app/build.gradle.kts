@@ -30,6 +30,10 @@ android {
         release {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // RELEASE1 deliberately keeps Gradle signing disabled. The public APK is signed
+            // after alignment with apksigner using the old->new signing-certificate lineage.
+            // This avoids accidentally producing a new-key-only APK that cannot update the
+            // three existing old-key installations.
         }
     }
 

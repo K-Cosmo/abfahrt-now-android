@@ -7,12 +7,15 @@ Diese Datei enthält den **aktiven** Arbeitsvorrat. Abgeschlossene Build-Histori
 ### B-REL-001 Erstes signiertes GitHub-APK-Release vorbereiten (F-REL-001)
 - **Status:** next / Release Engineering.
 - Zielkandidat: erster echter öffentlicher APK-Release auf Basis des akzeptierten Build 155, Tag `v1.1.0-b155`.
-- dauerhaftes Android-Release-Keypair/Keystore erzeugen und **außerhalb des Repos** sicher verwahren; Backup/Recovery dokumentieren.
-- Release-Signing-Konfiguration darf Secrets nur über lokale/private Properties bzw. CI-Environment beziehen; kein Keystore und kein Passwort im Repository.
-- final signierte APK mit `apksigner verify --verbose --print-certs` prüfen, SHA-256 veröffentlichen und finalen 16-KB-/Release-Smoke auf genau diesem Artefakt durchführen.
-- GitHub-Release-Tag muss dem vorhandenen Update-Contract `v<versionName>-b<human build>` entsprechen.
-- CI kann später einen separaten manuellen/Tag-Release-Workflow erhalten; heutige Android-CI bleibt credential-frei.
-- Rollout-Hinweis: vorhandene Debug-Installationen sind mit anderem Schlüssel signiert und lassen sich nicht per `install -r` auf den ersten Release-Key upgraden. Für den ersten Wechsel ist typischerweise Deinstallation/Neuinstallation erforderlich; dabei gehen lokale App-Daten/API-Keys verloren und müssen neu hinterlegt werden. Ab dem ersten Release-Key muss derselbe Schlüssel dauerhaft für Updates verwendet werden.
+- Feldstand: drei Installationen existieren bereits mit einem alten privaten Release-Key. Dessen Zertifikat enthält historische Riles-Tech-/Leonard-Scharf-Metadaten, die für das unabhängige Community-Projekt nicht als dauerhafte öffentliche Signer-Identität fortgeführt werden sollen.
+- deshalb kontrollierte **Signing-Key-Rotation** statt New-Key-only oder dauerhafter Wiederverwendung des alten Zertifikats: alter Signer -> neuer neutraler Community-Signer über APK Signature Scheme v3.1 / `apksigner` Signing-Certificate-Lineage.
+- Build 155 hat `minSdk 34`; der Android-13+/API-33+-Rotationspfad ist damit innerhalb des unterstützten Plattformbereichs.
+- alter Keystore bleibt erhalten und wird vor Rotation gegen eine frühere/installierte Old-Key-APK per Certificate-SHA-256 verifiziert.
+- neuer Keystore: außerhalb des Repos, RSA-4096/JKS, neutraler Subject (empfohlen `CN=Abfahrt Now Community, C=DE`), separates Backup.
+- Gradle-Release bleibt credential-frei und unsigned; finales APK wird nach `zipalign -P 16` mit `apksigner`, altem Signer, neuem Signer und `--lineage` signiert.
+- Acceptance: `apksigner verify`, SHA-256, `zipalign -c -P 16`, danach reales `adb install -r` auf mindestens einem bestehenden Old-Key-Gerät **ohne Deinstallation** und mit erhaltenen Preferences/API-Keys.
+- Signaturkonflikt ist Stop-Befund; kein Deinstallations-Workaround.
+- GitHub-Release-Tag bleibt `v<versionName>-b<human build>`; RELEASE1 `v1.1.0-b155`.
 
 ### B-149-001 HERE-Detailsheet als Standortkarte
 - **Status:** implemented; visueller Nutzer-Smoke positiv, formales Build-/Logcat-Gate bleibt gemäß Evidence-Regel zu dokumentieren.
