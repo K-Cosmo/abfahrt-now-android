@@ -8,32 +8,32 @@
 - [x] Build-156 scope/spec/plan created.
 
 ## Runtime implementation
-- [ ] Set `versionCode = 1560`; keep `versionName = 1.1.0`.
-- [ ] Update GitHub release API path to new repository.
-- [ ] Update release-page URL generation to new repository.
-- [ ] Update Community footer repository link.
-- [ ] Keep applicationId/package/signing lineage unchanged.
+- [x] Set `versionCode = 1560`; keep `versionName = 1.1.0`.
+- [x] Update GitHub release API path to new repository.
+- [x] Update release-page URL generation to new repository.
+- [x] Update Community footer repository link.
+- [x] Keep applicationId/package/signing lineage unchanged.
 
 ## Localization / UI
-- [ ] Set `app_name = Abfahrtsradar` in all 22 locale sets.
-- [ ] Replace visible old Community-app brand references in all locale sets.
-- [ ] Correct API feedback/support wording to `abfahrt.now`.
-- [ ] Confirm no current Community UI claims Riles Tech ownership.
+- [x] Set `app_name = Abfahrtsradar` in all 22 locale sets.
+- [x] Replace visible old Community-app brand references in all locale sets.
+- [x] Correct API feedback/support wording to `abfahrt.now`.
+- [x] Confirm no current Community UI claims Riles Tech ownership.
 - [ ] Verify launcher, onboarding, permission rationale, settings footer and update dialog.
 
 ## Public project surface
-- [ ] Update README title/text/current repository links.
-- [ ] Update current normative `/doc` references to Abfahrtsradar/new repository.
-- [ ] Record repository-rename/redirect evidence.
-- [ ] Keep MIT and AI-assisted-development disclosures intact.
+- [x] Update README title/text/current repository links.
+- [x] Update current normative `/doc` references to Abfahrtsradar/new repository.
+- [x] Record repository-rename/redirect evidence.
+- [x] Keep MIT and AI-assisted-development disclosures intact.
 
 ## Automated verification
 - [ ] Locale parity/static governance gates green.
 - [ ] Unit tests green.
 - [ ] Debug build green.
 - [ ] Release/R8 build green.
-- [ ] No current runtime source reference to old repository slug.
-- [ ] No stale visible `Abfahrt!` Community-app identity in locale resources.
+- [x] No current runtime source reference to old repository slug (known runtime update/footer/policy paths statically checked).
+- [x] No stale visible `Abfahrt!` Community-app identity in any of the 22 locale resource sets.
 
 ## Migration/runtime evidence
 - [ ] Existing Build 155 update checker succeeds through renamed-repo redirect.
