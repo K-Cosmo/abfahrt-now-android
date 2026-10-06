@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Valós idejű indulások
 szerte Európában</string>
     <string name="app_subtitle">Valós idejű közlekedés Európához</string>
@@ -11,7 +11,7 @@ szerte Európában</string>
     <string name="impressum">Impresszum</string>
     <string name="datenschutz">Adatvédelem</string>
     <string name="agb">Feltételek</string>
-    <string name="welcome_title">Üdv az Abfahrt!-ban!</string>
+    <string name="welcome_title">Üdv az Abfahrtsradar-ban!</string>
     <string name="welcome_body">Add meg az API-kulcsodat, hogy lásd a közeli valós idejű indulásokat.
 Kulcs: abfahrt.now</string>
     <string name="api_key_hint">API-kulcs megadása…</string>
@@ -47,7 +47,7 @@ Kulcs: abfahrt.now</string>
     <string name="occupancy_high">🔴  Magas</string>
     <string name="occupancy_full">🔴  Tele</string>
     <string name="allow_location">Hely engedélyezése</string>
-    <string name="location_rationale">Az Abfahrt! a helyzetedet használja a közeli indulásokhoz.</string>
+    <string name="location_rationale">Az Abfahrtsradar a helyzetedet használja a közeli indulásokhoz.</string>
     <string name="retry">Próbáld újra</string>
     <string name="error_location">A hely nem érhető el.
 Kapcsold be a GPS-t.</string>
@@ -90,7 +90,7 @@ Menj ki vagy kapcsold be a GPS-t.</string>
     <string name="apikey_local_note">A kulcs csak helyben kerül tárolásra.</string>
     <string name="feedback_button">Visszajelzés küldése az API szolgáltatónak</string>
     <string name="feedback_hint">E-mailt nyit a hi@abfahrt.now címre</string>
-    <string name="feedback_subject">Visszajelzés az Abfahrt! API-ról</string>
+    <string name="feedback_subject">Visszajelzés az abfahrt.now API-ról</string>
     <string name="lang_system">Rendszernyelv</string>
     <string name="lang_de">Német</string>
     <string name="lang_en">Angol</string>
@@ -138,7 +138,7 @@ Menj ki vagy kapcsold be a GPS-t.</string>
     <string name="language_update_note">Új nyelvek az alkalmazásfrissítésekkel érkeznek.</string>
     <string name="loading_departures">Indulások betöltése…</string>
     <string name="close">Bezárás</string>
-    <string name="permission_rationale_full">Az Abfahrt! a helyzetedet használja a közeli megállók és az aktuális indulások megjelenítéséhez.</string>
+    <string name="permission_rationale_full">Az Abfahrtsradar a helyzetedet használja a közeli megállók és az aktuális indulások megjelenítéséhez.</string>
     <string name="no_departures_found">No departures found.</string>
     <string name="no_results_time_window">Nincs találat a kiválasztott időablakban.</string>
     <string name="no_results_time_window_hint">Az API csak kb. a következő 15 indulást adja vissza mostantól. Húzd balra az időablakot, vagy frissíts új adatokért.</string>
@@ -149,7 +149,7 @@ Menj ki vagy kapcsold be a GPS-t.</string>
     <string name="refresh_minutes">Minden %d percben</string>
     <string name="refresh_minutes_plural">Minden %d percben</string>
     <string name="feedback_email_hint">E-mailt nyit a hi@abfahrt.now címre</string>
-    <string name="api_feedback_greeting">Szia Abfahrt! csapat,
+    <string name="api_feedback_greeting">Szia abfahrt.now csapat,
 </string>
     <string name="lang_picker_system">Rendszer</string>
     <string name="lang_picker_english_uk">English</string>
@@ -227,7 +227,7 @@ Best regards</string>
     <string name="onboarding_welcome_title">API-kulcs szükséges</string>
     <string name="onboarding_welcome_body">Az abfahrt.now használatához személyes API-kulcs szükséges. A folytatáshoz add meg a kulcsot. Az OpenRouteService-kulcs továbbra is opcionális, és a következő lépésben vagy később a beállításokban adható meg.</string>
     <string name="onboarding_ors_title">Opcionális: gyalogos és kerékpáros útvonalak bekapcsolása</string>
-    <string name="onboarding_ors_body">OpenRouteService kulccsal az Abfahrt pontos gyalogos vagy kerékpáros útvonalakat és hozzájuk tartozó időket tud mutatni. Ez is opcionális, és később bármikor hozzáadható a beállításokban.</string>
+    <string name="onboarding_ors_body">OpenRouteService kulccsal az Abfahrtsradar pontos gyalogos vagy kerékpáros útvonalakat és hozzájuk tartozó időket tud mutatni. Ez is opcionális, és később bármikor hozzáadható a beállításokban.</string>
     <string name="onboarding_step_counter">%1$d / %2$d lépés</string>
 <string name="next_step">Tovább</string>
     <string name="next_without_ors_key">Folytatás gyalogos és kerékpáros útvonalak nélkül</string>
