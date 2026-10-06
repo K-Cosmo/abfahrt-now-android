@@ -207,7 +207,7 @@ Tarkista Wi‑Fi tai mobiilidata.</string>
     <string name="api_key_request_button">Pyydä API-avain</string>
     <string name="api_key_request_subject">API-avaimen pyyntö – Android-sovelluksen käyttö</string>
     <string name="api_key_request_body">Hei,
-haluaisin pyytää henkilökohtaisen API-avaimen Abfahrt Android -sovelluksen käyttöön.
+haluaisin pyytää henkilökohtaisen API-avaimen Abfahrtsradar Android -sovelluksen käyttöön.
 Ystävällisin terveisin</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Pyörällä</string>
