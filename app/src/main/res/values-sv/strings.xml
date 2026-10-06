@@ -208,7 +208,7 @@ Kontrollera wifi eller mobildata.</string>
     <string name="api_key_request_button">Begär API-nyckel</string>
     <string name="api_key_request_subject">Begäran om API-nyckel – användning i Android-app</string>
     <string name="api_key_request_body">Hej,
-Jag vill gärna be om en personlig API-nyckel för att använda Abfahrt Android-appen.
+Jag vill gärna be om en personlig API-nyckel för att använda Abfahrtsradar Android-appen.
 Vänliga hälsningar</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Med cykel</string>
