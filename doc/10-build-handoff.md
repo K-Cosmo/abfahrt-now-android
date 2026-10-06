@@ -51,13 +51,13 @@ Build 155 ist nicht mehr nur Release-Kandidat: **`v1.1.0-b155`** ist der erste �
 - 16-KB-Runtime-Smoke auf offiziellem 16-KB-x86_64-Emulator gr체n
 - GitHub `releases/latest` zeigt auf `v1.1.0-b155`
 
-Release: https://github.com/K-Cosmo/abfahrt-now-android/releases/tag/v1.1.0-b155
+Release: https://github.com/K-Cosmo/abfahrtsradar-android/releases/tag/v1.1.0-b155
 
 Der normale Gradle-Release bleibt absichtlich credential-frei/unsigned. Der lokale transparente Signing-Pfad mit Signing-Certificate-Lineage ist f체r RELEASE1 bewiesen; ein automatisierter signierter CI-Release-Workflow bleibt optionaler Folgeschritt.
 
 ## N채chster Produkt-/Hardening-Schritt
 
-F체r den n채chsten Produktbuild ist zuerst F-NAME-001 zu entscheiden: ein eigener sichtbarer App-Name, klar getrennt von der offiziellen `Abfahrt!`-App. F-ORS-001/B-ORS-001 bleibt der n채chste getrennte technische Hardening-Kandidat.
+Build 156 ist als **Abfahrtsradar Identity Migration** in Arbeit: sichtbarer Name `Abfahrtsradar`, neues kanonisches Repository `K-Cosmo/abfahrtsradar-android`, direkter neuer Updatechecker-Pfad und 22 Locale-Sets. Package-ID und Signing-Lineage bleiben unver채ndert. F-ORS-001/B-ORS-001 folgt weiterhin getrennt nach Abschluss dieses Identity-Builds.
 
 ## Separates Finding: ORS-Key-Probe
 
