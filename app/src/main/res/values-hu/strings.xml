@@ -193,7 +193,7 @@ Menj ki vagy kapcsold be a GPS-t.</string>
     <string name="key_status_not_configured">Nincs beállítva</string>
     <string name="key_action_add">API-kulcs hozzáadása</string>
     <string name="key_action_change_or_delete">API-kulcs kezelése</string>
-    <string name="ors_apikey_sheet_hint">OpenRouteService kulccsal az Abfahrt pontos gyalogos vagy kerékpáros útvonalakat és hozzájuk tartozó időket tud mutatni. A kulcs opcionális és helyben tárolódik.</string>
+    <string name="ors_apikey_sheet_hint">OpenRouteService kulccsal az Abfahrtsradar pontos gyalogos vagy kerékpáros útvonalakat és hozzájuk tartozó időket tud mutatni. A kulcs opcionális és helyben tárolódik.</string>
     <string name="ors_plans_label">Árak megtekintése</string>
     <string name="ors_plans_url">https://account.heigit.org/info/plans</string>
     <string name="ors_signup_label">Fiók létrehozása</string>
@@ -205,7 +205,7 @@ Menj ki vagy kapcsold be a GPS-t.</string>
     <string name="api_key_request_button">API-kulcs kérése</string>
     <string name="api_key_request_subject">API-kulcs igénylés</string>
     <string name="api_key_request_body">Hello,
-I would like to request a personal API key for using the Abfahrt Android app.
+I would like to request a personal API key for using the Abfahrtsradar Android app.
 Best regards</string>
     <string name="api_support_email">hi@abfahrt.now</string>
     <string name="detail_bike_time">Kerékpárral</string>
