@@ -2,7 +2,7 @@
 
 ## Projektidentität
 
-Abfahrt! in diesem Repository ist eine **unabhängig entwickelte Community-Android-App**.
+Abfahrtsradar in diesem Repository ist eine **unabhängig entwickelte Community-Android-App**.
 
 Sie ist **nicht** die offizielle Android-App von abfahrt.now, nicht mit dem Betreiber/Entwickler der abfahrt.now-API verbunden und entwickelt oder betreibt die abfahrt.now-API nicht. Die App ist ein eigenständiger Client, der externe Dienste über deren bereitgestellte Schnittstellen nutzt.
 
@@ -47,11 +47,15 @@ Credentials sind strikt dienstgebunden:
 
 Build 150 setzt den GitHub-Update-Checker deshalb über einen **eigenen anonymen OkHttp-/Retrofit-Client** um. Ein fokussierter JVM-Test schützt zusätzlich, dass der GitHub-Client keinen `ApiKeyInterceptor` installiert.
 
+## Repository-Identität ab Build 156
+
+Das kanonische öffentliche Repository ist `K-Cosmo/abfahrtsradar-android`. Das frühere Repository `K-Cosmo/abfahrt-now-android` wurde auf GitHub umbenannt. Bereits veröffentlichte Build-155-Installationen dürfen für ihren alten Update-Metadatenpfad auf GitHubs Repository-Redirect angewiesen sein; neue Builds verwenden ausschließlich den neuen kanonischen Pfad.
+
 ## Update- und Release-Metadaten
 
 Für den Community-Update-Check gilt ab Build 150:
 
-- Quelle ist ausschließlich `GET https://api.github.com/repos/K-Cosmo/abfahrt-now-android/releases/latest`;
+- Quelle ist ausschließlich `GET https://api.github.com/repos/K-Cosmo/abfahrtsradar-android/releases/latest`;
 - die App verwendet keinen GitHub-Token und sendet keine abfahrt.now-/ORS-Credentials an GitHub;
 - Release-Tags für App-Updates folgen `v<semver>-b<build>`, z. B. `v1.1.0-b150`;
 - die monotone **Buildnummer** ist für die Update-Entscheidung maßgeblich; Android `versionCode` entspricht derzeit `build * 10`;
