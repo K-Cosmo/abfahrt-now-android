@@ -5,8 +5,8 @@
 ympäri Eurooppaa</string>
     <string name="app_subtitle">Joukkoliikenne reaaliajassa Eurooppaan</string>
     <string name="powered_by">Palvelun tarjoaa abfahrt.now</string>
-    <string name="built_by">Tekijä Riles Tech UG ↗</string>
-    <string name="disclaimer">Lähtöajat tulevat abfahrt.now-palvelusta. Riles Tech UG ei vastaa tietojen oikeellisuudesta.</string>
+    <string name="built_by">Abfahrtsradar Community  ↗</string>
+    <string name="disclaimer">Lähtöajat tulevat abfahrt.now-palvelusta.</string>
     <string name="version_label">Version %s</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
