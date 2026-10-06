@@ -148,9 +148,24 @@ Die Runtime-Evidence stammt aus dem zuvor signierten RELEASE1-Kandidaten auf unv
 
 ## Folge-Releases
 
-Nach erfolgreicher Rotation wird der neue Community-Key der aktive Release-Signer. Die Signing-Certificate-Lineage muss bei künftigen direkten APK-Releases weitergeführt werden, solange Updates von Installationen aus der alten Signer-Historie unterstützt werden sollen.
+Nach erfolgreicher Rotation ist der neue Community-Key der **aktuelle sichtbare Release-Signer**. Für den hier bewährten direkten APK-Signierpfad bedeutet das jedoch **nicht**, dass der historische Signer aus dem `apksigner sign`-Aufruf entfernt wird.
 
-Der alte Keystore wird deshalb nicht gelöscht oder absichtlich unbrauchbar gemacht.
+Auch Folge-Releases verwenden den bereits real bewiesenen Aufruf mit historischem Signer zuerst, Community-Signer als `--next-signer` und der bestehenden Signing-Certificate-Lineage:
+
+```text
+apksigner sign \
+  --ks <old-keystore> --ks-key-alias <old-alias> \
+  --next-signer \
+  --ks <community-keystore> --ks-key-alias <community-alias> \
+  --lineage <lineage-file> \
+  <aligned-apk>
+```
+
+Grund: Ein Versuch, nur den Community-Key zusammen mit der bestehenden Lineage zu übergeben, scheiterte mit Android Build Tools 37 bereits vor dem Signieren, weil die standardmäßig berücksichtigte v1/JAR-Signatur den ältesten Signer der Lineage benötigt. Obwohl die App mit `minSdk = 34` technisch keine v1-Signatur zur Laufzeit benötigt, wird für Release-Artefakte **kein neuer, abweichender Signierpfad** eingeführt, solange der bestehende Old+Community+Lineage-Pfad erfolgreich verifiziert und real update-kompatibel ist.
+
+Die Verifikation des fertigen APK muss weiterhin genau **einen aktuellen Signer** `CN=Abfahrt Now Community, C=DE` mit dem bekannten Community-Zertifikat ausweisen. Der historische Signer bleibt Teil der kryptografischen Signer-Historie, nicht der sichtbare aktuelle Signer.
+
+Die Signing-Certificate-Lineage muss bei künftigen direkten APK-Releases weitergeführt werden, solange Updates von Installationen aus der alten Signer-Historie unterstützt werden sollen. Der alte Keystore wird deshalb nicht gelöscht oder absichtlich unbrauchbar gemacht.
 
 ## GitHub Release Contract
 
