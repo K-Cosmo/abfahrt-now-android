@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Abfahrt!</string>
+    <string name="app_name">Abfahrtsradar</string>
     <string name="app_tagline">Partenze in tempo reale
 in tutta Europa</string>
     <string name="app_subtitle">Trasporto in tempo reale per l’Europa</string>
@@ -11,7 +11,7 @@ in tutta Europa</string>
     <string name="impressum">Imprint</string>
     <string name="datenschutz">Privacy</string>
     <string name="agb">Terms</string>
-    <string name="welcome_title">Benvenuto in Abfahrt!</string>
+    <string name="welcome_title">Benvenuto in Abfahrtsradar</string>
     <string name="welcome_body">Inserisci la tua API key per vedere le partenze in tempo reale vicino a te.
 Richiedila su abfahrt.now</string>
     <string name="api_key_hint">Inserisci API key…</string>
@@ -47,7 +47,7 @@ Richiedila su abfahrt.now</string>
     <string name="occupancy_high">🔴  Alto</string>
     <string name="occupancy_full">🔴  Pieno</string>
     <string name="allow_location">Consenti posizione</string>
-    <string name="location_rationale">Abfahrt! ha bisogno della tua posizione per mostrare le partenze vicine.</string>
+    <string name="location_rationale">Abfahrtsradar ha bisogno della tua posizione per mostrare le partenze vicine.</string>
     <string name="retry">Riprova</string>
     <string name="error_location">Posizione non disponibile.
 Attiva il GPS.</string>
@@ -90,7 +90,7 @@ Vai all’aperto o attiva il GPS.</string>
     <string name="apikey_local_note">La tua key viene salvata solo in locale.</string>
     <string name="feedback_button">Invia feedback al provider dell’API</string>
     <string name="feedback_hint">Apre una mail a hi@abfahrt.now</string>
-    <string name="feedback_subject">Feedback sull’API di Abfahrt!</string>
+    <string name="feedback_subject">Feedback sull’API di abfahrt.now</string>
     <string name="lang_system">Lingua di sistema</string>
     <string name="lang_de">Deutsch</string>
     <string name="lang_en">English</string>
@@ -141,7 +141,7 @@ Controlla il Wi‑Fi o i dati mobili.</string>
     <string name="language_update_note">Le nuove lingue arriveranno con gli aggiornamenti dell’app.</string>
     <string name="loading_departures">Caricamento partenze…</string>
     <string name="close">Chiudi</string>
-    <string name="permission_rationale_full">Abfahrt! ha bisogno della tua posizione per mostrare fermate vicine e partenze attuali.</string>
+    <string name="permission_rationale_full">Abfahrtsradar ha bisogno della tua posizione per mostrare fermate vicine e partenze attuali.</string>
     <string name="no_departures_found">Nessuna partenza trovata.</string>
     <string name="no_results_time_window">Nessun risultato nella finestra temporale selezionata.</string>
     <string name="no_results_time_window_hint">L’API restituisce solo le prossime ~15 partenze da adesso. Sposta la finestra temporale verso sinistra o aggiorna per caricare nuovi dati.</string>
@@ -152,7 +152,7 @@ Controlla il Wi‑Fi o i dati mobili.</string>
     <string name="refresh_minutes">Ogni %d minuto</string>
     <string name="refresh_minutes_plural">Ogni %d minuti</string>
     <string name="feedback_email_hint">Apre una mail a hi@abfahrt.now</string>
-    <string name="api_feedback_greeting">Ciao team di Abfahrt!,</string>
+    <string name="api_feedback_greeting">Ciao team di abfahrt.now,</string>
     <string name="lang_picker_system">Sistema</string>
     <string name="lang_picker_english_uk">Inglese</string>
     <string name="lang_picker_german">Deutsch</string>
@@ -229,7 +229,7 @@ Cordiali saluti</string>
     <string name="onboarding_welcome_title">Chiave API richiesta</string>
     <string name="onboarding_welcome_body">Per usare abfahrt.now è richiesta una chiave API personale. Inserisci la chiave per continuare. La chiave OpenRouteService resta facoltativa e può essere aggiunta nel passaggio successivo o più tardi nelle Impostazioni.</string>
     <string name="onboarding_ors_title">Opzionale: attiva percorsi a piedi e in bici</string>
-    <string name="onboarding_ors_body">Con una key OpenRouteService, Abfahrt può mostrare percorsi precisi a piedi o in bici e i relativi tempi. Anche questo è opzionale e può essere aggiunto in qualsiasi momento più tardi nelle Impostazioni.</string>
+    <string name="onboarding_ors_body">Con una key OpenRouteService, Abfahrtsradar può mostrare percorsi precisi a piedi o in bici e i relativi tempi. Anche questo è opzionale e può essere aggiunto in qualsiasi momento più tardi nelle Impostazioni.</string>
     <string name="onboarding_step_counter">Passo %1$d di %2$d</string>
 <string name="next_step">Avanti</string>
     <string name="next_without_ors_key">Continua senza percorsi a piedi e in bici</string>
