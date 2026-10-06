@@ -107,7 +107,9 @@ Das signierte Kandidaten-APK besitzt Datei-SHA-256:
 
 Auf einem realen Gerät wurde vor dem Update die installierte `base.apk` gezogen und als alter Release-Signer mit exakt dem bekannten alten Zertifikat verifiziert. Anschließend war `adb install -r` mit dem rotierenden Kandidaten erfolgreich (`Success`). Danach meldete das Paket `versionCode=1550`, `versionName=1.1.0`.
 
-Damit ist die **kryptografische Update-Kompatibilität alt -> neuer Community-Signer real bewiesen**. Noch separat zu bestätigen bleiben Daten-/Preferences-Erhalt, 16-KB-Runtime und Kernsmoke auf diesem Endnutzergerät.
+Damit ist die **kryptografische Update-Kompatibilität alt -> neuer Community-Signer real bewiesen**. Das reale Endnutzergerät lief im RELEASE1-Smoke mit 4-KB-Seiten; dieser Pfad belegt die Update-/Datenkompatibilität auf normaler Hardware, ersetzt aber nicht den separaten 16-KB-Runtime-Gate.
+
+Der exakt signierte Kandidat wurde deshalb zusätzlich auf einem offiziellen Android-16-KB-x86_64-Emulator gestartet. Der Kaltstart meldete `AbfahrtCompat: memoryPageSizeBytes=16384`, und `lib/x86_64/libmaplibre.so` wurde durch den Native Loader erfolgreich geladen (`ok`). Im aufgezeichneten 16-KB-Smoke trat weder `FATAL EXCEPTION` noch eine App-ANR auf. Damit ist der 16-KB-Runtime-Gate für das RELEASE1-Kandidaten-APK erfüllt. Noch separat zu bestätigen bleiben Daten-/Preferences-Erhalt und der vollständige Kernsmoke auf dem realen Endnutzergerät.
 
 ## Verifikation vor Veröffentlichung
 
@@ -120,7 +122,7 @@ Ein GitHub-APK-Release ist erst zulässig, wenn **genau das hochzuladende APK** 
 5. `zipalign -c -P 16 -v 4`
 6. reales `adb install -r` auf mindestens einem bestehenden Old-Key-Gerät erfolgreich
 7. Einstellungen/API-Keys bleiben bei diesem In-place-Update erhalten
-8. Runtime `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`
+8. 16-KB-Runtime auf einem offiziellen 16-KB-Testsystem: `PAGE_SIZE=16384` und `memoryPageSizeBytes=16384`; für RELEASE1 per x86_64-Emulator bestätigt
 9. Kernsmoke ohne FATAL/ANR
 
 Ein Signaturfehler darf **nicht** durch Deinstallation umgangen werden. Ein fehlgeschlagenes `adb install -r` auf einer tatsächlich Old-Key-signierten Installation ist ein Stop-Signal für RELEASE1.
